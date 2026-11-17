@@ -1,0 +1,137 @@
+[
+  {
+    "id": "q01",
+    "theme": "energie",
+    "question": "Pour faire tourner un data center, quelle électricité pollue le moins ?",
+    "choices": ["Un générateur diesel", "Une centrale à charbon", "Le solaire ou l'éolien"],
+    "answer": 2,
+    "explication": "Même serveur, électricité différente = empreinte très différente. Les data centers les plus sobres misent sur l'énergie bas carbone.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q02",
+    "theme": "refroidissement",
+    "question": "Pourquoi un data center a-t-il besoin d'être refroidi ?",
+    "choices": ["Les serveurs chauffent en tournant", "Pour garder les données au frais", "Pour le confort des techniciens"],
+    "answer": 0,
+    "explication": "Tout calcul produit de la chaleur. Moins on fait travailler les serveurs pour rien, moins il faut refroidir.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q03",
+    "theme": "materiel",
+    "question": "Dans l'empreinte carbone du numérique en France, qu'est-ce qui pèse le plus ?",
+    "choices": ["L'électricité consommée à l'usage", "La fabrication des équipements", "Les deux pareil"],
+    "answer": 1,
+    "explication": "Fabriquer les appareils pèse plus lourd que les utiliser. Le geste n°1 : garder ton matériel plus longtemps.",
+    "source": "ADEME / Arcep, étude sur l'empreinte environnementale du numérique en France (2022)"
+  },
+  {
+    "id": "q04",
+    "theme": "donnees",
+    "question": "Tes vieux mails et photos en double stockés dans le cloud…",
+    "choices": ["Ne consomment rien", "Occupent des serveurs allumés en permanence", "Disparaissent tout seuls"],
+    "answer": 1,
+    "explication": "Le cloud, ce sont des serveurs bien réels. Fais un petit ménage : supprime les doublons et vide ta corbeille.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q05",
+    "theme": "usages",
+    "question": "Quel usage fait le plus travailler les data centers et les réseaux ?",
+    "choices": ["Envoyer un SMS", "Regarder des vidéos en streaming", "Lire un PDF déjà téléchargé"],
+    "answer": 1,
+    "explication": "La vidéo représente une grosse part du trafic. Baisse la qualité quand l'écran est petit, ça ne se voit presque pas.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q06",
+    "theme": "ia",
+    "question": "Générer une image avec une IA, par rapport à une recherche web classique, ça demande…",
+    "choices": ["Moins de calcul", "Autant de calcul", "Beaucoup plus de calcul"],
+    "answer": 2,
+    "explication": "Les IA génératives font tourner de gros serveurs. Garde-les pour quand elles servent vraiment.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q07",
+    "theme": "reseau",
+    "question": "À la maison, quel réseau est le plus sobre pour regarder une vidéo ?",
+    "choices": ["La 4G/5G", "C'est exactement pareil", "Le wifi"],
+    "answer": 2,
+    "explication": "Le réseau fixe consomme moins que le réseau mobile. Chez toi, bascule sur le wifi.",
+    "source": "ADEME, guide « En route vers la sobriété numérique » — À VÉRIFIER"
+  },
+  {
+    "id": "q08",
+    "theme": "refroidissement",
+    "question": "Le « free cooling » dans un data center, c'est…",
+    "choices": ["Refroidir les serveurs avec l'air extérieur", "Une clim offerte gratuitement", "Éteindre les serveurs la nuit"],
+    "answer": 0,
+    "explication": "Quand il fait frais dehors, l'air extérieur remplace en partie la clim. C'est pour ça qu'on aime les data centers dans les pays froids.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q09",
+    "theme": "materiel",
+    "question": "Un serveur en fin de vie, le mieux c'est…",
+    "choices": ["Le stocker dans un hangar", "Le reconditionner ou recycler ses composants", "Le jeter avec les ordures"],
+    "answer": 1,
+    "explication": "Un appareil reconditionné, c'est un appareil neuf en moins à fabriquer. Pense aussi au reconditionné pour ton téléphone.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q10",
+    "theme": "energie",
+    "question": "Pour polluer moins, où vaut-il mieux installer un data center ?",
+    "choices": ["Là où l'électricité est bas carbone", "Là où l'électricité vient du charbon", "Peu importe, ça ne change rien"],
+    "answer": 0,
+    "explication": "L'électricité n'a pas la même empreinte partout. Le lieu d'un data center change beaucoup son bilan.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q11",
+    "theme": "donnees",
+    "question": "Envoyer un gros fichier à 20 personnes : quelle option est la plus sobre ?",
+    "choices": ["Une pièce jointe à chacun", "Un seul lien de téléchargement partagé", "L'envoyer deux fois pour être sûr"],
+    "answer": 1,
+    "explication": "Un lien = le fichier stocké une seule fois. Pense aussi à supprimer le lien quand tout le monde l'a récupéré.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q12",
+    "theme": "usages",
+    "question": "Désactiver la lecture auto des vidéos, ça sert à…",
+    "choices": ["Avoir plus d'abonnés", "Moins scroller et moins solliciter les serveurs", "Rien du tout"],
+    "answer": 1,
+    "explication": "Moins de vidéos lancées sans le vouloir = moins de données transférées et de temps perdu. Ça se règle en 10 secondes.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q13",
+    "theme": "ia",
+    "question": "Pour une question simple comme « capitale de l'Italie ? », le plus sobre c'est…",
+    "choices": ["Demander à une IA générative", "Faire une recherche classique (ou y réfléchir 2 s)", "Demander à 3 IA pour comparer"],
+    "answer": 1,
+    "explication": "Pas besoin d'un gros modèle pour une réponse simple. Garde l'IA pour les tâches où elle t'aide vraiment.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q14",
+    "theme": "reseau",
+    "question": "Regarder une vidéo en basse définition sur un téléphone, ça…",
+    "choices": ["Se voit à peine et transfère moins de données", "Est interdit", "Use l'écran plus vite"],
+    "answer": 0,
+    "explication": "Sur un petit écran, la 4K ne sert pas à grand-chose. Règle la qualité vidéo par défaut sur « auto » ou plus basse.",
+    "source": "À VÉRIFIER"
+  },
+  {
+    "id": "q15",
+    "theme": "refroidissement",
+    "question": "La chaleur produite par un data center peut servir à…",
+    "choices": ["Rien, elle est perdue de toute façon", "Chauffer des logements ou une piscine", "Faire fondre la neige du toit, c'est tout"],
+    "answer": 1,
+    "explication": "Récupérer la chaleur des serveurs pour chauffer un quartier, ça existe déjà. Une chaleur perdue en moins !",
+    "source": "À VÉRIFIER"
+  }
+]
