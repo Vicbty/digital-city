@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { getStats, isLocalMode, type Stats } from '../lib/supabase'
+import QrModal from './QrModal'
 
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null)
+  const [showQr, setShowQr] = useState(false)
 
   useEffect(() => {
     let alive = true
@@ -23,6 +25,10 @@ export default function Dashboard() {
         <h1 className="title-sm">🏙️ Digital City · Live</h1>
         {isLocalMode && <span className="badge">mode local</span>}
       </header>
+
+      <button className="btn btn-primary" onClick={() => setShowQr(true)}>
+        📱 QR code
+      </button>
 
       {!stats ? (
         <p className="muted">Chargement…</p>
@@ -66,6 +72,7 @@ export default function Dashboard() {
       <a className="btn btn-ghost" href="/">
         ← Retour au jeu
       </a>
+      {showQr && <QrModal onClose={() => setShowQr(false)} />}
     </main>
   )
 }
