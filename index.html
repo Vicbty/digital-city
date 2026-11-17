@@ -1,38 +1,825 @@
 <!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#eef1f4" />
-    <!-- iPhone : ajout à l'écran d'accueil -->
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Digital City" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="format-detection" content="telephone=no" />
-    <title>Digital City — sauveras-tu le pire data center de France ?</title>
-    <meta name="description" content="Tu hérites du data center le plus polluant de France. Réponds au quiz, gagne des pièces, rends-le sobre. 3 niveaux, bats le score de tes potes !" />
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>EcoVille Digital</title>
+<meta name="description" content="Your town is hooked on screens. Cut its digital footprint step by step until it reaches net zero.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta name="theme-color" content="#cfd8b0">
+<!-- iPhone : ajout à l'écran d'accueil -->
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EcoVille">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<!-- Partage (WhatsApp, Insta, LinkedIn…) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EcoVille Digital">
+<meta property="og:title" content="EcoVille Digital — bring your town's digital footprint to net zero">
+<meta property="og:description" content="Coal-powered data centers, phones replaced every year, e-waste in a dump… Can you fix your town?">
+<meta property="og:image" content="/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: cheerful, tactile city-builder that teaches the hidden footprint of screens, clouds and cables
+   IDEA: a floating diorama town wired to data centres; its sky clears as its digital life gets lighter
+   PICTURE: full-bleed isometric canvas: blinking server halls, antennas, e-waste heaps, homes glowing blue
+   COLOUR and TYPE: sky blue + leaf green fields, forest ink, coin-gold accent, server-cyan detail; Fredoka + Nunito
+   LAYOUT: HUD chips top, goal card left, tool rail right, dock bottom, drawer right / bottom sheet on phones */
+:root{color-scheme:light dark;--ink:light-dark(#12352a,#e8f6ee);--mut:light-dark(#4d6b5f,#9fc0b1);--panel:light-dark(rgba(255,255,255,.94),rgba(14,30,23,.94));--line:light-dark(rgba(18,53,42,.12),rgba(232,246,238,.14));--soft:light-dark(#eef7f1,#1c3a2d);--leaf:#1f9d5a;--leaf2:light-dark(#178a4e,#3cc77d);--gold:#ffc23d;--bad:#d9534f;--cyan:light-dark(#0e7fa8,#5ad1ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%}
+body{background:#bfe3f4;color:var(--ink);font:16px/1.5 Nunito,system-ui,sans-serif;overflow:hidden}
+#app{position:relative;height:100dvh;min-height:540px;overflow:hidden;user-select:none;-webkit-user-select:none}
+#cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+#cv.plant{cursor:copy}#cv.drag{cursor:grabbing}
+h1,h2,h3,.fred{font-family:Fredoka,Nunito,sans-serif;font-weight:600}
+.card{background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:18px;box-shadow:0 8px 28px rgba(8,40,26,.18);border:1px solid var(--line)}
+svg.i{width:22px;height:22px;flex:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none;z-index:3}
+.hud>*{pointer-events:auto}
+.town{display:flex;gap:10px;align-items:center;padding:8px 14px 8px 8px;min-width:220px}
+.lvl{width:46px;height:46px;border-radius:14px;background:linear-gradient(160deg,#3fcf7f,#178a4e);color:#fff;display:grid;place-items:center;font:700 22px Fredoka,sans-serif;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.tname{font:600 17px/1.1 Fredoka,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.lname{font-size:13px;color:var(--mut);font-weight:700}
+.bar{height:8px;border-radius:9px;background:var(--soft);overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#3fcf7f,#ffc23d);border-radius:9px;transition:width .4s}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(8,40,26,.14);white-space:nowrap}
+.chip b{font:600 17px Fredoka,sans-serif}.chip small{font-size:12px;color:var(--mut);font-weight:700}
+.chip.co2 b{color:var(--c,#b4572f)}
+.mission{position:absolute;top:84px;left:10px;width:300px;padding:12px 14px;z-index:2}
+.mission h3{margin:0;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.mission .row{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px}
+.mission .row .bar{flex:1;margin:0}
+.ok{color:var(--leaf2);font-weight:800}.no{color:var(--bad);font-weight:800}
+.hint{margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--soft);font-size:13.5px;line-height:1.35}
+.hint button{color:var(--leaf2);font-weight:800;text-decoration:underline;padding:0}
+.mission.min .body{display:none}
+.rail{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:2}
+.rb{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 18px rgba(8,40,26,.14);position:relative}
+.rb:hover{transform:translateY(-1px)}.rb.on{background:var(--leaf);color:#fff}
+.rb.gold{background:linear-gradient(160deg,#ffd567,#f3a913);color:#5a3b00;border:0}
+.dock{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:2px;padding:6px;z-index:3;max-width:calc(100% - 20px);overflow-x:auto;scrollbar-width:none}
+.db{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:66px;height:60px;padding:4px 8px;border-radius:14px;font-size:12.5px;font-weight:800;flex:none}
+.db:hover{background:var(--soft)}.db.on{background:var(--leaf);color:#fff}
+.db.guide{color:var(--cyan)}
+.db kbd{position:absolute;top:3px;right:5px;font:700 10px Nunito,sans-serif;opacity:.5}
+.badge{position:absolute;top:-2px;left:calc(50% + 6px);min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:#e8453c;color:#fff;font:700 11px/19px Nunito,sans-serif;text-align:center}
+.badge:empty{display:none}
+.drawer{position:absolute;right:66px;top:76px;bottom:88px;width:390px;max-width:calc(100% - 86px);display:flex;flex-direction:column;z-index:4;transform:translateX(calc(100% + 90px));transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 6px}
+.dh h2{margin:0;font-size:21px}
+.dbody{overflow-y:auto;padding:6px 16px 16px;flex:1}
+.x{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}.x:hover{background:var(--soft)}
+.sub{color:var(--mut);font-size:13.5px;margin:0 0 10px}
+.why{display:flex;gap:8px;align-items:flex-start;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--cyan) 10%,transparent);font-size:13.5px;line-height:1.4;margin:0 0 10px}
+.why svg{flex:none;width:18px;height:18px;color:var(--cyan);margin-top:1px}
+.item{border:1px solid var(--line);border-radius:14px;padding:11px 12px;margin-bottom:9px;background:light-dark(#fff,rgba(255,255,255,.03))}
+.item.hot{border-color:var(--leaf2);box-shadow:0 0 0 2px color-mix(in srgb,var(--leaf2) 25%,transparent)}
+.it{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.it b{font:600 15.5px Fredoka,sans-serif}
+.meta{font-size:13px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:3px}
+.pb{height:9px;border-radius:9px;background:var(--soft);overflow:hidden;margin:8px 0 4px}
+.pb i{display:block;height:100%;background:var(--leaf2);border-radius:9px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 14px;border-radius:12px;background:var(--leaf);color:#fff;font-weight:800;font-size:14px;white-space:nowrap;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:var(--soft);color:var(--ink);box-shadow:none}
+.btn.gold{background:linear-gradient(160deg,#ffd567,#f3a913);color:#4b3200}
+.btn[disabled]{background:var(--soft);color:var(--mut);box-shadow:none;cursor:not-allowed}
+.btn.sm{min-height:34px;padding:0 10px;font-size:13px}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.dots{display:flex;gap:4px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--soft);border:1px solid var(--line)}.dots i.f{background:var(--leaf2);border-color:transparent}
+.big{font:600 24px/1.1 Fredoka,sans-serif;margin:4px 0}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 10px;font-size:14px;margin:10px 0}
+.kv span:nth-child(even){font-weight:800;text-align:right;white-space:nowrap}
+.delta{color:var(--leaf2);font-weight:800}
+.rk{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border-radius:12px}
+.rk:nth-child(odd){background:var(--soft)}
+.rk.me{outline:2px solid var(--leaf2)}
+.rk .pos{font:700 17px Fredoka,sans-serif;text-align:center}
+.rk .nm{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk .nm small{display:block;color:var(--mut);font-weight:700;font-size:12px}
+.rk .sc{text-align:right;font:600 16px Fredoka,sans-serif;white-space:nowrap}
+.tag{display:inline-block;font:800 10.5px Nunito,sans-serif;padding:1px 6px;border-radius:6px;background:var(--soft);color:var(--mut);vertical-align:1px;margin-left:4px}
+.tag.g{background:#d9f6e5;color:#13703f}
+.toggle{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin:8px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--leaf)}
+.g-sec{margin:0 0 18px}.g-sec h3{margin:0 0 8px;font-size:17px}
+.g-steps{counter-reset:s;margin:0;padding:0;list-style:none}
+.g-steps li{counter-increment:s;position:relative;padding:0 0 10px 36px;font-size:14.5px;line-height:1.4}
+.g-steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:26px;height:26px;border-radius:50%;background:var(--leaf);color:#fff;font:700 14px/26px Fredoka,sans-serif;text-align:center}
+.g-act{display:grid;grid-template-columns:34px minmax(0,1fr);gap:4px 10px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.4}
+.g-act .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--soft);color:var(--leaf2)}
+.g-act b{font:600 15px Fredoka,sans-serif;display:block}
+.g-act .gain{color:var(--leaf2);font-weight:800;font-size:13px}
+.g-bld{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;line-height:1.4}
+.g-bld b{font-size:14.5px}
+.modal{position:absolute;inset:0;background:rgba(8,30,20,.42);display:none;place-items:center;z-index:10;padding:16px}
+.modal.open{display:grid}
+.mbox{width:min(480px,100%);max-height:calc(100% - 20px);overflow:auto;padding:22px;border-radius:22px;background:var(--panel);box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;animation:pop .25s cubic-bezier(.2,1.3,.4,1)}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.mbox h2{margin:0 0 6px;font-size:25px;line-height:1.12;text-wrap:balance;padding-right:30px}
+.mbox p{margin:6px 0}
+.mbox .x{position:absolute;top:10px;right:10px}
+.opt{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:14px;border:2px solid var(--line);margin:8px 0;font-weight:700;font-size:15px;background:light-dark(#fff,rgba(255,255,255,.03))}
+.opt:hover{border-color:var(--leaf2)}
+.opt.right{border-color:var(--leaf2);background:color-mix(in srgb,var(--leaf2) 15%,transparent)}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.fact{padding:10px 12px;border-radius:12px;background:var(--soft);font-size:14.5px;margin-top:10px}
+input[type=text]{width:100%;font:700 17px Nunito,sans-serif;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:light-dark(#fff,#0f2219);color:var(--ink);margin:10px 0}
+.bins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.bin{border-radius:16px;padding:12px 6px 10px;color:#fff;font-weight:800;font-size:13.5px;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:96px;justify-content:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18);text-align:center;line-height:1.2}
+.bin svg{width:32px;height:32px}
+.waste{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border-radius:18px;background:var(--soft);margin-top:12px;text-align:center}
+.waste svg{width:76px;height:64px}
+.waste b{font:600 19px/1.2 Fredoka,sans-serif}
+.facade{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px;border-radius:16px;background:#2b3440;margin-top:12px}
+.dev{aspect-ratio:1.45/1;border-radius:10px;background:#3b4656;border:2px solid #4c5868;color:#c9d3df;font-weight:800;font-size:12.5px;position:relative;display:grid;place-items:center;transition:background .12s}
+.dev::after{content:"";position:absolute;right:7px;bottom:6px;width:7px;height:7px;border-radius:50%;background:#1d242c}
+.dev.lit{border-color:#ffb020;background:#4a4030;color:#fff}
+.dev.lit::after{background:#ff4530;box-shadow:0 0 8px 2px #ff6a3d}
+.timer{height:10px;border-radius:9px;background:var(--soft);overflow:hidden;margin-top:10px}.timer i{display:block;height:100%;background:var(--gold)}
+.rew{display:flex;gap:14px;justify-content:center;margin:14px 0;font:600 20px Fredoka,sans-serif;flex-wrap:wrap}
+.rew span{display:flex;align-items:center;gap:6px}
+.unl{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.unl span{padding:5px 10px;border-radius:10px;background:var(--soft);font-weight:800;font-size:13.5px}
+.slide-ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:var(--soft);color:var(--leaf2);margin-bottom:10px}
+.slide-ic svg{width:36px;height:36px}
+.sdots{display:flex;gap:6px;justify-content:center;margin:14px 0 4px}.sdots i{width:8px;height:8px;border-radius:50%;background:var(--soft)}.sdots i.f{background:var(--leaf2);width:22px;border-radius:5px}
+.slide ul{margin:8px 0;padding-left:20px;font-size:15px;line-height:1.45}.slide li{margin:4px 0}
+.toasts{position:absolute;left:50%;top:84px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:6;pointer-events:none;width:max-content;max-width:92%}
+.toast{padding:9px 16px;border-radius:14px;background:var(--panel);box-shadow:0 8px 24px rgba(0,0,0,.18);font-weight:800;font-size:14px;animation:tin .25s ease-out;text-align:center}
+.toast.bad{color:var(--bad)}.toast.good{color:var(--leaf2)}
+@keyframes tin{from{transform:translateY(-10px);opacity:0}}
+.tip{position:absolute;pointer-events:none;z-index:5;padding:7px 11px;border-radius:12px;background:var(--panel);box-shadow:0 6px 18px rgba(0,0,0,.18);font-size:13px;font-weight:700;display:none;max-width:260px}
+.tip b{font:600 14.5px Fredoka,sans-serif;display:block}
+.coach{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);z-index:5;display:none;align-items:center;gap:10px;padding:10px 12px 10px 16px;width:min(500px,calc(100% - 20px));font-size:14.5px;font-weight:700;border:2px solid var(--gold)}
+.coach.on{display:flex}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px}
+.keys kbd{font:800 12px Nunito,sans-serif;padding:3px 8px;border-radius:7px;background:var(--soft);border:1px solid var(--line);text-align:center}
+.note{font-size:12.5px;color:var(--mut);margin-top:10px}
+button.chip{cursor:pointer;font:inherit;color:inherit}button.chip:hover{border-color:var(--gold)}
+.rate{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0}
+.rate button{height:48px;border-radius:12px;background:var(--soft);font:600 19px Fredoka,sans-serif;border:2px solid transparent}
+.rate button:hover{border-color:var(--gold)}.rate button.on{background:var(--gold);color:#4b3200}
+.rscale{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);font-weight:700;margin-top:-6px}
+.cstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 6px}
+.cstats div{background:var(--soft);border-radius:12px;padding:10px;text-align:center}
+.cstats b{display:block;font:600 22px Fredoka,sans-serif}.cstats span{font-size:12px;color:var(--mut);font-weight:700}
+.hist{display:grid;grid-template-columns:22px minmax(0,1fr) 30px;gap:4px 8px;align-items:center;font-size:12.5px;font-weight:700}
+.hist i{display:block;height:10px;border-radius:6px;background:var(--gold);min-width:2px}.hist span:last-child{text-align:right;color:var(--mut)}
+@media(max-width:700px){
+ .mission{top:auto;bottom:84px;left:10px;width:auto;right:10px;padding:9px 12px}
+ .stats .chip small{display:none}
+ .chip{padding:6px 9px}.chip b{font-size:15px}
+ .town{min-width:0;padding:6px 10px 6px 6px}.lvl{width:38px;height:38px;font-size:18px}.tname{max-width:150px;font-size:15px}
+ .drawer{left:0;right:0;top:auto;bottom:0;width:auto;max-width:none;height:70%;border-radius:22px 22px 0 0;transform:translateY(105%)}
+ .db{height:54px;font-size:10.5px;min-width:0;flex:1 1 0;padding:2px 0}.db kbd{display:none}
+ .dock{left:6px;right:6px;transform:none;max-width:none;justify-content:space-between;gap:0;padding:4px}
+ .coach{bottom:150px}.toasts{top:128px}
+ .hud{flex-direction:column}.stats{justify-content:flex-start}
+ .rail{top:130px;bottom:auto;transform:none;gap:6px}.rail .rb{width:42px;height:42px}.rail [data-k=zin],.rail [data-k=zout],.rail [data-k=center]{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#ffc23d" stroke="#c98a12" stroke-width="2"/><circle cx="12" cy="12" r="6" fill="none" stroke="#e7a520" stroke-width="1.5"/><path d="M13.8 9.6a3 3 0 1 0 0 4.8" fill="none" stroke="#8a5d05" stroke-width="2" stroke-linecap="round"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.6l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="#7d6cf2" stroke="#5545c9" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+ <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 0 1-.6-9A6 6 0 0 1 18 9.6a4.5 4.5 0 0 1-.5 8.9z" fill="currentColor" opacity=".9"/><text x="12" y="16" font-size="6.5" font-weight="800" text-anchor="middle" fill="#fff" font-family="Nunito,sans-serif">CO2</text></symbol>
+ <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="#ffd34d" stroke="#d99a12" stroke-width="1.5"/><circle cx="9" cy="10" r="1.3" fill="#5a3b00"/><circle cx="15" cy="10" r="1.3" fill="#5a3b00"/><path d="M8 14c2 2.5 6 2.5 8 0" stroke="#5a3b00" stroke-width="1.8" fill="none" stroke-linecap="round"/></symbol>
+ <symbol id="i-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 0 5 2.2 5 5"/></symbol>
+ <symbol id="i-tasks" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1"/><path d="M8.5 10.5l1.5 1.5 3-3M8.5 16h7"/></symbol>
+ <symbol id="i-build" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V8M7 13l5-5 5 5"/><path d="M4 4h16"/></symbol>
+ <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v11H5z"/><path d="M4 9l2-4h12l2 4"/><path d="M9 5v4M15 5v4"/><rect x="10" y="12" width="4" height="6" rx="1"/></symbol>
+ <symbol id="i-quiz" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M10 8.5a2 2 0 1 1 2.8 1.8c-.6.3-.8.7-.8 1.2"/><circle cx="12" cy="13.6" r=".4" fill="currentColor"/></symbol>
+ <symbol id="i-sort" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="16" rx="2"/><path d="M11 15.5h2"/><path d="M3 21h18"/></symbol>
+ <symbol id="i-power" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.6 6.6a7.5 7.5 0 1 0 10.8 0"/></symbol>
+ <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4.5c0 3 1.5 4.5 3.7 4.8M16 6h3.5c0 3-1.5 4.5-3.7 4.8M12 13v4M8 21h8M9.5 17h5v4h-5z"/></symbol>
+ <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M9 8h7M9 12h5"/></symbol>
+ <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+ <symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+ <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></symbol>
+ <symbol id="i-hand" viewBox="0 0 24 24"><ellipse cx="12" cy="17" rx="8" ry="3.5" fill="#e09a12"/><ellipse cx="12" cy="15.5" rx="8" ry="3.5" fill="#ffd567"/><ellipse cx="12" cy="11.5" rx="8" ry="3.5" fill="#e09a12"/><ellipse cx="12" cy="10" rx="8" ry="3.5" fill="#ffd567"/><ellipse cx="12" cy="6" rx="8" ry="3.5" fill="#e09a12"/><ellipse cx="12" cy="4.5" rx="8" ry="3.2" fill="#ffe08a"/></symbol>
+ <symbol id="i-sound" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+ <symbol id="i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/></symbol>
+ <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+ <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+ <symbol id="i-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.5l3-5.2M17 19h2.5l-3-5.2M9.5 6.5L12 3l2.5 3.5"/><path d="M7.5 13.8L10 9.5M16.5 13.8L14 9.5M8 19h8"/></symbol>
+ <symbol id="i-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5z"/><path d="M14.5 6.5L17 4l3 3-2.5 2.5"/></symbol>
+ <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.5-7.5-10A4.2 4.2 0 0 1 12 7.5 4.2 4.2 0 0 1 19.5 10c0 5.5-7.5 10-7.5 10z"/></symbol>
+ <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3.5" width="16" height="7" rx="1.5"/><rect x="4" y="13.5" width="16" height="7" rx="1.5"/><path d="M8 7h.01M8 17h.01M12 7h4M12 17h4"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+ <symbol id="i-rate" viewBox="0 0 24 24"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.6l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="#ffc23d" stroke="#c98a12" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.5" r=".6" fill="currentColor"/></symbol>
+ <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+</svg>
 
-    <!-- Open Graph (WhatsApp, Insta, LinkedIn…) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta property="og:site_name" content="Digital City" />
-    <meta property="og:title" content="🏙️ Digital City — sauveras-tu le pire data center de France ?" />
-    <meta property="og:description" content="Réponds au quiz, gagne des pièces et transforme le pire data center en champion du numérique sobre. Défie tes potes !" />
-    <!-- Après le 1er déploiement, remplacer par l'URL absolue (ex. https://digital-city.vercel.app/og.png) -->
-    <meta property="og:image" content="/og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="🏙️ Digital City" />
-    <meta name="twitter:description" content="Transforme le pire data center en champion du numérique sobre !" />
-    <meta name="twitter:image" content="/og.png" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<div id="app">
+ <canvas id="cv" aria-label="Your town. Tap buildings to collect coins or upgrade them."></canvas>
+
+ <header class="hud">
+  <div class="card town">
+   <div class="lvl" id="lvlN" title="Your level">1</div>
+   <div style="flex:1">
+    <div class="tname" id="tName">My Town</div>
+    <div class="lname" id="lName">Level 1</div>
+    <div class="bar" title="XP towards the next level"><i id="xpBar" style="width:0"></i></div>
+   </div>
+  </div>
+  <div class="stats">
+   <div class="chip" title="Coins: spend them on upgrades and drop-off boxes"><svg class="i"><use href="#i-coin"/></svg><b id="vCoins">0</b></div>
+   <div class="chip" title="XP (experience points): needed to level up"><svg class="i"><use href="#i-star"/></svg><b id="vXp">0</b><small>XP</small></div>
+   <div class="chip co2" id="co2Chip" title="Your town's digital carbon footprint, in tonnes of CO₂ per year. Lower is better."><svg class="i" style="color:var(--c,#b4572f)"><use href="#i-cloud"/></svg><b id="vCo2">0</b><small>t CO₂/yr digital</small></div>
+   <div class="chip" title="Citizen mood: a lighter digital footprint makes citizens happier, and happy towns earn more coins"><svg class="i"><use href="#i-smile"/></svg><b id="vMood">0%</b><small>mood</small></div>
+   <div class="chip" title="Citizens"><svg class="i"><use href="#i-people"/></svg><b id="vPop">0</b></div>
+   <button class="chip" id="cComm" data-k="rate" title="Visitors and player ratings. Click to rate the game from 1 to 10"><svg class="i" style="color:var(--cyan)"><use href="#i-eye"/></svg><b id="vVis">–</b><small>visitors</small><svg class="i"><use href="#i-rate"/></svg><b id="vRate">Rate</b></button>
+  </div>
+ </header>
+
+ <section class="card mission" id="mission" aria-live="polite"></section>
+
+ <div class="rail">
+  <button class="rb gold" id="bCollect" title="Collect coins from every ready building (Space)" aria-label="Collect all coins"><svg class="i"><use href="#i-hand"/></svg><span class="badge" id="bgReady"></span></button>
+  <button class="rb" data-k="zin" title="Zoom in (+)" aria-label="Zoom in"><svg class="i"><use href="#i-plus"/></svg></button>
+  <button class="rb" data-k="zout" title="Zoom out (−)" aria-label="Zoom out"><svg class="i"><use href="#i-minus"/></svg></button>
+  <button class="rb" data-k="center" title="Re-center the map (C)" aria-label="Re-center"><svg class="i"><use href="#i-target"/></svg></button>
+  <button class="rb" data-k="labels" id="bLbl" title="Show or hide building names (N)" aria-label="Building names"><svg class="i"><use href="#i-tag"/></svg></button>
+  <button class="rb" id="bMute" title="Sound on/off (M)" aria-label="Sound"><svg class="i"><use href="#i-sound"/></svg></button>
+  <button class="rb" data-k="settings" title="Settings" aria-label="Settings"><svg class="i"><use href="#i-gear"/></svg></button>
+ </div>
+
+ <nav class="card dock" aria-label="Game actions">
+  <button class="db" data-k="tasks" title="Tasks: 3 small missions that pay bonus coins and XP"><svg class="i"><use href="#i-tasks"/></svg>Tasks<kbd>T</kbd><span class="badge" id="bgTasks"></span></button>
+  <button class="db" data-k="build" title="Upgrade: make a building greener to cut CO₂"><svg class="i"><use href="#i-build"/></svg>Upgrade<kbd>U</kbd><span class="badge" id="bgBuild"></span></button>
+  <button class="db" data-k="plant" id="bPlant" title="Drop-off: place collection boxes for old phones (−2 t CO₂ each)"><svg class="i"><use href="#i-box"/></svg>Drop-off<kbd>D</kbd></button>
+  <button class="db" data-k="quiz" title="Quiz: answer a digital-impact question for coins and XP"><svg class="i"><use href="#i-quiz"/></svg>Quiz<kbd>Q</kbd></button>
+  <button class="db" data-k="sort" title="Sort: decide whether old devices should be repaired, reused or recycled"><svg class="i"><use href="#i-sort"/></svg>Sort<kbd>S</kbd></button>
+  <button class="db" data-k="lights" title="Standby: switch off devices left on standby before time runs out"><svg class="i"><use href="#i-power"/></svg>Standby<kbd>E</kbd></button>
+  <button class="db" data-k="ranks" title="Ranks: compare your digital footprint with other towns"><svg class="i"><use href="#i-trophy"/></svg>Ranks<kbd>R</kbd></button>
+  <button class="db guide" data-k="guide" title="Guide: how the game works and what every button does"><svg class="i"><use href="#i-book"/></svg>Guide<kbd>G</kbd></button>
+ </nav>
+
+ <aside class="card drawer" id="drawer" aria-label="Panel">
+  <div class="dh"><h2 id="dTitle">Tasks</h2><button class="x" data-k="close" aria-label="Close panel"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <div class="dbody" id="dBody"></div>
+ </aside>
+
+ <div class="card coach" id="coach"><span id="coachTxt" style="flex:1"></span><button class="btn sm ghost" id="coachOk">Got it</button></div>
+ <div class="toasts" id="toasts"></div>
+ <div class="tip" id="tip"></div>
+ <div class="modal" id="modal"><div class="mbox" id="mbox" role="dialog" aria-modal="true"></div></div>
+</div>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.random()*a.length|0];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const IX=32,IY=16,N=12,START=484,BOX_MAX=16,BOX_COST=20;
+
+/* ---------- Buildings: each tier = [name, CO2 t/yr, coins per cycle, cost, level needed, what it means] ---------- */
+const K={
+home:{L:'Home',c:10,h:42,role:'Where citizens use phones, TVs, consoles and Wi-Fi. Their habits (keeping devices, switching off) matter a lot.',t:[
+ ['Always-On Home',12,5,0,1,'Five screens on standby day and night, a new phone every year and 4K videos on mobile data.'],
+ ['Smart-Saver Home',8,7,80,1,'Devices fully switched off at night, and Wi-Fi instead of mobile data at home.'],
+ ['Long-Life Home',4,10,300,4,'Phones and laptops are kept 5 years or more, and the next one is bought refurbished.'],
+ ['Low-Tech Home',1,14,900,7,'Fewer devices, repaired and shared by the family, powered by rooftop solar.']]},
+aidc:{L:'AI Data Center',c:20,h:68,role:'Runs AI and online services on thousands of chips. Its footprint depends mostly on where its electricity comes from.',t:[
+ ['Coal-Powered AI Center',120,20,0,1,'Power-hungry AI chips running on electricity from the coal plant next door.'],
+ ['Gas-Powered AI Center',70,26,250,2,'Gas emits less CO₂ than coal for the same electricity, but it is still a fossil fuel.'],
+ ['Solar-Powered AI Center',15,34,700,5,'The same servers, now on solar power: the electricity source changes everything.'],
+ ['Wind-Powered AI Center',-10,44,1600,8,'Wind turbines and batteries power the chips, and spare clean power is shared with the town.']]},
+clouddc:{L:'Cloud Data Center',c:20,h:64,role:'Stores emails, photos and videos for the whole town. Old idle servers and air conditioning waste energy.',t:[
+ ['Overheating Server Hall',90,18,0,1,'Old servers, many of them idle, cooled by power-hungry air conditioning.'],
+ ['Efficient Cooling Hall',60,22,220,2,'Hot and cold aisles and outside air cool the servers with far less energy.'],
+ ['Virtualised Data Center',25,30,650,5,'Many virtual servers share fewer, well-used machines; idle hardware is switched off.'],
+ ['Heat-Recycling Data Center',-8,40,1500,9,'Its waste heat warms nearby homes and a swimming pool instead of being thrown away.']]},
+cooling:{L:'Cooling Plant',c:12,h:46,role:'Keeps the data centers from overheating. Cooling can use a lot of energy and fresh water.',t:[
+ ['Water-Guzzling Cooling Tower',20,3,0,1,'Evaporative cooling for the servers consumes large amounts of fresh water.'],
+ ['Closed-Loop Cooling',12,5,150,2,'The same water circulates in a closed loop instead of evaporating.'],
+ ['Lake Free-Cooling',5,7,500,6,'Cold water from the lake cools the servers with very little extra energy.'],
+ ['Heat Network',-5,9,1000,8,'Pipes carry the servers’ warm water to heat homes, so their boilers can stay off.']]},
+factory:{L:'Device Factory',c:15,h:50,role:'Makes phones, laptops and screens. Manufacturing is the biggest part of a device’s footprint.',t:[
+ ['Throwaway Phone Factory',45,10,0,1,'Glued-in batteries and a new model every year: phones built to be replaced.'],
+ ['Efficient Factory',25,13,200,3,'Cleaner energy and less waste on the production line.'],
+ ['Modular Phone Factory',10,17,550,5,'Screens, batteries and cameras can be swapped, so phones last for years.'],
+ ['Circular Device Factory',4,23,1300,8,'New devices are built from recycled metals and designed to be repaired.']]},
+network:{L:'Network Hub',c:12,h:52,role:'Carries every message and video through antennas and cables. Mobile data usually uses more energy than fixed fibre.',t:[
+ ['Diesel Mobile Mast',60,8,0,1,'Antennas everywhere, a diesel backup generator, and everyone streaming on 4G.'],
+ ['Shared Mobile Mast',35,11,150,2,'Operators share one mast instead of each building their own.'],
+ ['Fibre Network Hub',15,14,450,4,'Fixed fibre carries data with much less energy per gigabyte than mobile networks.'],
+ ['Solar Fibre Hub',4,19,1200,7,'A fibre network powered by solar panels, with equipment put to sleep at night.']]},
+ewaste:{L:'E-Waste Site',c:10,h:32,role:'Where old phones, chargers and screens end up. Recovering and reusing them avoids mining and pollution.',t:[
+ ['Open E-Waste Dump',50,4,0,1,'Old devices are dumped and cables burned, releasing toxic fumes and wasting metals.'],
+ ['E-Waste Sorting Center',30,6,120,1,'Phones, screens and batteries are collected and sorted safely.'],
+ ['Metal Recovery Plant',14,8,400,3,'Gold, copper and other metals are recovered so less needs to be mined.'],
+ ['Refurb & Recycling Hub',-10,11,1100,7,'Devices are repaired and resold first, and recycled only as a last resort.']]},
+office:{L:'Office',c:10,h:48,role:'Hundreds of computers and screens. Leaving them on and replacing them often adds up.',t:[
+ ['Always-On Office',15,4,0,1,'Computers and screens left on every night and every weekend.'],
+ ['Auto-Shutdown Office',6,6,60,1,'Computers go to sleep automatically when nobody is using them.'],
+ ['Long-Life IT Office',3,8,350,4,'Laptops are kept for 6 years and replaced with refurbished ones.'],
+ ['Sober-Digital Office',1,10,1000,9,'Fewer screens, lighter software and only the cloud storage it really needs.']]},
+shop:{L:'Phone Shop',c:15,h:40,role:'Sells devices. It can push people to replace phones every year, or help them keep, repair and reuse them.',t:[
+ ['New-Phone Megastore',30,10,0,1,'Shiny new models every year, pushing everyone to replace phones that still work.'],
+ ['Trade-In Store',18,13,180,3,'Old phones are taken back and sent for reuse or recycling.'],
+ ['Refurbished Store',8,17,600,6,'Sells checked and repaired second-hand phones with a warranty.'],
+ ['Repair & Rent Co-op',-5,22,1200,9,'Fixes broken devices and rents out the ones you only need now and then.']]},
+school:{L:'School',c:12,h:44,role:'Where the next generation learns how to use digital tools wisely.',t:[
+ ['Screens-Everywhere School',18,4,0,1,'A new tablet for every pupil every two years, and screens left on all day.'],
+ ['Digital Sobriety School',10,6,200,3,'Pupils learn how their clicks, videos and devices affect the planet.'],
+ ['Low-Tech Lab',4,9,700,6,'Pupils repair old computers and build simple, durable tools.'],
+ ['Digital Climate Lab',2,13,1500,10,'Students design lighter apps and websites for the whole town.']]}};
+const SLOTS=[
+ {id:'home1',k:'home',i:5,j:5},{id:'home2',k:'home',i:4,j:5},{id:'home3',k:'home',i:5,j:4},
+ {id:'school',k:'school',i:2,j:4},{id:'park',k:'office',i:3,j:2},{id:'market',k:'shop',i:7,j:5},
+ {id:'factory',k:'clouddc',i:9,j:4},{id:'power',k:'aidc',i:10,j:1},{id:'water',k:'cooling',i:4,j:8},
+ {id:'farm',k:'factory',i:1,j:10},{id:'transit',k:'network',i:7,j:7},{id:'waste',k:'ewaste',i:10,j:10}];
+const SL=Object.fromEntries(SLOTS.map(s=>[s.id,s]));
+const LV=[
+ {n:'Screen Smog',xp:80,co2:470},{n:'First Unplug',xp:200,co2:400},{n:'Cooler Servers',xp:350,co2:300},
+ {n:'Fibre Streets',xp:550,co2:260},{n:'Solar Cloud',xp:800,co2:170},{n:'Repair Town',xp:1100,co2:130},
+ {n:'Long-Life City',xp:1450,co2:85},{n:'Clean Code',xp:1850,co2:45},{n:'Digital Pioneer',xp:2300,co2:10},
+ {n:'Net-Zero Digital Haven',xp:Infinity,co2:0}];
+const QUIZ=[
+ ['According to France’s environment agency (ADEME) and telecoms regulator (Arcep), what causes most of France’s digital carbon footprint?',['Data centers','Networks (Wi-Fi, 4G, fibre)','Our devices: phones, TVs, laptops…'],2,'Their 2022 study found that devices account for around 79% of it, mostly from manufacturing them.'],
+ ['When does a smartphone produce most of its CO₂ over its whole life?',['While it is being made','While it is charging','When it is recycled'],0,'Mining the metals and making the chips and screen weigh far more than years of charging.'],
+ ['What is the best way to cut your phone’s footprint?',['Charge it only at night','Keep it longer and buy refurbished','Use dark mode'],1,'Every extra year of use spreads the manufacturing footprint over more time.'],
+ ['To watch the same video at home, what usually uses less energy?',['Wi-Fi on a fixed fibre or box connection','4G or 5G mobile data','They are always exactly equal'],0,'Mobile networks generally use more energy per gigabyte than fixed connections.'],
+ ['Roughly what share of the world’s electricity did data centers use in 2024, according to the International Energy Agency (IEA)?',['About 1.5%','About 15%','About 50%'],0,'About 415 TWh. The IEA expects this to more than double by 2030, driven largely by AI.'],
+ ['A data center’s PUE (Power Usage Effectiveness) compares…',['Its total energy use with the energy used by the servers','Its number of users with its number of servers','Its price with its speed'],0,'A PUE of 1.0 would mean every watt goes to computing. The closer to 1, the less is lost to cooling.'],
+ ['Why do many data centers use large amounts of water?',['To clean the servers','To cool the servers','To make electricity on site'],1,'Evaporative cooling consumes fresh water, which matters a lot where water is scarce.'],
+ ['In 2022, roughly what share of the world’s e-waste was documented as properly collected and recycled?',['About 22%','About 60%','About 90%'],0,'The Global E-waste Monitor 2024 counted 62 million tonnes of e-waste in 2022, and only about 22% was documented as properly recycled.'],
+ ['What reduces the data needed to stream a video?',['Watching in 4K','Choosing a lower resolution when 4K isn’t needed','Turning the volume up'],1,'Higher resolutions send far more data through networks and data centers.'],
+ ['Do routers, TV boxes and consoles on standby still use electricity?',['Yes','No','Only during the day'],0,'Standby adds up over a year. A power strip with a switch makes it easy to turn everything off.'],
+ ['What valuable materials can be recovered from old phones?',['None, they are only plastic','Gold, silver, copper and other metals','Only glass'],1,'Recovering them means less mining, which uses a lot of energy and damages ecosystems.'],
+ ['What does buying a refurbished phone mainly avoid?',['The emissions of manufacturing a new phone','Software updates','Using a SIM card'],0,'Most of a phone’s footprint comes from making it, so reuse avoids most of it.'],
+ ['What is “digital sobriety”?',['Never using the internet','Using digital tools as much as we need, with durable devices','Always buying the newest devices'],1,'It is about making conscious choices, not about giving up technology.'],
+ ['Why is turning off video autoplay a good idea?',['Videos load faster','It avoids streaming videos nobody is watching','It improves the camera'],1,'Autoplay keeps sending data through networks and servers even after you stop watching.'],
+ ['You listen to the same album every day. What is lighter for the planet?',['Download it once and play it offline','Stream it again every day','Stream it as a music video'],0,'Streaming repeats the data transfer every time; a download happens only once.'],
+ ['Why does generative AI raise concerns about energy use?',['It runs on paper','Training and running large models needs powerful chips and lots of electricity','It works without electricity'],1,'Using AI when it is really useful, and powering data centers with clean energy, both help.'],
+ ['Which electricity gives a data center the lowest carbon footprint?',['Coal','Natural gas','Low-carbon sources such as wind and solar'],2,'The same server can emit many times less CO₂ depending on where its electricity comes from.'],
+ ['What can be done with the heat produced by servers?',['Nothing, it is always wasted','Heat homes, offices or swimming pools','It turns back into electricity by itself'],1,'Several European cities already feed data-center heat into their heating networks.'],
+ ['Where should a phone with a swollen battery go?',['The household bin','A drawer','An e-waste collection point'],2,'Damaged lithium batteries can catch fire. Collection points handle them safely.'],
+ ['What happens to a lot of e-waste that is not collected properly?',['It disappears naturally','It is dumped, burned or handled informally, releasing toxic substances','It turns into compost'],1,'Lead, mercury and other substances can pollute soil and water and harm workers’ health.'],
+ ['Which habit makes a laptop last longer?',['Keeping it clean, updated and repaired','Replacing it as soon as a new model comes out','Never switching it off'],0,'Repairing a keyboard or a battery costs far less, for you and for the planet, than a new laptop.']];
+const BINS=[['Repair','#e0861a','i-wrench'],['Reuse or donate','#2f7fd1','i-heart'],['E-waste recycling','#3d9a4a','i-recycle']];
+const WASTE=[['Phone with a cracked screen',0,'phone'],['Laptop that works but feels slow',1,'laptop'],['Swollen phone battery',2,'battery'],['Tablet you no longer use (works fine)',1,'tablet'],['Headphones with a loose wire',0,'headphones'],['Dead rechargeable batteries',2,'battery'],['Old chargers and cables you don’t need',2,'cable'],['Working phone you replaced',1,'phone'],['Laptop with a broken keyboard',0,'laptop'],['Burnt-out power adapter',2,'adapter'],['Game console you stopped playing',1,'console'],['Printer with a jammed roller',0,'printer'],['Smashed phone with a dead motherboard',2,'phone'],['Old monitor that still works',1,'monitor'],['Phone whose battery drains fast',0,'phone']];
+const DEVS=['TV','Console','Router','Laptop','Speaker','Monitor','Printer','TV box','Tablet','PC','Charger','Hi-fi','Screen','Modem','Projector','Camera'];
+const TK={
+ litter:{t:'Pick up {n} old devices lying around town',n:[4,6,8],c:8,x:3,go:null,ic:'i-recycle',how:'Tap the old phones and cables on the map.'},
+ quiz:{t:'Answer {n} quiz questions correctly',n:[2,3],c:22,x:10,go:'quiz',ic:'i-quiz'},
+ sort:{t:'Sort {n} old devices the right way',n:[5,8],c:7,x:3,go:'sort',ic:'i-sort'},
+ lights:{t:'Switch off {n} devices on standby',n:[10,15],c:4,x:2,go:'lights',ic:'i-power'},
+ plant:{t:'Install {n} drop-off box{es}',n:[1,2],c:24,x:6,go:'plant',ic:'i-box'},
+ collect:{t:'Collect coins {n} times',n:[5,8,10],c:6,x:2,go:null,ic:'i-coin',how:'Tap gold bubbles or press Space.'},
+ upgrade:{t:'Upgrade {n} building{s}',n:[1,2],c:60,x:25,go:'build',ic:'i-build'}};
+const RIVALS=[['Pixelmoor',468,1],['Bytebury',410,2],['Cachefield',262,4],['Fiberdale',176,5],['Greenbit',96,7],['Solarstream',22,9]];
+
+/* ---------- State ---------- */
+const LS='ecoville-digital-v1';
+const fresh=()=>({v:1,town:'',coins:150,xp:0,level:1,tier:Object.fromEntries(SLOTS.map(s=>[s.id,0])),prod:Object.fromEntries(SLOTS.map(s=>[s.id,Date.now()-8000])),trees:[],tasks:[],seen:[],won:false,mute:false,tut:0,ai:true,lbl:true,intro:false,rated:0,ratePrompted:false,t:0});
+function norm(s){const f=fresh();s=Object.assign(f,s||{});for(const sl of SLOTS){if(!(sl.id in s.tier))s.tier[sl.id]=0;if(!(sl.id in s.prod))s.prod[sl.id]=Date.now()}return s}
+let hadLocal=false,S;
+try{const l=JSON.parse(localStorage.getItem(LS));if(l&&l.v===1){S=norm(l);hadLocal=true}}catch(e){}
+if(!S)S=fresh();
+
+const scale=()=>1+.3*(S.level-1);
+const co2=()=>SLOTS.reduce((a,s)=>a+K[s.k].t[S.tier[s.id]][1],0)-2*S.trees.length;
+const green=()=>clamp((START-co2())/(START+30),0,1);
+const mult=()=>.8+.6*green();
+const mood=()=>Math.round(30+70*green());
+const pop=()=>40+SLOTS.filter(s=>s.k==='home').reduce((a,s)=>a+S.tier[s.id]*12,0)+S.level*10;
+const ready=s=>Date.now()-S.prod[s.id]>=K[s.k].c*1000;
+
+/* ---------- Map ---------- */
+const G=[...Array(N)].map((_,i)=>[...Array(N)].map((_,j)=>(i===6||j===6)?'r':'g'));
+[[2,7],[3,7],[2,8],[3,8]].forEach(([i,j])=>G[i][j]='w');
+SLOTS.forEach(s=>G[s.i][s.j]='s');
+const hash=(i,j)=>{let h=(i*374761393+j*668265263)^0x5bd1e995;h=(h^(h>>13))*1274126177;return((h^(h>>16))>>>0)/4294967295};
+
+/* ---------- Canvas helpers ---------- */
+const cv=$('#cv'),ctx=cv.getContext('2d');
+let W=1,H=1,dpr=1,cam={x:0,y:0,z:1},tm=0,dtG=0,hover=null,hoverTile=null,sel=null,plantMode=false;
+const PR=[],FT=[],CF=[];
+function fit(){const top=W<700?120:90,bot=W<700?150:90;const z=clamp(Math.min(W/(N*64+(W<700?-140:60)),(H-top-bot)/(N*32+120)),.42,2);cam.z=z;cam.x=W/2;cam.y=top+(H-top-bot)/2-(N*16-8)*z+30*z}
+function resize(){const r=cv.getBoundingClientRect();W=r.width||1;H=r.height||1;dpr=Math.min(2,devicePixelRatio||1);cv.width=W*dpr;cv.height=H*dpr;fit()}
+const iso=(i,j)=>[(i-j)*IX,(i+j)*IY];
+const toWorld=(sx,sy)=>[(sx-cam.x)/cam.z,(sy-cam.y)/cam.z];
+const toTile=(wx,wy)=>{const a=wx/IX,b=wy/IY;return[Math.round((b+a)/2),Math.round((b-a)/2)]};
+function hx(c){c=c.replace('#','');return[parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
+const toHex=a=>'#'+a.map(v=>clamp(Math.round(v),0,255).toString(16).padStart(2,'0')).join('');
+const mix=(a,b,t)=>{const A=hx(a),B=hx(b);return toHex(A.map((v,k)=>v+(B[k]-v)*t))};
+const sh=(c,f)=>{const A=hx(c);return toHex(A.map(v=>f>0?v+(255-v)*f:v*(1+f)))};
+const up=(p,h)=>[p[0],p[1]-h],l2=(p,q,u)=>[p[0]+(q[0]-p[0])*u,p[1]+(q[1]-p[1])*u];
+function poly(pts,f){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let k=1;k<pts.length;k++)ctx.lineTo(pts[k][0],pts[k][1]);ctx.closePath();ctx.fillStyle=f;ctx.fill()}
+function line(pts,col,w){ctx.strokeStyle=col;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let k=1;k<pts.length;k++)ctx.lineTo(pts[k][0],pts[k][1]);ctx.stroke()}
+function corners(x,y,a,b){return{T:[x+(b-a)*IX,y-(a+b)*IY],R:[x+(a+b)*IX,y+(a-b)*IY],B:[x+(a-b)*IX,y+(a+b)*IY],L:[x-(a+b)*IX,y+(b-a)*IY]}}
+function dia(x,y,a,b,f){const c=corners(x,y,a,b);poly([c.T,c.R,c.B,c.L],f);return c}
+function box(x,y,a,b,h,col,z=0){const{T,R,B,L}=corners(x,y-z,a,b);
+ poly([L,B,up(B,h),up(L,h)],sh(col,-.07));poly([B,R,up(R,h),up(B,h)],sh(col,-.25));poly([up(T,h),up(R,h),up(B,h),up(L,h)],sh(col,.12));
+ return{T:up(T,h),R:up(R,h),B:up(B,h),L:up(L,h),bL:L,bB:B,bR:R,h}}
+function wins(o,rows,cols,col,side=3){const h=o.h;const f=(P,Q,s)=>{for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const A=l2(P,Q,(c+.28)/cols),B=l2(P,Q,(c+.72)/cols),v0=h*(r+.28)/rows,v1=h*(r+.72)/rows;poly([up(A,v0),up(B,v0),up(B,v1),up(A,v1)],typeof col==='function'?col(r,c,s):col)}};if(side&1)f(o.bL,o.bB,0);if(side&2)f(o.bB,o.bR,1)}
+function leds(o,rows,cols,side=3){const h=o.h;const f=(P,Q,s)=>{for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const A=l2(P,Q,(c+.18)/cols),B=l2(P,Q,(c+.82)/cols),v=h*(r+.4)/rows;poly([up(A,v-2.4),up(B,v-2.4),up(B,v+2.4),up(A,v+2.4)],'#1c222b');const on=((tm*2.2+r*1.7+c*2.3+s*3)|0)%4;const C=l2(A,B,.25+.5*(((tm*.9+c+r)|0)%2));ctx.fillStyle=on===0?'#ffd34d':on===1?'#5ad1ff':'#3cff8a';ctx.fillRect(C[0]-.9,C[1]-v-.9,1.8,1.8)}};if(side&1)f(o.bL,o.bB,0);if(side&2)f(o.bB,o.bR,1)}
+function gable(x,y,a,b,h,rh,col,wall,z=0){const c=corners(x,y-z,a,b),T=up(c.T,h),R=up(c.R,h),B=up(c.B,h),L=up(c.L,h);const P1=[x-a*IX,y-z-a*IY-h-rh],P2=[x+a*IX,y-z+a*IY-h-rh];
+ poly([T,R,P2,P1],sh(col,.14));poly([L,B,P2,P1],col);poly([R,B,P2],sh(wall,-.3));return{L,B,P1,P2}}
+function panel(A,B,C,D,col='#2b56a3'){const q=(u,v)=>l2(l2(A,B,u),l2(D,C,u),v);poly([q(.12,.15),q(.88,.15),q(.88,.85),q(.12,.85)],col);ctx.strokeStyle='rgba(170,205,255,.75)';ctx.lineWidth=.7;ctx.beginPath();for(const u of[.37,.63]){const s=q(u,.15),e=q(u,.85);ctx.moveTo(s[0],s[1]);ctx.lineTo(e[0],e[1])}const s=q(.12,.5),e=q(.88,.5);ctx.moveTo(s[0],s[1]);ctx.lineTo(e[0],e[1]);ctx.stroke()}
+function greenTop(o){const q=(u,v)=>l2(l2(o.L,o.B,u),l2(o.T,o.R,u),v);poly([q(.08,.08),q(.92,.08),q(.92,.92),q(.08,.92)],'#68b84a');ctx.fillStyle='#4f9e3b';for(const[u,v]of[[.3,.3],[.7,.6],[.4,.75]]){const p=q(u,v);ctx.beginPath();ctx.arc(p[0],p[1]-1.5,2.6,0,7);ctx.fill()}}
+function onTop(o,u,v){return l2(l2(o.L,o.B,u),l2(o.T,o.R,u),v)}
+function cyl(x,y,r,h,col,z=0){const yb=y-z,yt=yb-h;ctx.fillStyle=sh(col,-.18);ctx.beginPath();ctx.moveTo(x-r,yt);ctx.lineTo(x-r,yb);ctx.ellipse(x,yb,r,r/2,0,Math.PI,0,true);ctx.lineTo(x+r,yt);ctx.closePath();ctx.fill();ctx.fillStyle=sh(col,-.02);ctx.beginPath();ctx.moveTo(x-r,yt);ctx.lineTo(x-r,yb);ctx.ellipse(x,yb,r,r/2,0,Math.PI,Math.PI/2,true);ctx.lineTo(x,yt);ctx.closePath();ctx.fill();ctx.fillStyle=sh(col,.2);ctx.beginPath();ctx.ellipse(x,yt,r,r/2,0,0,7);ctx.fill()}
+function shadow(x,y,rx,ry){ctx.fillStyle='rgba(20,40,20,.16)';ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,7);ctx.fill()}
+function tree(x,y,s=1,ty=0,col='#3f9d4a'){const sw=Math.sin(tm*1.6+x*.07)*1.1*s;shadow(x,y,7*s,3.4*s);ctx.fillStyle='#7a5234';ctx.fillRect(x-1.3*s,y-9*s,2.6*s,9*s);
+ if(ty){poly([[x+sw,y-30*s],[x+8.5*s,y-7*s],[x-8.5*s,y-7*s]],sh(col,-.12));poly([[x+sw,y-30*s],[x+8.5*s,y-7*s],[x+sw*.4,y-7*s]],sh(col,-.32))}
+ else{ctx.fillStyle=sh(col,-.15);ctx.beginPath();ctx.arc(x+sw,y-15*s,8.5*s,0,7);ctx.fill();ctx.fillStyle=col;ctx.beginPath();ctx.arc(x+sw-1,y-16.5*s,7*s,0,7);ctx.fill();ctx.fillStyle=sh(col,.28);ctx.beginPath();ctx.arc(x+sw-3*s,y-19*s,3.2*s,0,7);ctx.fill()}}
+function turbine(x,y,H,s=1){ctx.lineCap='round';ctx.strokeStyle='#9fb0b8';ctx.lineWidth=3.4*s;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-H);ctx.stroke();ctx.strokeStyle='#fbfdfe';ctx.lineWidth=2.2*s;ctx.stroke();
+ const a=tm*2.2+x*.3;for(const[w,c]of[[3*s,'#8a9aa3'],[1.8*s,'#ffffff']]){ctx.lineWidth=w;ctx.strokeStyle=c;ctx.beginPath();for(let k=0;k<3;k++){const an=a+k*2.094;ctx.moveTo(x,y-H);ctx.lineTo(x+Math.cos(an)*15*s,y-H+Math.sin(an)*15*s)}ctx.stroke()}
+ ctx.fillStyle='#dfe7ea';ctx.beginPath();ctx.arc(x,y-H,2.4*s,0,7);ctx.fill()}
+function emit(x,y,g,rate){if(Math.random()<rate*dtG)PR.push({x:x+rnd(-1,1),y,vx:rnd(3,8),vy:rnd(-17,-10),r:rnd(2,3.3),l:0,m:rnd(2.2,3.6),c:['70,62,56','132,128,122','236,240,244'][g],a:[.75,.55,.6][g],k:'s'})}
+function heat(x,y,rate){if(Math.random()<rate*dtG)PR.push({x:x+rnd(-2,2),y,vx:rnd(-2,3),vy:rnd(-14,-8),r:rnd(1.6,2.4),l:0,m:rnd(.9,1.5),c:'255,110,60',a:.45,k:'s'})}
+function sparkle(x,y,n,col='90,200,110'){for(let k=0;k<n;k++)PR.push({x:x+rnd(-14,14),y:y+rnd(-20,4),vx:rnd(-10,10),vy:rnd(-40,-18),r:rnd(1.6,3),l:0,m:rnd(.8,1.5),c:col,a:1,k:'p'})}
+function waves(x,y,col,n=3){ctx.lineWidth=1.3;for(let k=0;k<n;k++){const r=((tm*14+k*9)%27)+4;ctx.strokeStyle=`rgba(${col},${(1-r/31).toFixed(2)})`;ctx.beginPath();ctx.arc(x,y,r,-2.5,-.65);ctx.stroke()}}
+function mast(x,y,H,s=1){ctx.strokeStyle='#7f888e';ctx.lineWidth=1.4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x-5*s,y);ctx.lineTo(x,y-H);ctx.lineTo(x+5*s,y);for(let k=1;k<5;k++){const t=k/5,yy=y-H*t,w=5*s*(1-t);ctx.moveTo(x-w,yy);ctx.lineTo(x+w,yy)}ctx.stroke();ctx.fillStyle='#e3e8eb';ctx.fillRect(x-4,y-H*.82,2.2,7);ctx.fillRect(x+1.8,y-H*.78,2.2,7);ctx.fillStyle=Math.sin(tm*4+x)>0?'#ff3b30':'#7a1f1a';ctx.beginPath();ctx.arc(x,y-H-1,1.9,0,7);ctx.fill()}
+function sign(o,col,u0=.2,u1=.8){const a=l2(o.bB,o.bR,u0),b=l2(o.bB,o.bR,u1);poly([up(a,o.h-6.5),up(b,o.h-6.5),up(b,o.h-1.5),up(a,o.h-1.5)],col)}
+function phoneIcon(o,u,col='#1f2a33',scr='#5ad1ff'){const A=l2(o.bL,o.bB,u),B=l2(o.bL,o.bB,u+.14);poly([up(A,o.h*.2),up(B,o.h*.2),up(B,o.h*.78),up(A,o.h*.78)],col);const A2=l2(o.bL,o.bB,u+.025),B2=l2(o.bL,o.bB,u+.115);poly([up(A2,o.h*.28),up(B2,o.h*.28),up(B2,o.h*.7),up(A2,o.h*.7)],scr)}
+function acUnits(o,n,hr){for(let k=0;k<n;k++){const p=onTop(o,(k+.5)/n,.5);box(p[0],p[1]+o.h,.05,.05,4,'#aab3ba',o.h);if(hr)heat(p[0],p[1]-5,hr)}}
+function recyc(c,r=5,col='#fff'){ctx.strokeStyle=col;ctx.lineWidth=1.8;ctx.beginPath();ctx.arc(c[0],c[1],r,.3,5.6);ctx.stroke();poly([[c[0]+r*Math.cos(5.6)+2,c[1]+r*Math.sin(5.6)],[c[0]+r*Math.cos(5.6)-2.5,c[1]+r*Math.sin(5.6)-2],[c[0]+r*Math.cos(5.6)-1,c[1]+r*Math.sin(5.6)+2.5]],col)}
+function van(x,y,ax,col='#f4f4f4'){const a=ax?.15:.075,b=ax?.075:.15;box(x,y,a,b,7,col,1.5);const c=corners(x,y-1.5,a,b);poly([up(l2(c.L,c.B,.15),2),up(l2(c.L,c.B,.85),2),up(l2(c.L,c.B,.85),4),up(l2(c.L,c.B,.15),4)],'#2f86c9')}
+function sawRoof(o,col){for(let k=0;k<3;k++){const a=l2(o.L,o.B,k/3),b=l2(o.L,o.B,(k+1)/3),Dx=o.T[0]-o.L[0],Dy=o.T[1]-o.L[1],a2=[a[0]+Dx,a[1]+Dy],b2=[b[0]+Dx,b[1]+Dy],r1=up(l2(a,b,.5),7),r2=[r1[0]+Dx,r1[1]+Dy];poly([a,r1,r2,a2],sh(col,.18));poly([b,b2,r2,r1],sh(col,-.2));poly([a,b,r1],'#9fc6dc')}}
+function hall(x,y,a,b,h,col){const o=box(x,y,a,b,h,col);leds(o,3,4);return o}
+
+/* ---------- Building sprites (by kind and tier) ---------- */
+const D={
+home(x,y,t){const wall=['#cfa77f','#ead6b3','#f3efe6','#fbfbf7'][t],roof=['#6b4a5a','#b4523c','#55657e','#4f9a5c'][t],h=[15,17,18,21][t];
+ shadow(x,y+2,24,10);const o=box(x,y,.25,.21,h,wall);wins(o,1,2,t?'#ffe7a3':(Math.sin(tm*7+x)>0?'#8fd3ff':'#4aa3ff'));
+ if(t<3){const g=gable(x,y,.25,.21,h,11,roof,wall);if(t===2)panel(g.L,g.B,g.P2,g.P1);
+  if(t===0){line([[g.P1[0]+5,g.P1[1]+2],[g.P1[0]+5,g.P1[1]-10]],'#555',1);line([[g.P1[0]+2,g.P1[1]-7],[g.P1[0]+8,g.P1[1]-7]],'#555',1);ctx.fillStyle='#e8e8e8';ctx.beginPath();ctx.ellipse(g.P2[0]-5,g.P2[1]-1,3.6,2.3,-.5,0,7);ctx.fill();waves(g.P1[0]+5,g.P1[1]-10,'110,170,255',2)}}
+ else{greenTop(o);box(x+3,y-2,.1,.07,2,'#2b56a3',h);tree(x-17,y+5,.6,0,'#4caf50')}},
+aidc(x,y,t){shadow(x,y+3,30,13);const o=hall(x+5,y-3,.3,.25,28,t<2?'#3b4252':'#4f5d70');ctx.fillStyle='#fff';ctx.font='700 7px Nunito,sans-serif';ctx.textAlign='center';const c=onTop(o,.5,.5);ctx.fillText('AI',c[0],c[1]+2.5);
+ if(t===0){box(x-15,y+8,.11,.09,10,'#7d6f66');box(x-17,y+5,.04,.04,24,'#5b504a',10);emit(x-17,y+5-34,0,7);acUnits(o,2,2)}
+ else if(t===1){acUnits(o,2,1);cyl(x-15,y+8,7,12,'#d7dadd');box(x-6,y+11,.03,.03,16,'#8a9096');emit(x-6,y+11-16,1,2.5)}
+ else if(t===2){for(let k=0;k<3;k++)box(x-22+k*9,y+4+k*4.5,.13,.05,2,'#2b56a3',3);if(Math.random()<dtG*.8)sparkle(x-12,y+4,1,'255,240,150')}
+ else{turbine(x-20,y+3,48);const b=box(x-6,y+12,.1,.05,6,'#eef6fa');poly([l2(b.bL,b.bB,.1),l2(b.bL,b.bB,.9),up(l2(b.bL,b.bB,.9),2.5),up(l2(b.bL,b.bB,.1),2.5)],'#3cc77d')}},
+clouddc(x,y,t){shadow(x,y+3,30,13);const o=hall(x,y,.38,.32,t===2?22:26,['#4b5563','#5b6b7b','#64748b','#e8eef2'][t]);
+ if(t===0){acUnits(o,4,3);box(x-20,y+11,.07,.05,6,'#6b6f73');emit(x-21,y+7,1,2.5)}
+ else if(t===1)acUnits(o,2,.8);
+ else if(t===2)panel(o.L,o.B,o.R,o.T);
+ else{greenTop(o);line([[o.bL[0]+4,o.bL[1]-3],[o.bL[0]-14,o.bL[1]+6]],'#d35400',2.6);if(Math.random()<dtG*2)PR.push({x:o.bL[0]-14,y:o.bL[1]+2,vx:rnd(-2,2),vy:-12,r:2,l:0,m:1.4,c:'255,255,255',a:.7,k:'s'})}},
+cooling(x,y,t){if(t===0){shadow(x,y+2,14,7);cyl(x,y,11,26,'#c9cdd1');ctx.fillStyle='#aab0b6';ctx.beginPath();ctx.ellipse(x,y-26,8,4,0,0,7);ctx.fill();emit(x,y-28,2,7);if(Math.random()<dtG*3)PR.push({x:x+rnd(-8,8),y:y-4,vx:0,vy:20,r:1.4,l:0,m:.6,c:'80,160,230',a:1,k:'d'})}
+ else if(t===1){shadow(x,y+2,20,9);cyl(x-8,y+3,7,15,'#9fb4c8');cyl(x+9,y-3,7,15,'#9fb4c8');line([[x-2,y-6],[x+3,y-9]],'#5a6b7a',2.5);emit(x+9,y-20,2,1)}
+ else if(t===2){dia(x,y,.44,.44,'#bcd7c0');line([[x-4,y+2],[x-30,y-11]],'#2f86c9',3);line([[x-2,y+5],[x-28,y-7]],'#7cc6f2',2);box(x+6,y-2,.13,.1,9,'#e6ecef')}
+ else{dia(x,y,.44,.44,'#a7d18a');line([[x+4,y-2],[x+30,y-15]],'#d35400',3);line([[x+6,y+1],[x+32,y-12]],'#2f86c9',3);const o=box(x-4,y+2,.13,.1,9,'#f2f5f7');greenTop(o);tree(x-18,y+6,.5)}},
+factory(x,y,t){shadow(x,y+3,26,12);
+ if(t<2){const col=t?'#a59a90':'#8c8079';const o=box(x,y,.3,.26,18,col);wins(o,1,3,t?'#d9cfb8':'#5d534c',2);sawRoof(o,col);phoneIcon(o,.4);box(x+9,y-7,.05,.05,26,t?'#8a8f94':'#5b504a',18);emit(x+9,y-7-44,t?1:0,t?2.5:6);if(!t)van(x-18,y+10,1)}
+ else if(t===2){const o=box(x,y,.3,.26,18,'#5a8fd6');wins(o,1,3,'#cfe6ff',2);phoneIcon(o,.15,'#1f2a33','#3cff8a');phoneIcon(o,.4,'#1f2a33','#ffd34d');phoneIcon(o,.65,'#1f2a33','#5ad1ff');panel(o.L,o.B,o.R,o.T)}
+ else{const o=box(x,y,.3,.26,18,'#f4f7f5');wins(o,1,3,'#a8d8f0',2);greenTop(o);recyc(up(l2(o.bL,o.bB,.5),9),5,'#3d9a4a');turbine(x+16,y-20,20,.55)}},
+network(x,y,t){dia(x,y,.44,.44,t<2?'#9a9ca3':'#b9c9a8');
+ if(t===0){mast(x-8,y+3,42);mast(x+11,y-5,34);waves(x-8,y-39,'255,90,90');waves(x+11,y-39,'255,90,90',2);box(x+12,y+8,.07,.05,6,'#6b6f73');emit(x+14,y+4,1,3)}
+ else if(t===1){mast(x,y+2,46);waves(x,y-44,'255,140,90');box(x+13,y+6,.05,.04,7,'#d0d4d8')}
+ else{const pulse=.5+.5*Math.sin(tm*4);line([[x-24,y+4],[x+24,y-4]],`rgba(90,209,255,${.4+.5*pulse})`,2);line([[x-6,y-10],[x+6,y+12]],`rgba(90,209,255,${.4+.5*(1-pulse)})`,2);
+  if(t===2){box(x-8,y+2,.06,.05,10,'#d9dde0');box(x+7,y-4,.06,.05,10,'#d9dde0');mast(x+15,y+7,22,.6)}
+  else{const o=box(x,y,.2,.15,12,'#f2f5f7');greenTop(o);box(x,y,.08,.06,2,'#2b56a3',12);tree(x-18,y+6,.45)}}},
+ewaste(x,y,t){if(t===0){shadow(x,y+2,28,12);ctx.fillStyle='#5f5b55';ctx.beginPath();ctx.ellipse(x,y,26,12,0,0,7);ctx.fill();ctx.fillStyle='#6f6a62';ctx.beginPath();ctx.ellipse(x-3,y-6,18,9,0,0,7);ctx.fill();ctx.fillStyle='#7c776e';ctx.beginPath();ctx.ellipse(x-2,y-11,10,5,0,0,7);ctx.fill();
+  for(let k=0;k<16;k++){const a=hash(k,3)*6.28,r=hash(k,7);ctx.fillStyle=k%3?'#1f2a33':['#5ad1ff','#e05a7a','#ffd34d'][k%3===0?(k/3|0)%3:0];ctx.fillRect(x+Math.cos(a)*19*r-2,y-6+Math.sin(a)*8*r-1.5,4,3)}
+  ctx.fillStyle=`rgba(255,${120+Math.sin(tm*12)*40|0},40,.9)`;poly([[x+8,y-4],[x+11,y-12-Math.sin(tm*9)*2],[x+14,y-4]],ctx.fillStyle);emit(x+11,y-14,0,5)}
+ else if(t===1){shadow(x,y+2,22,10);const o=box(x-3,y-3,.26,.2,12,'#7a8fa3');wins(o,1,2,'#d6e2ec');['#e0861a','#2f7fd1','#3d9a4a'].forEach((c,k)=>box(x-6+k*8,y+9-k,.05,.05,6,c))}
+ else if(t===2){shadow(x,y+2,24,10);const o=box(x,y,.28,.22,14,'#3f8f63');recyc(up(l2(o.bB,o.bR,.5),8));box(x-18,y+10,.18,.05,3,'#555',4);for(let k=0;k<3;k++)box(x-24+k*6,y+7+k*3,.03,.03,3,['#1f2a33','#ffd34d','#b9c3cc'][k],7)}
+ else{shadow(x,y+2,22,10);const o=box(x-2,y-2,.26,.22,14,'#f2e6d0');greenTop(o);sign(o,'#3cc77d');phoneIcon(o,.35,'#1f2a33','#3cff8a');['#e0861a','#2f7fd1','#3d9a4a'].forEach((c,k)=>box(x+6+k*7,y+11-k*3.5,.04,.04,5,c));tree(x-20,y+4,.5)}},
+office(x,y,t){shadow(x,y+3,22,10);const h=[34,34,30,26][t],o=box(x,y,.24,.2,h,['#9fb4c8','#a9bfd1','#c9d6df','#e9eef0'][t]);const share=[1,.5,.3,.22][t];
+ wins(o,4,3,(r,c,s)=>hash(r*7+c+s*31,t+3)<share?'#ffe7a3':'#5f7486');
+ if(t===0)acUnits(o,2,2);else if(t===1)acUnits(o,1,.5);else if(t===2)panel(o.L,o.B,o.R,o.T);else{greenTop(o);tree(x-19,y+6,.55);tree(x+19,y+6,.5,1)}},
+shop(x,y,t){shadow(x,y+2,24,10);
+ if(t<3){const o=box(x,y,.3,.24,16,['#d9d4e6','#dfe7f2','#e6f2e8'][t]);wins(o,1,2,'#fff3cf',1);sign(o,t===0?(Math.sin(tm*6)>0?'#ff4fa0':'#ff8fc4'):t===1?'#2f86c9':'#3cc77d');phoneIcon(o,.12,'#1f2a33',t===2?'#3cff8a':'#5ad1ff');
+  if(t===0){for(let k=0;k<3;k++)box(x-17,y+9,.05,.05,4,'#f2f2f2',k*4);van(x+16,y+9,1)}else if(t===1)box(x-17,y+9,.05,.05,6,'#3d9a4a');else tree(x-19,y+7,.45)}
+ else{const o=box(x,y,.28,.22,14,'#caa071');wins(o,1,2,'#fff3cf');gable(x,y,.28,.22,14,9,'#5f8f4a','#caa071');line([[x-20,y+9],[x-14,y+6]],'#6b7b8a',2);ctx.strokeStyle='#2f4f3a';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x+15,y+9,2.4,0,7);ctx.arc(x+20,y+11,2.4,0,7);ctx.stroke()}},
+school(x,y,t){shadow(x,y+3,26,11);
+ if(t<2){const wall=t?'#c97d5d':'#b5654a',o=box(x,y,.3,.22,18,wall);wins(o,2,3,t?'#fff0c0':(r,c)=>Math.sin(tm*5+r+c*2)>-.2?'#8fd3ff':'#4aa3ff');gable(x,y,.3,.22,18,10,t?'#5f8f4a':'#6e3b30',wall);line([[x+18,y+6],[x+18,y-22]],'#555',1.2);poly([[x+18,y-22],[x+27,y-19+Math.sin(tm*4)],[x+18,y-16]],t?'#3cc77d':'#d84a3c');if(t)for(let k=0;k<3;k++)box(x-16+k*6,y+11-k*2.5,.06,.04,2,'#6bbf4f')}
+ else{const o=box(x,y,.32,.24,20,'#f5f7f4');wins(o,2,3,'#a8d8f0');if(t===2){panel(o.L,o.B,o.R,o.T);tree(x-20,y+4,.55);tree(x+20,y+6,.5,1)}else{greenTop(o);ctx.fillStyle='rgba(170,230,255,.75)';ctx.beginPath();ctx.ellipse(x,y-24,10,9,0,Math.PI,0);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=1;ctx.stroke();turbine(x+18,y+6,34,.6)}}}};
+function dropBox(x,y){shadow(x,y+1,7,3);const o=box(x,y,.08,.065,12,'#2f9e62');poly([l2(o.L,o.B,.2),l2(o.L,o.B,.8),l2(o.T,o.R,.8),l2(o.T,o.R,.2)],'#1f6e44');recyc(up(l2(o.bL,o.bB,.5),6),2.6)}
+
+/* ---------- Movers & old devices on the map ---------- */
+const MV=[];
+for(let k=0;k<4;k++){const sp=rnd(.7,1)*(k%2?1:-1);MV.push({v:1,ax:k<2?1:0,u:rnd(0,11),sp,lane:sp>0?.2:-.2,idx:k})}
+for(let k=0;k<12;k++){const sp=rnd(.22,.38)*(k%2?1:-1);MV.push({v:0,ax:k%2,u:rnd(0,11),sp,lane:(k%3?1:-1)*.42,col:pick(['#e74c3c','#3498db','#f39c12','#9b59b6','#1abc9c','#e84393','#2d3436']),idx:k})}
+const VT=[['van','van','van','van'],['van','van','bike','van'],['van','bike','bike','bike'],['bike','bike','bike','bike']];
+let LT=[],litterClock=0;
+const maxLitter=()=>[7,5,3,2][S.tier.waste];
+function spawnLitter(){for(let n=0;n<20;n++){const i=rnd(0,N)|0,j=rnd(0,N)|0;if((G[i][j]==='g'||G[i][j]==='r')&&!S.trees.some(t=>t[0]===i&&t[1]===j)){LT.push({i,j,dx:rnd(-10,10),dy:rnd(-4,4),ty:Math.random()*3|0,r:rnd(-.6,.6)});return}}}
+
+/* ---------- Render loop ---------- */
+function frame(now){const dt=Math.min(.05,(now-(frame.l||now))/1000);frame.l=now;tm+=dt;dtG=dt;
+ litterClock+=dt;if(litterClock>7){litterClock=0;if(LT.length<maxLitter())spawnLitter()}
+ const g=green();
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ const sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,mix('#9c9483','#5fb8f2',g));sky.addColorStop(.65,mix('#cbbfa4','#c9ecff',g));sky.addColorStop(1,mix('#b7aa90','#e9f8ff',g));ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ const sx=W*.82,sy=H*.16;const sg=ctx.createRadialGradient(sx,sy,4,sx,sy,90);sg.addColorStop(0,`rgba(255,240,180,${.35+.6*g})`);sg.addColorStop(1,'rgba(255,240,180,0)');ctx.fillStyle=sg;ctx.fillRect(sx-90,sy-90,180,180);ctx.fillStyle=mix('#e8dcb0','#fff3b0',g);ctx.beginPath();ctx.arc(sx,sy,22,0,7);ctx.fill();
+ for(let k=0;k<5;k++){const cx=((tm*(6+k*2)+k*260)%(W+260))-130,cy=50+k*38+(k%2)*20;ctx.globalAlpha=.8;ctx.fillStyle=mix('#8f8676','#ffffff',g);ctx.beginPath();ctx.ellipse(cx,cy,48,14,0,0,7);ctx.ellipse(cx+26,cy-8,28,14,0,0,7);ctx.ellipse(cx-24,cy-4,22,11,0,0,7);ctx.fill();ctx.globalAlpha=1}
+ ctx.setTransform(dpr*cam.z,0,0,dpr*cam.z,dpr*cam.x,dpr*cam.y);
+ const grassA=mix('#a39b62','#69c24b',g),grassB=mix('#988f58','#5db544',g);
+ for(let k=0;k<N;k++){let[x,y]=iso(N-1,k);let c=corners(x,y,.5,.5);poly([c.R,c.B,up(c.B,-22),up(c.R,-22)],'#7a5a3c');poly([c.R,c.B,up(c.B,-5),up(c.R,-5)],sh(grassB,-.2));[x,y]=iso(k,N-1);c=corners(x,y,.5,.5);poly([c.L,c.B,up(c.B,-22),up(c.L,-22)],'#8f6a47');poly([c.L,c.B,up(c.B,-5),up(c.L,-5)],sh(grassA,-.1))}
+ const fib=S.tier.transit>=2;
+ for(let i=0;i<N;i++)for(let j=0;j<N;j++){const[x,y]=iso(i,j),t=G[i][j],h=hash(i,j);
+  if(t==='g'||t==='s')dia(x,y,.5,.5,h>.5?grassA:grassB);
+  if(t==='s')dia(x,y,.47,.47,mix('#c9bfa9','#dbe8cf',g));
+  if(t==='r'){dia(x,y,.5,.5,'#70737b');ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.2;ctx.beginPath();if(j===6&&i!==6){ctx.moveTo(x-7,y-3.5);ctx.lineTo(x+7,y+3.5)}else if(i===6&&j!==6){ctx.moveTo(x+7,y-3.5);ctx.lineTo(x-7,y+3.5)}ctx.stroke();
+   if(fib&&i!==j){const p=.45+.45*Math.sin(tm*3-(i+j)*.6);ctx.strokeStyle=`rgba(90,209,255,${p.toFixed(2)})`;ctx.lineWidth=1.6;ctx.beginPath();if(j===6){ctx.moveTo(x-16,y);ctx.lineTo(x,y+8)}else{ctx.moveTo(x+16,y);ctx.lineTo(x,y+8)}ctx.stroke()}}
+  if(t==='w'){dia(x,y,.5,.5,mix('#7c806a','#3fa7e0',g));ctx.strokeStyle='rgba(255,255,255,.45)';ctx.lineWidth=1;ctx.beginPath();const o=Math.sin(tm*1.5+i+j)*4;ctx.moveTo(x-8+o,y);ctx.lineTo(x+o,y-2);ctx.stroke()}}
+ const outl=(i,j,c)=>{const[x,y]=iso(i,j),q=corners(x,y,.5,.5);ctx.beginPath();ctx.moveTo(...q.T);ctx.lineTo(...q.R);ctx.lineTo(...q.B);ctx.lineTo(...q.L);ctx.closePath();ctx.strokeStyle=c;ctx.lineWidth=2.5;ctx.stroke()};
+ if(plantMode&&hoverTile){const[i,j]=hoverTile;if(i>=0&&j>=0&&i<N&&j<N)outl(i,j,canPlant(i,j)?'#3cff8a':'#ff5a5a')}
+ if(sel)outl(sel.i,sel.j,'#ffc23d');if(hover&&hover!==sel)outl(hover.i,hover.j,'rgba(255,255,255,.85)');
+ const L=[];
+ SLOTS.forEach(s=>L.push([s.i+s.j,()=>{const[x,y]=iso(s.i,s.j);D[s.k](x,y,S.tier[s.id])}]));
+ S.trees.forEach(t=>L.push([t[0]+t[1]+.1,()=>{const[x,y]=iso(t[0],t[1]);dropBox(x+t[2]*.6,y+t[3]*.6)}]));
+ LT.forEach(l=>L.push([l.i+l.j+.05,()=>{const[x,y]=iso(l.i,l.j);const px=x+l.dx,py=y+l.dy;shadow(px,py+1,5,2);ctx.save();ctx.translate(px,py-2);ctx.rotate(l.r);
+  if(l.ty===0){ctx.fillStyle='#1f2a33';ctx.fillRect(-2.6,-4.2,5.2,8.4);ctx.fillStyle='#5ad1ff';ctx.fillRect(-1.8,-3.3,3.6,6)}
+  else if(l.ty===1){ctx.strokeStyle='#2d2d2d';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(-6,0);ctx.bezierCurveTo(-3,-5,0,5,3,-1);ctx.lineTo(6,-1);ctx.stroke();ctx.fillStyle='#ddd';ctx.fillRect(5,-2.5,3,3)}
+  else{ctx.fillStyle='#3a6b35';ctx.fillRect(-4,-2,8,4);ctx.fillStyle='#ffd34d';ctx.fillRect(4,-1,1.5,2)}
+  ctx.restore();ctx.fillStyle='rgba(255,255,255,'+(.4+.4*Math.sin(tm*5+l.i))+')';ctx.beginPath();ctx.arc(px+5,py-7,1.2,0,7);ctx.fill()}]));
+ const vt=VT[S.tier.market],walkers=3+S.level;
+ MV.forEach(m=>{if(!m.v&&m.idx>=walkers)return;m.u+=m.sp*dt;if(m.u>11.4||m.u<-.4){m.sp=-m.sp;m.lane=m.v?-m.lane:m.lane;m.u=clamp(m.u,-.4,11.4)}
+  const i=m.ax?m.u:6+m.lane,j=m.ax?6+m.lane:m.u;L.push([i+j+.2,()=>{const[x,y]=iso(i,j);if(!m.v){person(x,y,m.col,Math.abs(Math.sin(tm*8+m.idx))*1.2);return}
+   if(vt[m.idx]==='van'){van(x,y,m.ax);emit(x-(m.ax?1:-1)*Math.sign(m.sp)*6,y-Math.sign(m.sp)*3,1,3)}
+   else{ctx.strokeStyle='#2f3a40';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x-3,y,2.4,0,7);ctx.moveTo(x+5.4,y);ctx.arc(x+3,y,2.4,0,7);ctx.stroke();box(x,y-1,.05,.04,4,'#3cc77d',3);person(x,y-2,m.idx%2?'#2f86c9':'#ffb347',0)}}])});
+ L.sort((a,b)=>a[0]-b[0]).forEach(o=>o[1]());
+ if(S.lbl){ctx.font='800 8.5px Nunito,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';SLOTS.forEach(s=>{const[x,y]=iso(s.i,s.j),ty=y-K[s.k].h-4,txt=K[s.k].L,w=ctx.measureText(txt).width+10;ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.roundRect?ctx.roundRect(x-w/2,ty-6,w,12,6):ctx.rect(x-w/2,ty-6,w,12);ctx.fill();ctx.fillStyle='#12352a';ctx.fillText(txt,x,ty+.5)})}
+ SLOTS.forEach(s=>{if(!ready(s))return;const[x,y]=iso(s.i,s.j),by=y-K[s.k].h-(S.lbl?24:14)+Math.sin(tm*3+s.i)*2.5;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,by,10,0,7);ctx.moveTo(x-4,by+8);ctx.lineTo(x,by+14);ctx.lineTo(x+4,by+8);ctx.fill();ctx.fillStyle='#ffc23d';ctx.beginPath();ctx.arc(x,by,6.5,0,7);ctx.fill();ctx.strokeStyle='#c98a12';ctx.lineWidth=1.4;ctx.stroke();ctx.fillStyle='#8a5d05';ctx.font='700 8px Fredoka,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('c',x,by+.5)});
+ for(let k=PR.length-1;k>=0;k--){const p=PR[k];p.l+=dt;if(p.l>=p.m){PR.splice(k,1);continue}p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.k==='s')p.r+=dt*3.2;if(p.k==='p')p.vy+=30*dt;ctx.fillStyle=`rgba(${p.c},${(p.a*(1-p.l/p.m)).toFixed(3)})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()}
+ if(PR.length>500)PR.splice(0,PR.length-500);
+ for(let k=FT.length-1;k>=0;k--){const f=FT[k];f.l+=dt;if(f.l>1.6){FT.splice(k,1);continue}ctx.globalAlpha=1-f.l/1.6;ctx.font='700 13px Fredoka,sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,.35)';ctx.strokeText(f.t,f.x,f.y-f.l*26);ctx.fillStyle=f.c;ctx.fillText(f.t,f.x,f.y-f.l*26);ctx.globalAlpha=1}
+ ctx.setTransform(dpr,0,0,dpr,0,0);if(g<.95){ctx.fillStyle=`rgba(120,104,80,${(.22*(1-g)).toFixed(3)})`;ctx.fillRect(0,0,W,H)}
+ for(let k=CF.length-1;k>=0;k--){const c=CF[k];c.l+=dt;if(c.l>3){CF.splice(k,1);continue}c.vy+=260*dt;c.x+=c.vx*dt;c.y+=c.vy*dt;c.r+=c.vr*dt;ctx.save();ctx.translate(c.x,c.y);ctx.rotate(c.r);ctx.fillStyle=c.c;ctx.fillRect(-4,-2.5,8,5);ctx.restore()}
+ requestAnimationFrame(frame)}
+function person(x,y,col,bob){ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,3,1.5,0,0,7);ctx.fill();ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(x,y-4-bob,2.5,3.6,0,0,7);ctx.fill();ctx.fillStyle='#f1c9a5';ctx.beginPath();ctx.arc(x,y-9.5-bob,2.2,0,7);ctx.fill()}
+function confetti(){for(let k=0;k<120;k++)CF.push({x:W/2+rnd(-60,60),y:H*.45,vx:rnd(-320,320),vy:rnd(-520,-180),r:rnd(0,6),vr:rnd(-8,8),l:0,c:pick(['#ffc23d','#3cc77d','#2f86c9','#5ad1ff','#ffffff'])})}
+function confettiSmall(){for(let k=0;k<30;k++)CF.push({x:W/2+rnd(-30,30),y:H-120,vx:rnd(-200,200),vy:rnd(-420,-200),r:0,vr:rnd(-8,8),l:0,c:pick(['#ffc23d','#3cc77d','#ffffff'])})}
+function ft(i,j,t,c,dy=0){const[x,y]=iso(i,j);FT.push({x,y:y-40+dy,t,c,l:0})}
+
+/* ---------- Sound ---------- */
+let AC=null;
+function snd(k){if(S.mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const seq={coin:[[988,.06],[1319,.1]],up:[[523,.08],[659,.08],[784,.08],[1047,.16]],bad:[[220,.14]],pick:[[740,.07]],lvl:[[523,.1],[659,.1],[784,.1],[1047,.1],[1319,.25]],ok:[[660,.08],[880,.12]]}[k]||[];let t=AC.currentTime;for(const[f,d]of seq){const o=AC.createOscillator(),g=AC.createGain();o.type=k==='bad'?'sawtooth':'triangle';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.12,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02);t+=d*.85}}catch(e){}}
+
+/* ---------- Actions ---------- */
+let uiQ=false,dirty=false;function changed(){S.t=Date.now();dirty=true;if(!uiQ){uiQ=true;requestAnimationFrame(()=>{uiQ=false;ui();renderDrawer()})}}
+function toast(m,c=''){const d=document.createElement('div');d.className='toast '+c;d.textContent=m;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),2800);while($('#toasts').children.length>3)$('#toasts').firstChild.remove()}
+function bump(k,n=1){S.tasks.forEach(t=>{if(t.k===k)t.p=Math.min(t.n,t.p+n)})}
+function gain(c,x){S.coins+=c;S.xp+=x}
+function collect(s,quiet){if(!ready(s))return false;const amt=Math.round(K[s.k].t[S.tier[s.id]][2]*mult());gain(amt,1);S.prod[s.id]=Date.now();ft(s.i,s.j,'+'+amt,'#ffd34d');const[x,y]=iso(s.i,s.j);sparkle(x,y-K[s.k].h,4,'255,200,60');bump('collect');if(!quiet)snd('coin');if(S.tut===0)advTut(1);check();changed();return true}
+function collectAll(){let n=0;SLOTS.forEach(s=>{if(collect(s,true))n++});if(n){snd('coin');toast(`Collected coins from ${n} building${n>1?'s':''}`,'good')}else toast('Nothing to collect yet: buildings are still working')}
+function upgrade(id){const s=SL[id],k=K[s.k],ti=S.tier[id];if(ti>=3)return;const nx=k.t[ti+1];
+ if(S.level<nx[4]){toast(`${nx[0]} unlocks at level ${nx[4]}`,'bad');snd('bad');return}
+ if(S.coins<nx[3]){toast(`You need ${fmt(nx[3]-S.coins)} more coins`,'bad');snd('bad');return}
+ const d=k.t[ti][1]-nx[1],xp=Math.round(nx[3]/10)+5;S.coins-=nx[3];S.tier[id]=ti+1;S.xp+=xp;S.prod[id]=Date.now();
+ const[x,y]=iso(s.i,s.j);sparkle(x,y-20,26);ft(s.i,s.j,`−${d} t CO₂`,'#5dff9a');ft(s.i,s.j,'+'+xp+' XP','#c9b8ff',-16);snd('up');toast(`${k.t[ti][0]} → ${nx[0]}`,'good');bump('upgrade');if(S.tut<=2)advTut(3);check();changed()}
+const canPlant=(i,j)=>i>=0&&j>=0&&i<N&&j<N&&G[i][j]==='g'&&!S.trees.some(t=>t[0]===i&&t[1]===j);
+function plant(i,j){if(S.trees.length>=BOX_MAX){toast('Your town already has every drop-off box it needs','bad');return}if(!canPlant(i,j)){toast('Drop-off boxes go on an empty grass tile','bad');snd('bad');return}if(S.coins<BOX_COST){toast(`A drop-off box costs ${BOX_COST} coins`,'bad');snd('bad');return}
+ S.coins-=BOX_COST;S.xp+=3;S.trees.push([i,j,rnd(-5,5)|0,rnd(-2,2)|0]);LT=LT.filter(l=>!(l.i===i&&l.j===j));
+ const[x,y]=iso(i,j);sparkle(x,y-10,12);ft(i,j,'−2 t CO₂','#5dff9a',20);snd('ok');bump('plant');check();changed()}
+function pickLitter(l){LT.splice(LT.indexOf(l),1);const c=Math.round(3*scale());gain(c,1);ft(l.i,l.j,'+'+c,'#ffd34d',30);snd('pick');bump('litter');check();changed()}
+function check(){let lv=0;while(S.level<10&&S.xp>=LV[S.level-1].xp&&co2()<=LV[S.level-1].co2){S.level++;lv=S.level;S.coins+=50*S.level}
+ if(lv){snd('lvl');confetti();showLevel(lv)}
+ if(S.level===10&&co2()<=0&&!S.won){S.won=true;setTimeout(showWin,lv?2500:300)}}
+function newTask(){const have=S.tasks.map(t=>t.k);let ks=Object.keys(TK).filter(k=>!have.includes(k));if(S.trees.length>=BOX_MAX-2)ks=ks.filter(k=>k!=='plant');if(SLOTS.every(s=>S.tier[s.id]>=3))ks=ks.filter(k=>k!=='upgrade');const k=pick(ks),d=TK[k],n=pick(d.n);return{k,n,p:0,c:Math.round(n*d.c*scale()),x:Math.round(n*d.x*scale())}}
+function fillTasks(){while(S.tasks.length<3)S.tasks.push(newTask())}
+function bestMove(){const op=[];SLOTS.forEach(s=>{const ti=S.tier[s.id];if(ti>=3)return;const nx=K[s.k].t[ti+1];if(nx[4]>S.level)return;op.push({s,nx,d:K[s.k].t[ti][1]-nx[1],from:K[s.k].t[ti][0]})});if(!op.length)return null;const aff=op.filter(o=>o.nx[3]<=S.coins);return(aff.length?aff:op).sort((a,b)=>aff.length?b.d/b.nx[3]-a.d/a.nx[3]:a.nx[3]-b.nx[3])[0]}
+
+/* ---------- HUD ---------- */
+function ui(){const c=co2(),L=LV[S.level-1];
+ $('#lvlN').textContent=S.level;$('#tName').textContent=S.town||'My Town';$('#lName').textContent=`Level ${S.level} · ${L.n}`;
+ const prev=S.level>1?LV[S.level-2].xp:0;$('#xpBar').style.width=(S.level<10?clamp((S.xp-prev)/(L.xp-prev),0,1)*100:100)+'%';
+ $('#vCoins').textContent=fmt(S.coins);$('#vXp').textContent=fmt(S.xp);$('#vCo2').textContent=fmt(c);$('#vMood').textContent=mood()+'%';$('#vPop').textContent=fmt(pop());
+ $('#co2Chip').style.setProperty('--c',c<=0?'#1f9d5a':c<150?'#5a9e2f':c<320?'#c98a12':'#b4572f');
+ const xpOk=S.xp>=L.xp,cOk=c<=L.co2,bm=bestMove(),m=$('#mission');
+ const mh=S.level<10?`<h3 data-k="mission">Goal: reach level ${S.level+1}<span class="fred" style="font-size:13px;color:var(--mut)">${xpOk&&cOk?'Ready!':'tap to '+(m.classList.contains('min')?'open':'hide')}</span></h3><div class="body">
+  <div class="row"><svg class="i"><use href="#i-star"/></svg><div class="bar"><i style="width:${clamp(S.xp/L.xp,0,1)*100}%"></i></div><span class="${xpOk?'ok':''}">${fmt(Math.min(S.xp,L.xp))}/${fmt(L.xp)} XP</span></div>
+  <div class="row"><svg class="i" style="color:${cOk?'#1f9d5a':'#b4572f'}"><use href="#i-cloud"/></svg><span style="flex:1">Digital CO₂ at or below <b>${fmt(L.co2)} t</b></span><span class="${cOk?'ok':'no'}">${cOk?'Done':fmt(c-L.co2)+' t to cut'}</span></div>
+  ${bm?`<div class="hint">Best next move: turn <b>${esc(bm.from)}</b> into <b>${esc(bm.nx[0])}</b> for ${fmt(bm.nx[3])} coins (−${bm.d} t). <button data-k="locate" data-id="${bm.s.id}">Show me</button></div>`:''}</div>`
+  :`<h3 data-k="mission">Final goal: net zero<span class="fred" style="font-size:13px;color:var(--mut)">${S.won?'Achieved':''}</span></h3><div class="body"><div class="row"><svg class="i"><use href="#i-cloud"/></svg><span style="flex:1">Bring digital CO₂ to 0 t or below</span><span class="${c<=0?'ok':'no'}">${c<=0?'Done':fmt(c)+' t to cut'}</span></div>${bm?`<div class="hint">Next: <b>${esc(bm.nx[0])}</b> for ${fmt(bm.nx[3])} coins (−${bm.d} t). <button data-k="locate" data-id="${bm.s.id}">Show me</button></div>`:'<div class="hint">Place drop-off boxes on empty grass for the last tonnes.</div>'}</div>`;
+ if(m._h!==mh){m._h=mh;m.innerHTML=mh}
+ $('#bgReady').textContent=SLOTS.filter(ready).length||'';
+ $('#bgTasks').textContent=S.tasks.filter(t=>t.p>=t.n).length||'';
+ $('#bgBuild').textContent=SLOTS.filter(s=>{const ti=S.tier[s.id];if(ti>=3)return false;const nx=K[s.k].t[ti+1];return nx[4]<=S.level&&nx[3]<=S.coins}).length||'';
+ $('#bMute').innerHTML=`<svg class="i"><use href="#i-${S.mute?'mute':'sound'}"/></svg>`;$('#bLbl').classList.toggle('on',!!S.lbl);
+ $('#bPlant').classList.toggle('on',plantMode);cv.classList.toggle('plant',plantMode)}
+
+/* ---------- Coach (contextual tips) ---------- */
+const TUT=['Step 1: tap the gold coin bubbles above buildings to collect coins (or press Space).','Step 2: open Tasks to see 3 small missions that pay bonus coins and XP.','Step 3: tap the Office and upgrade it to an Auto-Shutdown Office, your first digital clean-up!','Step 4: keep cutting digital CO₂ and earning XP to level up. Open the Guide anytime if you are lost.'];
+function coach(){const c=$('#coach');if(!S.town||!S.intro||S.tut>=TUT.length||$('#modal').classList.contains('open')||panelName){c.classList.remove('on');return}$('#coachTxt').textContent=TUT[S.tut];c.classList.add('on')}
+function advTut(n){if(S.tut<n){S.tut=n;changed();coach()}}
+$('#coachOk').onclick=()=>{S.tut++;changed();coach();if(S.tut===2){sel=SL.park;focusOn(SL.park)}};
+
+/* ---------- Drawer ---------- */
+let panelName=null,panelArg=null;
+function openPanel(n,a){if(panelName===n&&a===panelArg&&$('#drawer').classList.contains('open')&&n!=='bld'){closePanel();return}panelName=n;panelArg=a;$('#drawer').classList.add('open');document.querySelectorAll('.db').forEach(b=>b.classList.toggle('on',b.dataset.k===n||(n==='bld'&&b.dataset.k==='build')));if(n==='tasks'&&S.tut===1)advTut(2);$('#dBody').scrollTop=0;renderDrawer();coach()}
+function closePanel(){panelName=null;sel=null;$('#drawer').classList.remove('open');document.querySelectorAll('.db').forEach(b=>b.classList.toggle('on',b.dataset.k==='plant'&&plantMode));coach()}
+const coinS=n=>`<span style="display:inline-flex;align-items:center;gap:3px;white-space:nowrap"><svg class="i" style="width:16px;height:16px"><use href="#i-coin"/></svg>${fmt(n)}</span>`;
+const dots=t=>`<span class="dots" title="Stage ${t+1} of 4">${[0,1,2,3].map(k=>`<i class="${k<=t?'f':''}"></i>`).join('')}</span>`;
+const why=t=>`<div class="why"><svg><use href="#i-info"/></svg><span>${t}</span></div>`;
+function upBtn(s){const ti=S.tier[s.id];if(ti>=3)return`<button class="btn sm" disabled>Fully upgraded</button>`;const nx=K[s.k].t[ti+1];if(nx[4]>S.level)return`<button class="btn sm" disabled>Unlocks at level ${nx[4]}</button>`;return`<button class="btn sm ${S.coins>=nx[3]?'':'ghost'}" data-k="up" data-id="${s.id}">Upgrade ${coinS(nx[3])}</button>`}
+function renderDrawer(){if(!panelName)return;const b=$('#dBody'),T=$('#dTitle');
+ if(panelName==='tasks'){fillTasks();T.textContent='Tasks';b.innerHTML=why('<b>What for?</b> Tasks are your biggest source of bonus coins and XP. Finish one, press <b>Claim reward</b>, and a new one appears.')+S.tasks.map((t,k)=>{const d=TK[t.k],done=t.p>=t.n;return`<div class="item ${done?'hot':''}"><div class="it"><span style="display:flex;gap:9px;align-items:center"><svg class="i" style="color:var(--leaf2)"><use href="#${d.ic}"/></svg><b>${esc(d.t.replace('{n}',t.n).replace('{s}',t.n>1?'s':'').replace('{es}',t.n>1?'es':''))}</b></span></div><div class="pb"><i style="width:${t.p/t.n*100}%"></i></div><div class="meta"><span>${t.p}/${t.n}</span><span>Reward ${coinS(t.c)} · ${t.x} XP</span></div>${d.how&&!done?`<div class="meta">How: ${d.how}</div>`:''}<div class="acts">${done?`<button class="btn sm gold" data-k="claim" data-i="${k}">Claim reward</button>`:`${d.go?`<button class="btn sm" data-k="${d.go}">Do it now</button>`:''}<button class="btn sm ghost" data-k="skip" data-i="${k}">Swap task (10 coins)</button>`}</div></div>`}).join('')+`<p class="note">Old phones and cables keep appearing on the map. Tap them to send them to recycling. The better your E-Waste Site, the fewer appear.</p>`}
+ else if(panelName==='build'){T.textContent='Upgrade';const arr=[...SLOTS].sort((a,b)=>{const sc=s=>{const ti=S.tier[s.id];if(ti>=3)return 3;const nx=K[s.k].t[ti+1];return nx[4]>S.level?2:nx[3]>S.coins?1:0};return sc(a)-sc(b)});
+  b.innerHTML=why('<b>What for?</b> Upgrading is the main way to win. Each building has 4 stages, from polluting to clean. An upgrade <b>cuts digital CO₂</b>, gives <b>XP</b> and makes the building <b>earn more coins</b>. Green outline = you can afford it now.')+arr.map(s=>{const k=K[s.k],ti=S.tier[s.id],cur=k.t[ti],nx=k.t[ti+1];return`<div class="item ${nx&&nx[4]<=S.level&&nx[3]<=S.coins?'hot':''}"><div class="it"><button data-k="locate" data-id="${s.id}" style="text-align:left;padding:0"><b>${esc(cur[0])}</b><div class="meta" style="margin:0"><span>${k.L}</span><span>${cur[1]} t CO₂</span></div></button>${dots(ti)}</div>${nx?`<div class="meta">Next: <b style="color:var(--ink)">${esc(nx[0])}</b><span class="delta">−${cur[1]-nx[1]} t CO₂</span><span>+${nx[2]-cur[2]} coins/cycle</span></div>`:''}<div class="acts">${upBtn(s)}</div></div>`}).join('')}
+ else if(panelName==='bld'){const s=SL[panelArg],k=K[s.k],ti=S.tier[s.id],cur=k.t[ti],nx=k.t[ti+1],left=Math.max(0,Math.ceil((K[s.k].c*1000-(Date.now()-S.prod[s.id]))/1000));T.textContent=k.L;
+  b.innerHTML=`${why(esc(k.role))}<div class="it"><div class="big">${esc(cur[0])}</div>${dots(ti)}</div><p class="sub" style="margin-top:6px">${esc(cur[5])}</p>
+  <div class="kv"><span>Digital emissions</span><span>${cur[1]} t CO₂/yr</span><span>Coins produced</span><span>${coinS(Math.round(cur[2]*mult()))} every ${k.c}s</span><span>Status</span><span id="bst">${ready(s)?'<span class="ok">Ready to collect</span>':'Ready in '+left+'s'}</span></div>
+  ${ready(s)?`<button class="btn gold" data-k="col" data-id="${s.id}" style="width:100%">Collect ${coinS(Math.round(cur[2]*mult()))}</button>`:''}
+  ${nx?`<div class="item" style="margin-top:12px"><div class="it"><b>Next: ${esc(nx[0])}</b><span class="delta">−${cur[1]-nx[1]} t</span></div><p class="sub" style="margin:4px 0 0">${esc(nx[5])}</p><div class="meta"><span>Coins ${cur[2]} → ${nx[2]}</span><span>+${Math.round(nx[3]/10)+5} XP</span>${nx[4]>S.level?`<span class="no">Unlocks at level ${nx[4]}</span>`:''}</div><div class="acts">${upBtn(s)}</div></div>`:`<div class="hint" style="margin-top:12px">This building is fully upgraded.</div>`}
+  <p class="note">All 4 stages: ${k.t.map((x,i)=>i===ti?`<b>${esc(x[0])}</b>`:esc(x[0])).join(' → ')}</p>`}
+ else if(panelName==='ranks')renderRanks();
+ else if(panelName==='guide')renderGuide();
+ else if(panelName==='settings'){T.textContent='Settings';b.innerHTML=`<label class="sub" for="rn">Town name</label><input type="text" id="rn" maxlength="22" value="${esc(S.town)}"><button class="btn" data-k="rename">Save name</button>
+  <label class="toggle" style="margin-top:16px"><input type="checkbox" id="snd" ${S.mute?'':'checked'}> Sound effects</label>
+  <label class="toggle"><input type="checkbox" id="lblT" ${S.lbl?'checked':''}> Show building names on the map</label>
+  <h3 style="margin:18px 0 6px">Keyboard shortcuts</h3>${keys()}
+  <h3 style="margin:18px 0 6px">Start over</h3><p class="sub">Erases your town, coins and level.</p><div id="rst"><button class="btn ghost" data-k="reset">Reset game</button></div>`}}
+const keys=()=>`<div class="keys">${[['Space','Collect all coins'],['T','Tasks'],['U','Upgrade list'],['D','Drop-off mode'],['Q','Quiz'],['S','Sort old devices'],['E','Standby hunt'],['R','Ranks'],['G','Guide'],['N','Building names'],['V','Rate the game'],['+ / −','Zoom'],['Arrows','Move the map'],['C','Re-center'],['M','Sound'],['Esc','Close']].map(([a,b])=>`<kbd>${a}</kbd><span>${b}</span>`).join('')}</div>`;
+const ACTS=[
+ ['i-hand','Collect (gold button, right)','Gathers the coins every building has produced. Buildings make coins every 10–20 seconds and then wait until you collect.','Gives: coins'],
+ ['i-tasks','Tasks','Shows 3 small missions (recycle old devices, answer the quiz…). Finish one, claim the reward, and a new one appears. “Do it now” takes you straight to the right action.','Gives: lots of coins and XP'],
+ ['i-build','Upgrade','Lists every building with its next, greener stage and its price. This is the main way to cut your digital CO₂. You can also tap a building on the map to upgrade it.','Gives: less CO₂, XP, more coins'],
+ ['i-box','Drop-off','Turns on placing mode: tap an empty grass tile to install a collection box for old phones and chargers (20 coins each, max 16). Fewer devices sleep in drawers, more get reused or recycled. Press again to stop.','Gives: −2 t CO₂ each, a little XP'],
+ ['i-quiz','Quiz','One question about the environmental impact of digital technology, with the explanation after you answer.','Gives: coins and XP for correct answers'],
+ ['i-sort','Sort','6 old devices: choose whether each should be repaired, reused or donated, or recycled at an e-waste point.','Gives: coins and XP for each good choice'],
+ ['i-power','Standby','A 15-second game: devices left on standby light up. Tap them to switch them off.','Gives: coins and XP per device'],
+ ['i-trophy','Ranks','The leaderboard: towns are ranked by digital footprint, lowest first. AI rival towns can be hidden.','Shows: your position'],
+ ['i-eye','Visitors and rating (top right)','Shows how many people have visited the game and its average rating out of 10. Click it to rate your experience from 1 to 10. You can change your score at any time.','Helps: tell us what you think'],
+ ['i-map','The map itself','Tap a building to see what it does, how much CO₂ it emits, and upgrade it. Tap old phones and cables lying around to recycle them. Drag to move, scroll or pinch to zoom.','Gives: coins, info']];
+function renderGuide(){$('#dTitle').textContent='Guide';$('#dBody').innerHTML=`
+ <div class="g-sec"><h3>The goal</h3><p class="sub" style="color:var(--ink);font-size:14.5px">Every message, video, cloud photo and new phone has a hidden cost: electricity for data centers and networks, and the CO₂ of manufacturing devices. Your town starts with a heavy <b>digital footprint of ${START} t of CO₂ per year</b> (the number at the top). Your job: bring it down to <b>0</b>.</p></div>
+ <div class="g-sec"><h3>How the game works, step by step</h3><ol class="g-steps">
+  <li><b>Collect coins.</b> Each building produces coins. When a gold bubble appears above it, tap it, or press the gold button to collect everything.</li>
+  <li><b>Earn extra coins and XP</b> with Tasks and the three mini-games (Quiz, Sort, Standby), and by tapping old devices on the map.</li>
+  <li><b>Spend coins on upgrades.</b> Each upgrade replaces a polluting habit or technology with a lighter one, and lowers your CO₂.</li>
+  <li><b>Level up.</b> The goal card on the left shows two conditions: enough <b>XP</b> AND CO₂ low enough. When both are met, you go up a level and unlock new upgrades.</li>
+  <li><b>Win.</b> Reach level 10 and bring your digital CO₂ to 0 t or less. Then compare your town in Ranks.</li></ol></div>
+ <div class="g-sec"><h3>What every button does</h3>${ACTS.map(a=>`<div class="g-act"><div class="ic"><svg class="i"><use href="#${a[0]}"/></svg></div><div><b>${a[1]}</b>${a[2]}<div class="gain">${a[3]}</div></div></div>`).join('')}</div>
+ <div class="g-sec"><h3>The numbers at the top</h3><div class="kv" style="font-size:14px"><span>Coins</span><span>to buy upgrades and boxes</span><span>XP</span><span>needed to level up</span><span>t CO₂/yr digital</span><span>your footprint, lower is better</span><span>Mood</span><span>happier citizens = up to +40% coins</span><span>Citizens</span><span>grows as you level up</span></div></div>
+ <div class="g-sec"><h3>The buildings of your town</h3>${[...new Set(SLOTS.map(s=>s.k))].map(k=>`<div class="g-bld"><b>${K[k].L}</b><span>${esc(K[k].role)}</span><span class="sub" style="margin:0">${K[k].t.map(t=>esc(t[0])).join(' → ')}</span></div>`).join('')}</div>
+ <div class="g-sec"><h3>Tips</h3><ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.5"><li>Not sure what to do? Follow <b>Best next move</b> in the goal card: it picks the upgrade that cuts the most CO₂ per coin.</li><li>Collect often: buildings stop producing until you collect.</li><li>A lighter town makes citizens happier, which raises your income.</li></ul></div>
+ <button class="btn" data-k="intro" style="width:100%">Replay the step-by-step tutorial</button>`}
+
+/* ---------- Community: visitors & ratings ---------- */
+let visitors=null,visitsTotal=null,ratings=[],ratingNote='';const T0=Date.now();
+const avgRating=()=>ratings.length?ratings.reduce((a,r)=>a+r.v,0)/ratings.length:null;
+function comm(){$('#vVis').textContent=visitors==null?'–':fmt(visitors);const a=avgRating();$('#vRate').textContent=a==null?(S.rated?S.rated+'/10':'Rate'):a.toFixed(1)+'/10';if($('#rateBox'))rateBody()}
+function rateModal(){openModal(`${X}<p class="sub" style="margin:0">Your opinion counts</p><h2>Rate your experience</h2><p>How much did you enjoy EcoVille Digital? Tap a score from 1 to 10.</p><div id="rateBox"></div>`);rateBody()}
+function rateBody(){const a=avgRating(),cnt=[...Array(10)].map((_,k)=>ratings.filter(r=>r.v===k+1).length),mx=Math.max(1,...cnt);
+ $('#rateBox').innerHTML=`<div class="rate">${[...Array(10)].map((_,k)=>`<button data-k="rateset" data-i="${k+1}" class="${S.rated===k+1?'on':''}" aria-label="Rate ${k+1} out of 10">${k+1}</button>`).join('')}</div><div class="rscale"><span>1 · not for me</span><span>10 · loved it</span></div>
+ ${S.rated?`<p class="ok" style="margin-top:10px">Thanks! Your rating: ${S.rated}/10. You can change it anytime.</p>`:''}
+ <div class="cstats"><div><b>${visitors==null?'–':fmt(visitors)}</b><span>visitors</span></div><div><b>${visitsTotal==null?'–':fmt(visitsTotal)}</b><span>visits</span></div><div><b>${a==null?'–':a.toFixed(1)}</b><span>average /10 · ${ratings.length} rating${ratings.length===1?'':'s'}</span></div></div>
+ ${ratings.length?`<div class="hist">${cnt.map((c,k)=>`<span>${k+1}</span><i style="width:${c/mx*100}%"></i><span>${c}</span>`).join('')}</div>`:''}
+ <p class="note">${esc(ratingNote||'Visitors and ratings are counted for everyone who opens the game signed in to claude.ai with access to post.')}</p>`}
+function setRating(v){S.rated=v;S.ratePrompted=true;changed();snd('ok');comm();
+ if(db&&uid)db.doc('ratings/'+uid).set({score:v,t:Date.now()}).then(()=>toast(`Thanks for rating ${v}/10!`,'good')).catch(()=>{ratingNote='Your rating is saved on this device only: the game owner must give you Contributor access for it to count.';comm();toast('Rating saved on this device','good')});
+ else{ratingNote='Your rating is saved on this device only. Open the game signed in to claude.ai for it to count.';comm();toast('Rating saved on this device','good')}}
+async function initCommunity(){
+ try{const vr=db.doc('visits/'+uid),vs=await vr.get(),d=vs.exists?vs.data()||{}:{};await vr.set({n:(d.n|0)+1,first:d.first||Date.now(),last:Date.now()})}catch(e){ratingNote='You can see the stats, but the game owner must give you Contributor access for your visit and rating to count.'}
+ db.collection('visits').limit(1000).onSnapshot(s=>{visitors=s.size;visitsTotal=s.docs.reduce((a,d)=>a+((d.data()||{}).n|0),0);comm()},()=>{});
+ db.collection('ratings').limit(1000).onSnapshot(s=>{ratings=s.docs.map(d=>({id:d.id,v:clamp((d.data()||{}).score|0,0,10)})).filter(r=>r.v>0);const me=ratings.find(r=>r.id===uid);if(me&&!S.rated){S.rated=me.v;changed()}comm()},()=>{})}
+
+/* ---------- Leaderboard ---------- */
+let db=null,UN=null,uid=null,players=[],names={},rankNote='Connecting to the shared leaderboard…',scoreOK=true,lastScore='',cloudBusy=false;
+function renderRanks(){if(panelName!=='ranks')return;$('#dTitle').textContent='Ranks';const c=co2();
+ let rows=players.filter(p=>p.id!==uid).map(p=>({nm:p.town,who:names[p.id]||'Player',co2:p.co2,lv:p.level,me:false}));
+ rows.push({nm:S.town||'My Town',who:'You',co2:c,lv:S.level,me:true});
+ if(S.ai)RIVALS.forEach(r=>rows.push({nm:r[0],who:'AI rival',co2:r[1],lv:r[2],ai:true}));
+ rows.sort((a,b)=>a.co2-b.co2||b.lv-a.lv);const me=rows.findIndex(r=>r.me)+1;
+ $('#dBody').innerHTML=why('<b>What for?</b> Towns are ranked by their digital footprint: the <b>lowest CO₂ is #1</b>. Your score updates as you upgrade.')+`<p class="sub">You are <b>#${me}</b> of ${rows.length}.</p><label class="toggle"><input type="checkbox" id="aiT" ${S.ai?'checked':''}> Show AI rival towns</label>
+ <div>${rows.map((r,k)=>`<div class="rk ${r.me?'me':''}"><div class="pos">${k+1}</div><div class="nm">${esc(r.nm)}${r.ai?'<span class="tag">AI</span>':''}${r.co2<=0?'<span class="tag g">Net zero</span>':''}<small>${esc(r.who)} · level ${r.lv}</small></div><div class="sc">${fmt(r.co2)} t</div></div>`).join('')}</div><p class="note">${esc(rankNote)}</p>`}
+async function initCloud(){
+ if(!window.claude||!window.claude.use){rankNote='Open this game on claude.ai to compete with other players. Your progress is saved on this device.';return}
+ try{UN=await window.claude.use('user')}catch(e){}try{db=await window.claude.use('db')}catch(e){}
+ if(UN){try{uid=await UN.id()}catch(e){}}
+ if(!db||!uid){db=null;rankNote='Sign in on claude.ai to join the shared leaderboard. Your progress is saved on this device.';renderRanks();return}
+ try{const snap=await db.doc('data/users/'+uid+'/digital').get();if(snap.exists){const d=snap.data();const c=JSON.parse(d.s||'null');if(c&&c.v===1&&(!hadLocal||(c.t||0)>(S.t||0))){S=norm(c);closeModal();if(!S.town)welcome();changed()}}}catch(e){}
+ initCommunity();
+ let timer=setTimeout(()=>{rankNote='The leaderboard can’t be reached yet; it will appear when the connection returns.';renderRanks()},10000);
+ db.collection('scores').orderBy('co2','asc').limit(100).onSnapshot(async snap=>{if(!snap.metadata.fromCache){clearTimeout(timer);rankNote=scoreOK?'Scores update live as towns cut their digital footprint.':'You can view the board, but the owner must give you Contributor access to post your score.'}
+  players=snap.docs.map(d=>{const x=d.data()||{};return{id:d.id,town:String(x.town||'Unnamed town').slice(0,22),co2:Number.isFinite(x.co2)?x.co2:START,level:clamp(x.level|0,1,10)}});
+  try{if(UN&&UN.profiles){const ps=await UN.profiles(players.map(p=>p.id));players.forEach(p=>{names[p.id]=(ps&&ps[p.id]&&ps[p.id].name)||'Player'})}}catch(e){}
+  renderRanks()},e=>{clearTimeout(timer);rankNote='The shared leaderboard is unavailable right now.';renderRanks()});
+ dirty=true}
+async function flush(){if(!dirty)return;dirty=false;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}
+ if(!db||!uid||cloudBusy)return;cloudBusy=true;
+ try{await db.doc('data/users/'+uid+'/digital').set({s:JSON.stringify(S)})}catch(e){}
+ const key=[S.town,co2(),S.level].join('|');
+ if(scoreOK&&S.town&&key!==lastScore){try{await db.doc('scores/'+uid).set({town:S.town.slice(0,22),co2:co2(),level:S.level,t:Date.now()});lastScore=key}catch(e){if(e&&e.code==='invalid_argument'){scoreOK=false;rankNote='You can view the board, but the owner must give you Contributor access to post your score.';renderRanks()}}}
+ cloudBusy=false}
+setInterval(flush,3000);addEventListener('pagehide',()=>{try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}});
+
+/* ---------- Modals, tutorial & mini-games ---------- */
+let modalLock=false,game=null;
+function openModal(h,lock=false){$('#mbox').innerHTML=h;$('#modal').classList.add('open');modalLock=lock;coach()}
+function closeModal(){if(game&&game.iv)clearInterval(game.iv);game=null;$('#modal').classList.remove('open');modalLock=false;coach()}
+const X='<button class="x" data-k="mclose" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>';
+function welcome(){openModal(`<h2>Welcome, Mayor!</h2><p>Your town is hooked on screens: coal-powered data centers, phones replaced every year, e-waste burning in a dump. Its <b>digital footprint</b> is ${START} t of CO₂ a year.</p><p>Your mission: make your town’s digital life sustainable, step by step, until it reaches <b>net zero</b>.</p><label class="sub" for="tn" style="display:block;margin-top:12px">Name your town</label><input type="text" id="tn" maxlength="22" placeholder="e.g. Pixelbrook" autocomplete="off"><button class="btn" data-k="found" style="width:100%;min-height:48px;font-size:16px">Found my town</button><p class="note">Next: a 1-minute tutorial explains every button.</p>`,true);setTimeout(()=>$('#tn')&&$('#tn').focus(),50)}
+const SLIDES=[
+ ['i-server','Your town runs on digital','<p>Every building in your town is part of its <b>digital life</b>: homes full of screens, data centers that store photos and run AI, network antennas, a phone factory, a phone shop and an e-waste site.</p><ul><li>The number at the top (<b>t CO₂/yr digital</b>) is your town’s digital footprint.</li><li>It starts at <b>'+START+' t</b>. Your goal is <b>0</b>.</li></ul>'],
+ ['i-hand','1. Collect coins','<p>Buildings produce coins every 10 to 20 seconds. When a <b>gold bubble</b> appears above a building, tap it to collect.</p><ul><li>The <b>gold button</b> on the right (or the Space bar) collects everything at once.</li><li>Buildings wait until you collect, so come back often.</li></ul>'],
+ ['i-tasks','2. Earn more with tasks and mini-games','<ul><li><b>Tasks</b>: 3 small missions with big rewards.</li><li><b>Quiz</b>: questions about digital impact.</li><li><b>Sort</b>: repair, reuse or recycle old devices.</li><li><b>Standby</b>: switch off devices left on standby.</li><li>Tap <b>old phones and cables</b> lying on the map to recycle them.</li></ul><p>All of these give coins and <b>XP</b>.</p>'],
+ ['i-build','3. Upgrade to cut CO₂','<p>Tap any building, or open <b>Upgrade</b>, to replace it with a lighter version. Example: Coal-Powered AI Center → Gas → Solar → Wind.</p><ul><li>Each upgrade <b>lowers CO₂</b>, gives <b>XP</b> and <b>more coins</b>.</li><li><b>Drop-off</b>: place boxes for old phones on empty grass (−2 t each).</li></ul>'],
+ ['i-star','4. Level up and win','<p>The <b>goal card</b> on the left shows what you need for the next level: enough <b>XP</b> AND CO₂ below a target. Both must be green.</p><ul><li>Each new level unlocks greener upgrades.</li><li>Reach <b>level 10 and 0 t</b> to win.</li><li>Compare towns in <b>Ranks</b>. Lost? Open the <b>Guide</b> at any time.</li></ul>']];
+function intro(n=0){const s=SLIDES[n];openModal(`${X}<div class="slide"><div class="slide-ic"><svg><use href="#${s[0]}"/></svg></div><p class="sub" style="margin:0">How to play · ${n+1} of ${SLIDES.length}</p><h2>${s[1]}</h2>${s[2]}</div><div class="sdots">${SLIDES.map((_,k)=>`<i class="${k===n?'f':''}"></i>`).join('')}</div><div class="acts" style="justify-content:space-between">${n?`<button class="btn ghost" data-k="slide" data-i="${n-1}">Back</button>`:'<span></span>'}${n<SLIDES.length-1?`<button class="btn" data-k="slide" data-i="${n+1}">Next</button>`:`<button class="btn gold" data-k="introdone">Start playing</button>`}</div>`)}
+function quiz(){let pool=QUIZ.map((_,k)=>k).filter(k=>!S.seen.includes(k));if(!pool.length){S.seen=[];pool=QUIZ.map((_,k)=>k)}const qi=pick(pool),q=QUIZ[qi];game={t:'quiz',qi};
+ openModal(`${X}<p class="sub" style="margin:0">Digital impact quiz · keys 1, 2, 3</p><h2>${esc(q[0])}</h2>${q[1].map((o,k)=>`<button class="opt" data-k="ans" data-i="${k}">${esc(o)}</button>`).join('')}<div id="qf"></div>`)}
+function answer(k){if(!game||game.done)return;game.done=1;const q=QUIZ[game.qi],ok=k===q[2];S.seen.push(game.qi);document.querySelectorAll('.opt').forEach((b,i)=>{b.classList.toggle('right',i===q[2]);b.classList.toggle('wrong',i===k&&!ok);b.disabled=true});
+ let rw='';if(ok){const c=Math.round(15*scale());gain(c,8);bump('quiz');snd('ok');rw=`<div class="rew"><span>+${coinS(c)}</span><span>+8 XP</span></div>`}else snd('bad');
+ $('#qf').innerHTML=`<div class="fact"><b>${ok?'Correct!':'Not quite.'}</b> ${esc(q[3])}</div>${rw}<div class="acts"><button class="btn" data-k="quiz">Next question</button><button class="btn ghost" data-k="mclose">Back to town</button></div>`;check();changed()}
+function devSvg(ty){const c='#1f2a33',s='#5ad1ff';const m={phone:`<rect x="26" y="6" width="24" height="46" rx="5" fill="${c}"/><rect x="29" y="11" width="18" height="34" rx="2" fill="${s}"/><path d="M31 14l12 26" stroke="#fff" stroke-width="1.5" opacity=".7"/>`,laptop:`<rect x="14" y="8" width="48" height="32" rx="3" fill="${c}"/><rect x="18" y="12" width="40" height="24" fill="${s}"/><path d="M8 42h60l-5 8H13z" fill="#9aa5b1"/>`,battery:`<rect x="18" y="14" width="40" height="30" rx="6" fill="#3a6b35"/><rect x="58" y="23" width="5" height="12" rx="1" fill="#3a6b35"/><path d="M36 19l-6 11h7l-4 10 10-13h-7l4-8z" fill="#ffd34d"/>`,tablet:`<rect x="16" y="6" width="44" height="46" rx="5" fill="${c}"/><rect x="20" y="10" width="36" height="38" rx="2" fill="${s}"/>`,headphones:`<path d="M18 36v-6a20 20 0 0 1 40 0v6" fill="none" stroke="${c}" stroke-width="5"/><rect x="12" y="32" width="12" height="18" rx="4" fill="#e05a7a"/><rect x="52" y="32" width="12" height="18" rx="4" fill="#e05a7a"/>`,cable:`<path d="M10 40c10-20 20 10 30-6s16 8 24-4" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/><rect x="60" y="22" width="10" height="10" rx="2" fill="#ddd"/>`,adapter:`<rect x="22" y="14" width="32" height="30" rx="5" fill="#ddd"/><path d="M30 14V6M46 14V6" stroke="#888" stroke-width="3"/><path d="M38 44v8" stroke="${c}" stroke-width="3"/><path d="M30 26l6 6 10-10" stroke="#d84a3c" stroke-width="3" fill="none"/>`,console:`<rect x="10" y="20" width="56" height="24" rx="10" fill="${c}"/><circle cx="24" cy="32" r="4" fill="#9aa5b1"/><circle cx="52" cy="29" r="2.5" fill="#e05a7a"/><circle cx="57" cy="34" r="2.5" fill="#5ad1ff"/>`,printer:`<rect x="14" y="20" width="48" height="22" rx="4" fill="#9aa5b1"/><rect x="22" y="8" width="32" height="12" fill="#fff" stroke="#ccc"/><rect x="22" y="38" width="32" height="12" fill="#fff" stroke="#ccc"/>`,monitor:`<rect x="10" y="6" width="56" height="36" rx="3" fill="${c}"/><rect x="14" y="10" width="48" height="28" fill="${s}"/><path d="M32 42h12l3 10H29z" fill="#9aa5b1"/>`}[ty];return`<svg viewBox="0 0 76 58">${m}</svg>`}
+function sortGame(){const items=[...WASTE].sort(()=>Math.random()-.5).slice(0,6);game={t:'sort',items,k:0,ok:0};sortRender()}
+function sortRender(){const g=game,it=g.items[g.k];if(!it){const c=Math.round(g.ok*4*scale());gain(c,g.ok*2);check();changed();openModal(`${X}<h2>${g.ok} of ${g.items.length} devices sorted well!</h2><p>${g.ok===g.items.length?'Perfect. Repairing and reusing come first because they avoid manufacturing a new device.':'Remember the order: repair first, then reuse or donate, and recycle only what can’t be saved.'}</p><div class="rew"><span>+${coinS(c)}</span><span>+${g.ok*2} XP</span></div><div class="acts"><button class="btn" data-k="sort">Play again</button><button class="btn ghost" data-k="mclose">Back to town</button></div>`);return}
+ openModal(`${X}<p class="sub" style="margin:0">Sort old devices · ${g.k+1} of ${g.items.length} · keys 1, 2, 3</p><h2>What should happen to it?</h2><div class="waste">${devSvg(it[2])}<b>${esc(it[0])}</b></div><div class="bins">${BINS.map((b,k)=>`<button class="bin" style="background:${b[1]}" data-k="bin" data-i="${k}"><svg><use href="#${b[2]}"/></svg>${b[0]}</button>`).join('')}</div><div id="sf" style="min-height:28px;margin-top:10px;font-weight:800;text-align:center"></div><p class="note">Rule of thumb: repair if it’s fixable, reuse or donate if it works, and recycle at an e-waste point only when it can’t be saved. Never put electronics in the household bin.</p>`)}
+function binPick(k){const g=game;if(!g||g.t!=='sort'||g.lock)return;g.lock=1;const it=g.items[g.k],ok=it[1]===k;if(ok){g.ok++;bump('sort');snd('ok')}else snd('bad');$('#sf').innerHTML=ok?'<span class="ok">Good choice!</span>':`<span class="no">Better choice: ${BINS[it[1]][0]}.</span>`;setTimeout(()=>{if(game!==g)return;g.k++;g.lock=0;sortRender()},ok?600:1300)}
+function lights(){const names=[...DEVS].sort(()=>Math.random()-.5);game={t:'lights',n:0,end:Date.now()+15000,lit:new Set()};openModal(`${X}<p class="sub" style="margin:0">Standby hunt · 15 seconds</p><h2>Switch off devices on standby!</h2><p>Nobody is using them, but their red standby light means they still draw power. Tap each glowing device.</p><div class="facade">${names.map((d,k)=>`<button class="dev" data-k="win" data-i="${k}">${d}</button>`).join('')}</div><div class="timer"><i id="lt" style="width:100%"></i></div><div class="rew" style="margin:10px 0 0"><span>Switched off: <b id="ln">0</b></span></div>`);
+ game.iv=setInterval(()=>{const g=game;if(!g||g.t!=='lights')return;const left=g.end-Date.now();$('#lt').style.width=clamp(left/150,0,100)+'%';if(left<=0){clearInterval(g.iv);g.iv=0;const c=Math.round(g.n*2*scale()),x=Math.round(g.n/2);gain(c,x);bump('lights',g.n);check();changed();snd('ok');openModal(`${X}<h2>${g.n} devices switched off</h2><p>Routers, TV boxes and consoles on standby keep using electricity all year. A power strip with a switch turns them all off in one click.</p><div class="rew"><span>+${coinS(c)}</span><span>+${x} XP</span></div><div class="acts"><button class="btn" data-k="lights">Play again</button><button class="btn ghost" data-k="mclose">Back to town</button></div>`);return}
+  if(Math.random()<.75&&g.lit.size<7){const free=[...Array(16).keys()].filter(k=>!g.lit.has(k));const k=pick(free);g.lit.add(k);const w=document.querySelector(`.dev[data-i="${k}"]`);w&&w.classList.add('lit')}},380)}
+function winTap(k){const g=game;if(!g||g.t!=='lights'||!g.lit.has(k))return;g.lit.delete(k);g.n++;document.querySelector(`.dev[data-i="${k}"]`).classList.remove('lit');$('#ln').textContent=g.n;snd('pick')}
+function showLevel(l){const un=[];SLOTS.forEach(s=>K[s.k].t.forEach((t,i)=>{if(i&&t[4]===l&&!un.includes(t[0]))un.push(t[0])}));const L=LV[l-1];
+ openModal(`${X}<p class="sub" style="margin:0">Level up!</p><h2>Level ${l}: ${esc(L.n)}</h2><p>Your town’s digital life is getting lighter, and citizens are happier.</p><div class="rew"><span>+${coinS(50*l)} bonus</span></div>${un.length?`<p><b>New upgrades unlocked</b></p><div class="unl">${un.map(u=>`<span>${esc(u)}</span>`).join('')}</div>`:''}<p class="sub">${l<10?`Next goal: ${fmt(L.xp)} XP and digital CO₂ at or below ${fmt(L.co2)} t.`:'Final goal: bring your digital footprint to net zero (0 t or less).'}</p><button class="btn" data-k="mclose" style="width:100%">Keep building</button>`)}
+function showWin(){confetti();snd('lvl');openModal(`${X}<h2>${esc(S.town||'Your town')} is digitally net zero!</h2><p>Long-lasting devices, repair shops, fibre, data centers on clean power that heat homes: your town now saves as much carbon as its digital life emits. See how far below zero you can go on the leaderboard.</p><div class="acts"><button class="btn gold" data-k="ranks">See the leaderboard</button><button class="btn" data-k="rate">Rate the game</button></div>`)}
+
+/* ---------- Input ---------- */
+function focusOn(s){const[x,y]=iso(s.i,s.j);const tx=W/2-x*cam.z-(W>700&&panelName?150:0),ty=H/2-(y-20)*cam.z;const sx=cam.x,sy=cam.y,t0=performance.now();const step=n=>{const k=clamp((n-t0)/350,0,1),e=1-(1-k)**3;cam.x=sx+(tx-sx)*e;cam.y=sy+(ty-sy)*e;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+function zoomAt(sx,sy,z){const[wx,wy]=toWorld(sx,sy);cam.z=clamp(z,.42,2.6);cam.x=sx-wx*cam.z;cam.y=sy-wy*cam.z}
+function hitSlot(wx,wy){return[...SLOTS].sort((a,b)=>(b.i+b.j)-(a.i+a.j)).find(s=>{const[x,y]=iso(s.i,s.j);return wx>x-30&&wx<x+30&&wy>y-K[s.k].h-30&&wy<y+15&&(wy<y-6||Math.abs(wx-x)/32+Math.abs(wy-y)/16<1)})}
+function hitLitter(wx,wy){return LT.find(l=>{const[x,y]=iso(l.i,l.j);return Math.hypot(wx-x-l.dx,wy-y-l.dy+2)<11})}
+function tapAt(sx,sy){const[wx,wy]=toWorld(sx,sy);if(AC&&AC.state==='suspended')AC.resume();
+ if(plantMode){const[i,j]=toTile(wx,wy);plant(i,j);return}
+ const l=hitLitter(wx,wy);if(l){pickLitter(l);return}
+ const s=hitSlot(wx,wy);if(s){if(collect(s))return;sel=s;openPanel('bld',s.id);return}
+ sel=null;if(panelName==='bld')closePanel()}
+const ptr=new Map();let drag=null,pinch=null;
+const rel=e=>{const r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);const p=rel(e);ptr.set(e.pointerId,p);if(ptr.size===1)drag={x:p[0],y:p[1],cx:cam.x,cy:cam.y,m:false};else if(ptr.size===2){const[a,b]=[...ptr.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:cam.z};if(drag)drag.m=true}});
+cv.addEventListener('pointermove',e=>{const p=rel(e);if(ptr.has(e.pointerId))ptr.set(e.pointerId,p);
+ if(pinch&&ptr.size===2){const[a,b]=[...ptr.values()];zoomAt((a[0]+b[0])/2,(a[1]+b[1])/2,pinch.z*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch.d);return}
+ if(drag&&ptr.size===1){const dx=p[0]-drag.x,dy=p[1]-drag.y;if(Math.hypot(dx,dy)>7)drag.m=true;if(drag.m){cam.x=drag.cx+dx;cam.y=drag.cy+dy;cv.classList.add('drag');$('#tip').style.display='none';return}}
+ const[wx,wy]=toWorld(p[0],p[1]);hoverTile=toTile(wx,wy);const s=e.pointerType==='mouse'&&!plantMode?hitSlot(wx,wy):null;hover=s||null;const tip=$('#tip');
+ const place=()=>{tip.style.display='block';tip.style.left=Math.min(p[0]+14,W-tip.offsetWidth-8)+'px';tip.style.top=(p[1]+16)+'px'};
+ if(s){const t=K[s.k].t[S.tier[s.id]],left=Math.max(0,Math.ceil((K[s.k].c*1000-(Date.now()-S.prod[s.id]))/1000));tip.innerHTML=`<b>${esc(K[s.k].L)}: ${esc(t[0])}</b>${t[1]} t CO₂/yr · ${ready(s)?'coins ready, tap to collect':'coins in '+left+'s, tap for details'}`;place()}
+ else if(e.pointerType==='mouse'&&hitLitter(wx,wy)){tip.innerHTML='<b>Old device</b>Tap to send it to recycling';place()}else tip.style.display='none'});
+const pend=e=>{const was=drag;ptr.delete(e.pointerId);if(ptr.size<2)pinch=null;if(ptr.size===0){cv.classList.remove('drag');if(was&&!was.m&&e.type==='pointerup')tapAt(...rel(e));drag=null}};
+cv.addEventListener('pointerup',pend);cv.addEventListener('pointercancel',pend);
+cv.addEventListener('pointerleave',()=>{hover=null;hoverTile=null;$('#tip').style.display='none'});
+cv.addEventListener('wheel',e=>{e.preventDefault();const p=rel(e);zoomAt(p[0],p[1],cam.z*Math.exp(-e.deltaY*.0015))},{passive:false});
+
+function act(k,el){const id=el&&el.dataset.id,i=el?+el.dataset.i:0;
+ switch(k){case'tasks':case'build':case'ranks':case'settings':case'guide':if(plantMode)setPlant(false);openPanel(k);break;
+ case'close':closePanel();break;case'plant':setPlant(!plantMode);break;
+ case'quiz':quiz();break;case'sort':sortGame();break;case'lights':lights();break;
+ case'intro':closePanel();intro(0);break;case'slide':intro(i);break;
+ case'introdone':S.intro=true;closeModal();changed();coach();break;
+ case'zin':zoomAt(W/2,H/2,cam.z*1.2);break;case'zout':zoomAt(W/2,H/2,cam.z/1.2);break;case'center':fit();break;
+ case'labels':S.lbl=!S.lbl;changed();break;
+ case'up':upgrade(id);break;case'col':collect(SL[id]);break;
+ case'locate':{const s=SL[id];sel=s;focusOn(s);openPanel('bld',id);break}
+ case'claim':{const t=S.tasks[i];if(t&&t.p>=t.n){gain(t.c,t.x);S.tasks.splice(i,1,newTask());snd('up');toast(`Task complete: +${fmt(t.c)} coins, +${t.x} XP`,'good');confettiSmall();check();changed()}break}
+ case'skip':if(S.coins<10){toast('Swapping a task costs 10 coins','bad');break}S.coins-=10;S.tasks.splice(i,1,newTask());changed();break;
+ case'mission':$('#mission').classList.toggle('min');ui();break;
+ case'mclose':if(!modalLock){const wasIntro=!S.intro&&$('#mbox').querySelector('.slide');closeModal();if(wasIntro){S.intro=true;changed();coach()}}break;
+ case'ans':answer(i);break;case'bin':binPick(i);break;case'win':winTap(i);break;
+ case'found':{const v=($('#tn').value||'').trim().slice(0,22);if(!v){$('#tn').focus();toast('Give your town a name first','bad');break}S.town=v;fillTasks();changed();snd('up');intro(0);break}
+ case'rename':{const v=($('#rn').value||'').trim().slice(0,22);if(v){S.town=v;changed();toast('Town renamed','good')}break}
+ case'reset':$('#rst').innerHTML='<p class="sub">Are you sure? This cannot be undone.</p><div class="acts"><button class="btn" style="background:var(--bad)" data-k="reset-yes">Yes, erase my town</button><button class="btn ghost" data-k="settings">Cancel</button></div>';break;
+ case'reset-yes':{const keep=S.mute;S=fresh();S.mute=keep;LT=[];lastScore='';closePanel();changed();welcome();break}
+ case'mute':S.mute=!S.mute;changed();break;
+ case'rate':rateModal();break;case'rateset':setRating(i);break}}
+function setPlant(on){plantMode=on;if(on){closePanel();toast(`Drop-off mode: tap empty grass to place a box for old phones (${BOX_COST} coins, −2 t CO₂). Press D to stop.`)}ui()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b||b.tagName==='CANVAS')return;if(AC&&AC.state==='suspended')AC.resume();act(b.dataset.k,b)});
+$('#bCollect').onclick=collectAll;$('#bMute').onclick=()=>act('mute');
+document.addEventListener('change',e=>{if(e.target.id==='aiT'){S.ai=e.target.checked;changed();renderRanks()}if(e.target.id==='snd'){S.mute=!e.target.checked;changed()}if(e.target.id==='lblT'){S.lbl=e.target.checked;changed()}});
+document.addEventListener('keydown',e=>{const tg=e.target.tagName;if(tg==='INPUT'&&e.target.type==='text'){if(e.key==='Enter'){if(e.target.id==='tn')act('found');if(e.target.id==='rn')act('rename')}return}
+ const mo=$('#modal').classList.contains('open');if(e.key==='Escape'){if(mo)act('mclose');else if(plantMode)setPlant(false);else closePanel();return}
+ if(mo){if(game&&game.t==='sort'&&'123'.includes(e.key))binPick(+e.key-1);if(game&&game.t==='quiz'&&'123'.includes(e.key))answer(+e.key-1);return}
+ const k=e.key.toLowerCase(),m={t:'tasks',u:'build',b:'build',d:'plant',p:'plant',q:'quiz',s:'sort',e:'lights',l:'lights',r:'ranks',g:'guide',h:'guide',n:'labels',v:'rate',c:'center',m:'mute','+':'zin','=':'zin','-':'zout'}[k];
+ if(e.key===' '){e.preventDefault();collectAll();return}
+ if(e.key.startsWith('Arrow')){e.preventDefault();const d=40;if(e.key==='ArrowLeft')cam.x+=d;if(e.key==='ArrowRight')cam.x-=d;if(e.key==='ArrowUp')cam.y+=d;if(e.key==='ArrowDown')cam.y-=d;return}
+ if(m)act(m)});
+
+/* ---------- Boot ---------- */
+new ResizeObserver(resize).observe(cv);resize();
+if(innerWidth<700)$('#mission').classList.add('min');
+fillTasks();for(let k=0;k<3;k++)spawnLitter();
+ui();requestAnimationFrame(frame);
+let lastR=null;setInterval(()=>{ui();if(S.intro&&!S.rated&&!S.ratePrompted&&(S.level>=2||Date.now()-T0>240000)&&!$('#modal').classList.contains('open')){S.ratePrompted=true;changed();rateModal()}if(panelName==='bld'){const s=SL[panelArg],r=ready(s);if(r!==lastR){lastR=r;renderDrawer()}else if(!r&&$('#bst'))$('#bst').textContent='Ready in '+Math.max(0,Math.ceil((K[s.k].c*1000-(Date.now()-S.prod[s.id]))/1000))+'s'}},1000);
+if(!S.town)welcome();else if(!S.intro)intro(0);coach();
+comm();initCloud();
+}
+</script>
+<!-- Ajouts Digital City : compteur de visites Supabase -->
+<script type="module" src="/src/game-bridge.ts"></script>
+</body>
 </html>
