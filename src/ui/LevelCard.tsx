@@ -34,7 +34,7 @@ export default function LevelCard({ data }: { data: LevelCardData }) {
                 {result.reductionPct >= done.co2Target ? '✔' : '✘'} CO₂ −{Math.max(0, result.reductionPct)} % (objectif −{done.co2Target} %)
               </li>
               <li className={result.satisfaction >= SATISFIED_THRESHOLD ? 'up' : 'down'}>
-                {result.satisfaction >= SATISFIED_THRESHOLD ? '✔' : '✘'} Habitants satisfaits ({result.satisfaction}/100)
+                {result.satisfaction >= SATISFIED_THRESHOLD ? '✔' : '✘'} Utilisateurs satisfaits ({result.satisfaction}/100)
               </li>
             </ul>
           </section>

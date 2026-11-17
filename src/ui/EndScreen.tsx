@@ -8,7 +8,7 @@ import { useStore } from '../store'
 function verdict(g: GameState): string {
   const last = g.levelResults[g.levelResults.length - 1]
   if (!last) return ''
-  if (!last.demandMet) return 'Ton data center est sobre… mais la ville n’a plus Internet 😅 Garde assez de serveurs !'
+  if (!last.demandMet) return 'Ton data center est sobre… mais tes utilisateurs n’ont plus de service 😅 Garde assez de serveurs !'
   if (last.reductionPct >= 60) return 'Data center exemplaire 🌱 Les voisins viennent prendre des notes !'
   if (last.reductionPct >= 35) return 'Beau virage vert 💚 Prochaine fois, attaque l’énergie et la clim en premier.'
   return 'Ton data center fume encore 🏭 Astuce : chaque bonne réponse au quiz = des pièces pour l’améliorer.'

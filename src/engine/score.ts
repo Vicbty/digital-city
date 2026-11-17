@@ -4,7 +4,7 @@ import type { GameState } from './types'
 export const REDUCTION_FOR_MAX = 75
 
 /**
- * Score sur 100 : réduction de CO₂ atteinte en fin de partie, pondérée par la satisfaction des habitants
+ * Score sur 100 : réduction de CO₂ atteinte en fin de partie, pondérée par la satisfaction des utilisateurs
  * (un data center sobre mais qui ne rend plus le service ne gagne pas).
  */
 export function computeScore(state: Pick<GameState, 'levelResults' | 'satisfaction'>): number {

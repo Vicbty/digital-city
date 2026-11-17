@@ -11,7 +11,7 @@ export const LEVELS: LevelDef[] = [
   {
     level: 2,
     name: 'Le rush du streaming',
-    intro: 'Une plateforme vidéo cartonne : les habitants en veulent plus. Tiens la charge sans exploser ton CO₂.',
+    intro: 'Une plateforme vidéo cartonne : tes utilisateurs en veulent plus. Tiens la charge sans exploser ton CO₂.',
     baseDemand: 58,
     co2Target: 40,
   },

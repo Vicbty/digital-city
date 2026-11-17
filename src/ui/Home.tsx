@@ -13,8 +13,8 @@ export default function Home() {
       </div>
       <h1 className="title">Digital City</h1>
       <p className="tagline">
-        Tu hérites du data center le plus polluant de France. Ta mission : le rendre le plus sobre possible… sans couper
-        Internet à toute la ville.
+        Tu hérites du data center le plus polluant de France. Ta mission : le rendre le plus sobre possible… sans couper le service
+        à tes utilisateurs.
       </p>
       <ul className="home-rules">
         <li>🧠 Réponds au quiz pour gagner des pièces 🪙</li>

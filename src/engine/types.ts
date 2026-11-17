@@ -15,12 +15,13 @@ export interface TierStats {
   capacity: number // puissance de calcul fournie
   demand: number // charge ajoutée (ex. données zombies)
   income: number // pièces gagnées par tour
-  satisfaction: number // effet sur la satisfaction des habitants par tour
+  satisfaction: number // effet sur la satisfaction des utilisateurs par tour
 }
 
 export interface FamilyDef {
   family: Family
   label: string // nom de la famille (FR)
+  short: string // nom court affiché sous la case (FR)
   upgradeCosts: [number, number] // prix pour passer au niveau 1, puis au niveau 2
   tiers: [TierStats, TierStats, TierStats]
 }

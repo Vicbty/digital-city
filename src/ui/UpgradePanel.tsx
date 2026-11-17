@@ -58,7 +58,7 @@ export default function UpgradePanel() {
       <p className="panel-title">
         {cur.emoji} {cur.name} ➜ {next.emoji} <strong>{next.name}</strong>
       </p>
-      <p className="hint">{next.description}</p>
+      <p className="hint panel-desc">{next.description}</p>
       <div className="chips">
         {chips.map((c) => (
           <Chip key={c.label} {...c} />
