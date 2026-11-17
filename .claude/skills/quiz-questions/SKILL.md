@@ -14,7 +14,8 @@ description: Écrire, ajouter ou corriger des questions du quiz de Digital City 
   "choices": ["...", "...", "..."],
   "answer": 0,
   "explication": "1-2 phrases, ton léger, avec un conseil concret.",
-  "source": "Nom de la source ou À VÉRIFIER"
+  "source": "Organisme, titre du document (année)",
+  "url": "https://lien-vers-la-source"
 }
 ```
 - theme ∈ energie | refroidissement | materiel | donnees | usages | ia | reseau
@@ -22,6 +23,7 @@ description: Écrire, ajouter ou corriger des questions du quiz de Digital City 
 - Il faut au moins 15 questions (une par tour).
 
 ## Règles
+- **Sources réelles obligatoires** : de préférence publiques (ADEME, Arcep, RTE, AIE, CNIL, info.gouv.fr, ministères). La source s'affiche au joueur après sa réponse.
 - **Ne jamais inventer de chiffre.** Si un chiffre précis n'est pas fourni avec une source, reformuler la question sans chiffre (comparaison qualitative) ou mettre "source": "À VÉRIFIER".
 - 3 choix, une seule bonne réponse, des mauvaises réponses plausibles.
 - Questions courtes (< 120 caractères), lisibles sur téléphone.

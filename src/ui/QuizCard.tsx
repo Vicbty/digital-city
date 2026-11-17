@@ -16,7 +16,7 @@ export default function QuizCard({ question }: { question: Question }) {
     <div className="modal" role="dialog" aria-modal="true">
       <div className={`quiz ${answered ? (correct ? 'quiz-ok' : 'quiz-ko') : ''}`}>
         <p className="quiz-meta">
-          🧠 Quiz · bonne réponse = +{reward} 🪙{streakBonus ? ' 🔥 bonus série !' : ''}
+          Question du tour · bonne réponse = +{reward} 🪙{streakBonus ? ' (bonus série)' : ''}
         </p>
         <h2 className="quiz-question">{question.question}</h2>
         <div className="quiz-choices">
@@ -35,6 +35,16 @@ export default function QuizCard({ question }: { question: Question }) {
           <div className="quiz-feedback">
             <p className="quiz-verdict">{correct ? `✅ Bien joué ! +${reward} 🪙` : '❌ Raté… pas grave !'}</p>
             <p>{question.explication}</p>
+            <p className="quiz-source">
+              📚 Source :{' '}
+              {question.url ? (
+                <a href={question.url} target="_blank" rel="noopener noreferrer">
+                  {question.source}
+                </a>
+              ) : (
+                question.source
+              )}
+            </p>
             <button className="btn btn-primary" onClick={() => finishQuiz(correct)}>
               Continuer ➜
             </button>

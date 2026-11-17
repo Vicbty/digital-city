@@ -5,29 +5,33 @@ description: Charte visuelle et règles d'interface de Digital City. À utiliser
 
 # Charte UI
 
-## Style
-- Ambiance : ville néon / pixel friendly, fun et colorée, pas corporate.
+## Style : « vrai data center », clair, pas « look IA »
+- Thème CLAIR : béton clair, blanc, gris métal, bleu câble, voyants rouge / orange / vert.
+- Interdit : dégradés violet-rose, effets néon, glow, texte en dégradé, avalanche d'emojis décoratifs.
 - Palette (variables CSS dans src/index.css) :
-  --bg #0f172a, --surface #1e293b, --text #f8fafc,
-  --money #facc15, --co2 #94a3b8, --wellbeing #4ade80, --privacy #60a5fa, --danger #f87171, --accent #a78bfa
-- Police : system-ui, titres en gras. Bâtiments représentés par des emojis (pas d'images à charger).
-- Coins arrondis 12px, ombres douces, transitions 150-250ms.
+  --bg #eef1f4, --surface #ffffff, --line #cfd6dd, --text #1b232c, --muted #5d6b79, --steel #3b4754,
+  --accent #1f6fc5, --ok #1f9d55, --warn #c27c00, --bad #d64545, --coin #9a6700
+- Étiquettes techniques (salles, niveaux, numéros d'équipements) en police mono majuscule (`.tag`).
+- Les équipements sont représentés par des emojis ; voyants = état (rouge polluant, orange en progrès, vert sobre).
+- Coins arrondis 10px, ombres légères, transitions 150-250ms.
 
-## Mobile first (le public joue sur téléphone via QR code)
-- Tester en 375px de large d'abord.
-- Grille carrée qui tient dans l'écran (min(90vw, 480px)).
-- Boutons d'au moins 44px de haut. Pas de survol obligatoire (pas de hover-only).
-- Barre des bâtiments en bas, scrollable horizontalement sur mobile.
-- Indicateurs en haut, toujours visibles, avec emoji + barre de progression.
+## Mobile first, format iPhone (le public scanne un QR code)
+- Tester en 320px (iPhone SE) et 390px (iPhone 13). Aucune barre de défilement horizontale.
+- Respecter les zones sûres : env(safe-area-inset-*).
+- Champs de saisie ≥ 16px (sinon iOS zoome).
+- Boutons d'au moins 44px de haut. Pas de survol obligatoire.
+- Icône écran d'accueil : public/apple-touch-icon.png (180px), manifest.webmanifest (192/512).
 
 ## Écrans
-1. Accueil : titre, 1 phrase d'accroche, bouton « Jouer ».
-2. Jeu : indicateurs / grille / barre des bâtiments / bouton « Tour suivant ».
-3. Carte quiz : modale plein écran, feedback immédiat vert/rouge + explication.
-4. Fin : score /100 en gros, « tu bats X % des joueurs », bouton partager (navigator.share, sinon copier le lien), note 1-10 en étoiles ou boutons, bouton rejouer.
-5. /dashboard : chiffres clés en grandes tuiles (visiteurs, parties, score moyen quiz, note moyenne) + répartition des notes.
+1. Accueil : logo, titre, « Comment gagner » (HowToPlay), pseudo, « Jouer ».
+2. Jeu : bandeau (niveau, pièces, objectif CO₂ du niveau, service, satisfaction, bouton « ? »), puis
+   vue extérieure → plan du site (5 salles) → salle (rôle, 3 versions, liste des équipements + Améliorer).
+3. Carte quiz : feedback vert/rouge + explication + source cliquable.
+4. Échange avec un data center voisin, carte de fin de niveau (étoiles).
+5. Fin : score /100, « tu bats X % », classement, partager, note 1-10, rejouer.
+6. /dashboard : tuiles, top 10, répartition des notes, QR code.
 
 ## Règles
 - Textes en français, tutoiement.
-- Aucune lib UI externe : CSS simple ou CSS modules.
-- Feedback visuel à chaque action (placement, argent insuffisant, case occupée).
+- Aucune lib UI externe.
+- Feedback visuel à chaque action (amélioration, pièces insuffisantes).

@@ -21,7 +21,9 @@ export interface TierStats {
 export interface FamilyDef {
   family: Family
   label: string // nom de la famille (FR)
-  short: string // nom court affiché sous la case (FR)
+  short: string // nom court (FR)
+  room: string // nom de la zone dans le bâtiment (FR)
+  role: string // à quoi sert cette zone, en une phrase (FR)
   upgradeCosts: [number, number] // prix pour passer au niveau 1, puis au niveau 2
   tiers: [TierStats, TierStats, TierStats]
 }
@@ -83,6 +85,7 @@ export interface Question {
   answer: number
   explication: string
   source: string
+  url?: string // lien vers la source
 }
 
 export interface GameState {

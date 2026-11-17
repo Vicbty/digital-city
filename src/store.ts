@@ -11,7 +11,7 @@ import {
   nextTurn,
   upgradeTile,
 } from './engine/simulation'
-import type { GameState, LevelResult, Question, TradeOffer, UpgradeError } from './engine/types'
+import type { Family, GameState, LevelResult, Question, TradeOffer, UpgradeError } from './engine/types'
 import { cleanPseudo, loadPseudo, storePseudo } from './lib/pseudo'
 
 const QUESTIONS = questionsData as Question[]
@@ -19,6 +19,8 @@ const QUESTIONS = questionsData as Question[]
 export type Screen = 'home' | 'game' | 'end'
 export type Phase = 'build' | 'quiz' | 'trade' | 'level'
 export type ToastKind = 'ok' | 'error' | 'info'
+/** Ce que le joueur regarde : l'extérieur du bâtiment, le plan des zones, ou une zone. */
+export type View = 'outside' | 'plan' | Family
 
 interface Toast {
   id: number
@@ -37,7 +39,8 @@ interface Store {
   pseudo: string
   phase: Phase
   game: GameState
-  selectedTile: number | null
+  view: View
+  showHelp: boolean
   questions: Question[]
   currentQuiz: Question | null
   currentTrade: TradeOffer | null
@@ -47,8 +50,9 @@ interface Store {
 
   setPseudo: (raw: string) => void
   start: () => void
-  selectTile: (index: number) => void
-  upgradeSelected: () => void
+  setView: (view: View) => void
+  setShowHelp: (show: boolean) => void
+  upgrade: (index: number) => void
   openQuiz: () => void
   finishQuiz: (correct: boolean) => void
   resolveTrade: (accept: boolean) => void
@@ -70,8 +74,8 @@ function shuffleQuestions(list: Question[]): Question[] {
 }
 
 const ERROR_TEXT: Record<UpgradeError, string> = {
-  maxTier: 'Déjà au top niveau 🌱',
-  notEnoughCoins: 'Pas assez de pièces 🪙 Réponds juste au quiz !',
+  maxTier: 'Déjà la version la plus sobre',
+  notEnoughCoins: 'Pas assez de pièces : réponds juste au quiz pour en gagner',
   outOfBounds: 'Hors du data center',
   gameOver: 'La partie est finie',
 }
@@ -101,7 +105,8 @@ export const useStore = create<Store>((set, get) => {
     pseudo: loadPseudo(),
     phase: 'build',
     game: createInitialState(),
-    selectedTile: null,
+    view: 'outside',
+    showHelp: false,
     questions: [],
     currentQuiz: null,
     currentTrade: null,
@@ -119,7 +124,8 @@ export const useStore = create<Store>((set, get) => {
         screen: 'game',
         phase: 'level',
         game: createInitialState(),
-        selectedTile: null,
+        view: 'outside',
+        showHelp: false,
         questions: shuffleQuestions(QUESTIONS),
         currentQuiz: null,
         currentTrade: null,
@@ -129,19 +135,20 @@ export const useStore = create<Store>((set, get) => {
       })
     },
 
-    selectTile: (index) => set({ selectedTile: get().selectedTile === index ? null : index }),
+    setView: (view) => set({ view }),
 
-    upgradeSelected: () => {
-      const { selectedTile, game, showToast } = get()
-      if (selectedTile === null) return
-      const before = game.grid[selectedTile]
-      const res = upgradeTile(game, selectedTile)
+    setShowHelp: (showHelp) => set({ showHelp }),
+
+    upgrade: (index) => {
+      const { game, showToast } = get()
+      const before = game.grid[index]
+      const res = upgradeTile(game, index)
       if (res.ok) {
         const after = FAMILIES[before.family].tiers[before.tier + 1]
-        set({ game: res.state, flash: { index: selectedTile, kind: 'ok', id: ++counter } })
-        showToast(`${after.emoji} ${after.name} !`, 'ok')
+        set({ game: res.state, flash: { index, kind: 'ok', id: ++counter } })
+        showToast(`${after.emoji} ${after.name} installé !`, 'ok')
       } else {
-        set({ flash: { index: selectedTile, kind: 'error', id: ++counter } })
+        set({ flash: { index, kind: 'error', id: ++counter } })
         showToast(ERROR_TEXT[res.error], 'error')
       }
     },
@@ -149,7 +156,7 @@ export const useStore = create<Store>((set, get) => {
     openQuiz: () => {
       const { questions, game } = get()
       const q = questions[(game.turn - 1) % questions.length] ?? null
-      set({ currentQuiz: q, phase: 'quiz', selectedTile: null, toast: null })
+      set({ currentQuiz: q, phase: 'quiz', toast: null })
     },
 
     finishQuiz: (correct) => {
@@ -174,7 +181,7 @@ export const useStore = create<Store>((set, get) => {
 
     closeLevelCard: () => {
       const { game } = get()
-      set({ levelCard: null, phase: 'build', screen: game.gameOver ? 'end' : 'game' })
+      set({ levelCard: null, phase: 'build', view: 'outside', screen: game.gameOver ? 'end' : 'game' })
     },
 
     showToast: (text, kind = 'info') => set({ toast: { id: ++counter, text, kind } }),
