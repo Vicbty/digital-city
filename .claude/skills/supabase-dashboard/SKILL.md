@@ -12,6 +12,7 @@ create table games (
   id uuid default gen_random_uuid() primary key,
   score int, quiz_correct int, quiz_total int,
   rating int check (rating between 1 and 10),
+  pseudo text check (char_length(pseudo) <= 20),
   created_at timestamptz default now()
 );
 alter table visits enable row level security;
@@ -25,9 +26,15 @@ grant select, insert on visits to anon;
 grant select, insert on games to anon;
 ```
 
+Si la table games existe déjà sans pseudo :
+```sql
+alter table games add column if not exists pseudo text check (char_length(pseudo) <= 20);
+```
+
 ## src/lib/supabase.ts doit exposer
 - logVisit() : 1 insert dans visits au chargement de l'app, une seule fois par navigateur et par jour (clé localStorage).
-- saveGame({ score, quizCorrect, quizTotal, rating }) : insert dans games.
+- saveGame({ score, quizCorrect, quizTotal, rating, pseudo }) : insert dans games (si la colonne pseudo manque, réessaie sans).
+- getLeaderboard(limit) : meilleurs scores avec pseudo (écran de fin + dashboard).
 - getStats() : { visitors, games, avgQuizPercent, avgRating, ratingDistribution[1..10], scores[] }.
 - getPercentileBeaten(score) : % des parties avec un score inférieur.
 

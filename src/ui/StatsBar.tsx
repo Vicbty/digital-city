@@ -52,7 +52,7 @@ export default function StatsBar() {
           <div className="meter-top">
             <span>😊</span>
             <strong>{game.satisfaction}</strong>
-            <small className="muted">habitants</small>
+            <small className="muted">utilisateurs</small>
           </div>
           <div className="meter-bar">
             <div style={{ width: `${game.satisfaction}%`, background: 'var(--wellbeing)' }} />

@@ -5,6 +5,7 @@ export const FAMILIES: Record<Family, FamilyDef> = {
   servers: {
     family: 'servers',
     label: 'Serveurs',
+    short: 'Serveurs',
     upgradeCosts: [50, 100],
     tiers: [
       { name: 'Vieux serveurs', emoji: '🗄️', description: 'Lents, gourmands, toujours allumés.', co2: 12, capacity: 10, demand: 0, income: 0, satisfaction: 0 },
@@ -15,6 +16,7 @@ export const FAMILIES: Record<Family, FamilyDef> = {
   cooling: {
     family: 'cooling',
     label: 'Refroidissement',
+    short: 'Refroid.',
     upgradeCosts: [40, 80],
     tiers: [
       { name: 'Clim à fond', emoji: '🥵', description: 'On refroidit les serveurs comme un frigo ouvert.', co2: 10, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
@@ -25,6 +27,7 @@ export const FAMILIES: Record<Family, FamilyDef> = {
   energy: {
     family: 'energy',
     label: 'Énergie',
+    short: 'Énergie',
     upgradeCosts: [60, 120],
     tiers: [
       { name: 'Générateur diesel', emoji: '🛢️', description: 'Ça tourne… et ça fume.', co2: 15, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
@@ -35,6 +38,7 @@ export const FAMILIES: Record<Family, FamilyDef> = {
   storage: {
     family: 'storage',
     label: 'Stockage',
+    short: 'Données',
     upgradeCosts: [30, 60],
     tiers: [
       { name: 'Données zombies', emoji: '🧟', description: 'Doublons, vieux mails, vidéos oubliées : ça charge les serveurs.', co2: 6, capacity: 0, demand: 3, income: 0, satisfaction: 0 },
@@ -45,6 +49,7 @@ export const FAMILIES: Record<Family, FamilyDef> = {
   hardware: {
     family: 'hardware',
     label: 'Matériel usagé',
+    short: 'Matériel',
     upgradeCosts: [30, 60],
     tiers: [
       { name: 'Décharge', emoji: '🗑️', description: 'Le vieux matériel finit en tas.', co2: 8, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
