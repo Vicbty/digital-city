@@ -29,7 +29,7 @@ export default function Dashboard() {
     <main className="screen dashboard">
       <header className="dash-head">
         <Logo size={36} />
-        <h1 className="title-sm">Digital City · en direct</h1>
+        <h1 className="title-sm">EcoVille Digital · en direct</h1>
         {isLocalMode && <span className="badge">mode local</span>}
       </header>
 

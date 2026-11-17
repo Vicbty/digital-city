@@ -1,20 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App'
-import ErrorBoundary from './ui/ErrorBoundary'
 import './index.css'
-
-declare global {
-  interface Window {
-    __dcMounted?: boolean
-  }
-}
+import Dashboard from './ui/Dashboard'
+import ErrorBoundary from './ui/ErrorBoundary'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      <App />
+      <Dashboard />
     </ErrorBoundary>
   </StrictMode>,
 )
-window.__dcMounted = true
