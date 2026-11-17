@@ -1,31 +1,32 @@
-import { FAMILY_LIST } from '../engine/buildings'
-import { LEVELS } from '../engine/levels'
 import { PSEUDO_MAX, PSEUDO_MIN, cleanPseudo } from '../lib/pseudo'
 import { useStore } from '../store'
+import HowToPlay from './HowToPlay'
+import Logo from './Logo'
 
 export default function Home() {
   const start = useStore((s) => s.start)
   const pseudo = useStore((s) => s.pseudo)
   const setPseudo = useStore((s) => s.setPseudo)
   const valid = cleanPseudo(pseudo).length >= PSEUDO_MIN
+
   return (
     <main className="screen home">
-      <div className="home-skyline" aria-hidden>
-        {FAMILY_LIST.map((f) => (
-          <span key={f.family}>{f.tiers[0].emoji}</span>
-        ))}
+      <div className="brand">
+        <Logo size={64} />
+        <div>
+          <h1 className="title">Digital City</h1>
+          <p className="tag">Data center DC-01 · à rénover</p>
+        </div>
       </div>
-      <h1 className="title">Digital City</h1>
       <p className="tagline">
-        Tu hérites du data center le plus polluant de France. Ta mission : le rendre le plus sobre possible… sans couper le service
-        à tes utilisateurs.
+        Tu hérites du data center le plus polluant de France. Rends-le sobre, sans couper le service à tes utilisateurs.
       </p>
-      <ul className="home-rules">
-        <li>🧠 Réponds au quiz pour gagner des pièces 🪙</li>
-        <li>🔧 Améliore tes installations, du pire au plus vert</li>
-        <li>🤝 Négocie avec les data centers voisins</li>
-        <li>⭐ {LEVELS.length} niveaux, 3 étoiles à chaque fois</li>
-      </ul>
+
+      <section className="card">
+        <h2 className="card-title">Comment gagner</h2>
+        <HowToPlay />
+      </section>
+
       <form
         className="pseudo-form"
         onSubmit={(e) => {

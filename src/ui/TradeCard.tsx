@@ -15,7 +15,7 @@ export default function TradeCard({ offer }: { offer: TradeOffer }) {
   return (
     <div className="modal" role="dialog" aria-modal="true">
       <div className="quiz trade">
-        <p className="quiz-meta">🤝 Proposition d’un data center voisin</p>
+        <p className="quiz-meta">Proposition d’un data center voisin</p>
         <h2 className="quiz-question">
           {offer.emoji} {offer.partner}
         </h2>

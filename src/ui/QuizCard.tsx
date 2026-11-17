@@ -16,7 +16,7 @@ export default function QuizCard({ question }: { question: Question }) {
     <div className="modal" role="dialog" aria-modal="true">
       <div className={`quiz ${answered ? (correct ? 'quiz-ok' : 'quiz-ko') : ''}`}>
         <p className="quiz-meta">
-          🧠 Quiz · bonne réponse = +{reward} 🪙{streakBonus ? ' 🔥 bonus série !' : ''}
+          Question du tour · bonne réponse = +{reward} 🪙{streakBonus ? ' (bonus série)' : ''}
         </p>
         <h2 className="quiz-question">{question.question}</h2>
         <div className="quiz-choices">

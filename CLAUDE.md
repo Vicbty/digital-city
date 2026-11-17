@@ -26,12 +26,14 @@ src/
   lib/supabase.ts← ordi DEV : logVisit(), saveGame(), getStats()
   content/questions.json ← questions du quiz (écrites par les researchers)
   ui/            ← ordi UI uniquement
-    Grid.tsx, UpgradePanel.tsx, QuizCard.tsx, TradeCard.tsx, LevelCard.tsx, EndScreen.tsx, Dashboard.tsx
+    Exterior.tsx (vue extérieure), FloorPlan.tsx (plan des 5 salles), ZoneView.tsx (équipements d'une salle),
+    Hud.tsx, HowToPlay.tsx, QuizCard.tsx, TradeCard.tsx, LevelCard.tsx, EndScreen.tsx, Dashboard.tsx
   store.ts       ← pont entre engine et ui
 ```
 
 ## Règles du jeu (résumé)
-- Grille 5x5 d'installations, 5 familles (serveurs, refroidissement, énergie, stockage, matériel usagé),
+- Parcours : vue extérieure du bâtiment (qui évolue avec les améliorations) → plan du site → une salle → ses équipements.
+- 25 équipements répartis en 5 familles (serveurs, refroidissement, énergie, stockage, matériel usagé),
   chacune avec 3 niveaux : 0 = le pire, 2 = le plus sobre. Au départ tout est au niveau 0.
 - Indicateurs : coins 🪙, CO₂/tour (et % de réduction vs départ), capacité ⚡ vs demande, satisfaction 😊 (0-100).
 - Chaque tour : une question de quiz. Bonne réponse = pièces (+ bonus de série). Les pièces servent à améliorer les installations.

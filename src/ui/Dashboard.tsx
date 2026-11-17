@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getLeaderboard, getStats, isLocalMode, type LeaderboardEntry, type Stats } from '../lib/supabase'
 import Leaderboard from './Leaderboard'
+import Logo from './Logo'
 import QrModal from './QrModal'
 
 export default function Dashboard() {
@@ -27,12 +28,13 @@ export default function Dashboard() {
   return (
     <main className="screen dashboard">
       <header className="dash-head">
-        <h1 className="title-sm">🗄️ Digital City · Live</h1>
+        <Logo size={36} />
+        <h1 className="title-sm">Digital City · en direct</h1>
         {isLocalMode && <span className="badge">mode local</span>}
       </header>
 
       <button className="btn btn-primary" onClick={() => setShowQr(true)}>
-        📱 QR code
+        QR code pour jouer
       </button>
 
       {!stats ? (

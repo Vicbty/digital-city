@@ -1,14 +1,18 @@
 import { TURNS_PER_LEVEL, turnInLevel } from '../engine/simulation'
 import { useStore } from '../store'
-import Grid from './Grid'
+import Exterior from './Exterior'
+import FloorPlan from './FloorPlan'
+import HelpModal from './HelpModal'
+import Hud from './Hud'
 import LevelCard from './LevelCard'
 import QuizCard from './QuizCard'
-import StatsBar from './StatsBar'
 import TradeCard from './TradeCard'
-import UpgradePanel from './UpgradePanel'
+import ZoneView from './ZoneView'
 
 export default function GameScreen() {
   const phase = useStore((s) => s.phase)
+  const view = useStore((s) => s.view)
+  const showHelp = useStore((s) => s.showHelp)
   const currentQuiz = useStore((s) => s.currentQuiz)
   const currentTrade = useStore((s) => s.currentTrade)
   const levelCard = useStore((s) => s.levelCard)
@@ -18,17 +22,23 @@ export default function GameScreen() {
 
   return (
     <main className="screen game">
-      <StatsBar />
-      <Grid />
-      <div className="bottom">
-        <UpgradePanel />
-        <button className="btn btn-primary btn-next" onClick={openQuiz}>
-          {lastOfLevel ? 'Finir le niveau ➜' : 'Tour suivant ➜'}
-        </button>
+      <Hud />
+      <div className="view">
+        {view === 'outside' && <Exterior />}
+        {view === 'plan' && <FloorPlan />}
+        {view !== 'outside' && view !== 'plan' && <ZoneView family={view} />}
       </div>
+      {view !== 'outside' && (
+        <div className="bottom">
+          <button className="btn btn-primary btn-big" onClick={openQuiz}>
+            {lastOfLevel ? 'Finir le niveau →' : 'Tour suivant → question'}
+          </button>
+        </div>
+      )}
       {phase === 'quiz' && currentQuiz && <QuizCard key={currentQuiz.id} question={currentQuiz} />}
       {phase === 'trade' && currentTrade && <TradeCard offer={currentTrade} />}
       {phase === 'level' && levelCard && <LevelCard data={levelCard} />}
+      {showHelp && <HelpModal />}
     </main>
   )
 }

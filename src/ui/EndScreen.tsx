@@ -103,7 +103,7 @@ export default function EndScreen() {
       </div>
 
       <button className="btn btn-primary btn-big" onClick={share}>
-        Défier mes potes 📤
+        Défier mes potes
       </button>
 
       {board && <Leaderboard entries={top} extra={myIndex >= 5 ? { pseudo, score } : null} />}
@@ -125,7 +125,7 @@ export default function EndScreen() {
       </section>
 
       <button className="btn btn-ghost" onClick={replay}>
-        Rejouer 🔁
+        Rejouer
       </button>
     </main>
   )

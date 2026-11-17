@@ -6,6 +6,8 @@ export const FAMILIES: Record<Family, FamilyDef> = {
     family: 'servers',
     label: 'Serveurs',
     short: 'Serveurs',
+    room: 'Salle serveurs',
+    role: "Les ordinateurs qui calculent et répondent à tes utilisateurs. Ils fournissent la capacité ⚡.",
     upgradeCosts: [50, 100],
     tiers: [
       { name: 'Vieux serveurs', emoji: '🗄️', description: 'Lents, gourmands, toujours allumés.', co2: 12, capacity: 10, demand: 0, income: 0, satisfaction: 0 },
@@ -17,6 +19,8 @@ export const FAMILIES: Record<Family, FamilyDef> = {
     family: 'cooling',
     label: 'Refroidissement',
     short: 'Refroid.',
+    room: 'Refroidissement',
+    role: "Les serveurs chauffent en permanence : il faut évacuer cette chaleur, sinon ils tombent en panne.",
     upgradeCosts: [40, 80],
     tiers: [
       { name: 'Clim à fond', emoji: '🥵', description: 'On refroidit les serveurs comme un frigo ouvert.', co2: 10, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
@@ -28,6 +32,8 @@ export const FAMILIES: Record<Family, FamilyDef> = {
     family: 'energy',
     label: 'Énergie',
     short: 'Énergie',
+    room: 'Local énergie',
+    role: "D'où vient l'électricité qui alimente tout le bâtiment.",
     upgradeCosts: [60, 120],
     tiers: [
       { name: 'Générateur diesel', emoji: '🛢️', description: 'Ça tourne… et ça fume.', co2: 15, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
@@ -39,6 +45,8 @@ export const FAMILIES: Record<Family, FamilyDef> = {
     family: 'storage',
     label: 'Stockage',
     short: 'Données',
+    room: 'Stockage',
+    role: "Les disques où dorment les données. Les données inutiles font travailler les serveurs pour rien.",
     upgradeCosts: [30, 60],
     tiers: [
       { name: 'Données zombies', emoji: '🧟', description: 'Doublons, vieux mails, vidéos oubliées : ça charge les serveurs.', co2: 6, capacity: 0, demand: 3, income: 0, satisfaction: 0 },
@@ -50,6 +58,8 @@ export const FAMILIES: Record<Family, FamilyDef> = {
     family: 'hardware',
     label: 'Matériel usagé',
     short: 'Matériel',
+    room: 'Atelier matériel',
+    role: "Ce que deviennent les vieux équipements : décharge, recyclage ou seconde vie.",
     upgradeCosts: [30, 60],
     tiers: [
       { name: 'Décharge', emoji: '🗑️', description: 'Le vieux matériel finit en tas.', co2: 8, capacity: 0, demand: 0, income: 0, satisfaction: 0 },
