@@ -19,6 +19,12 @@ export interface GameRecord {
   quizCorrect: number
   quizTotal: number
   rating: number | null // 1-10, null si le joueur n'a pas noté
+  pseudo?: string | null
+}
+
+export interface LeaderboardEntry {
+  pseudo: string
+  score: number
 }
 
 export interface Stats {
@@ -72,16 +78,45 @@ export async function saveGame(game: GameRecord): Promise<void> {
     lsSet(LS_GAMES, [...lsGet<GameRecord[]>(LS_GAMES, []), game])
     return
   }
+  const row = {
+    score: game.score,
+    quiz_correct: game.quizCorrect,
+    quiz_total: game.quizTotal,
+    rating: game.rating,
+  }
   try {
-    const { error } = await client.from('games').insert({
-      score: game.score,
-      quiz_correct: game.quizCorrect,
-      quiz_total: game.quizTotal,
-      rating: game.rating,
-    })
-    if (error) throw error
+    const { error } = await client.from('games').insert({ ...row, pseudo: game.pseudo ?? null })
+    if (!error) return
+    // Colonne pseudo pas encore créée dans Supabase : on enregistre quand même la partie, sans pseudo.
+    console.error('[supabase] saveGame (avec pseudo)', error)
+    const retry = await client.from('games').insert(row)
+    if (retry.error) throw retry.error
   } catch (e) {
     console.error('[supabase] saveGame', e)
+  }
+}
+
+/** Meilleurs scores avec pseudo, du plus haut au plus bas. */
+export async function getLeaderboard(limit = 10): Promise<LeaderboardEntry[]> {
+  if (!client) {
+    return lsGet<GameRecord[]>(LS_GAMES, [])
+      .filter((g): g is GameRecord & { pseudo: string } => !!g.pseudo)
+      .map((g) => ({ pseudo: g.pseudo, score: g.score }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+  }
+  try {
+    const { data, error } = await client
+      .from('games')
+      .select('pseudo, score')
+      .not('pseudo', 'is', null)
+      .order('score', { ascending: false })
+      .limit(limit)
+    if (error) throw error
+    return (data ?? []).map((r) => ({ pseudo: String(r.pseudo), score: r.score ?? 0 }))
+  } catch (e) {
+    console.error('[supabase] getLeaderboard', e)
+    return []
   }
 }
 

@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react'
-import { getStats, isLocalMode, type Stats } from '../lib/supabase'
+import { getLeaderboard, getStats, isLocalMode, type LeaderboardEntry, type Stats } from '../lib/supabase'
+import Leaderboard from './Leaderboard'
 import QrModal from './QrModal'
 
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [showQr, setShowQr] = useState(false)
+  const [board, setBoard] = useState<LeaderboardEntry[]>([])
 
   useEffect(() => {
     let alive = true
-    const load = () => getStats().then((s) => alive && setStats(s))
+    const load = () => {
+      getStats().then((s) => alive && setStats(s))
+      getLeaderboard(10).then((b) => alive && setBoard(b))
+    }
     load()
     const id = setInterval(load, 10_000)
     return () => {
@@ -22,7 +27,7 @@ export default function Dashboard() {
   return (
     <main className="screen dashboard">
       <header className="dash-head">
-        <h1 className="title-sm">🏙️ Digital City · Live</h1>
+        <h1 className="title-sm">🗄️ Digital City · Live</h1>
         {isLocalMode && <span className="badge">mode local</span>}
       </header>
 
@@ -52,6 +57,8 @@ export default function Dashboard() {
               <span>note moyenne</span>
             </div>
           </div>
+
+          <Leaderboard entries={board} title="Top 10 des joueurs" />
 
           <section className="dist">
             <h2>Répartition des notes</h2>

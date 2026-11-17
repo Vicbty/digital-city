@@ -12,6 +12,7 @@ import {
   upgradeTile,
 } from './engine/simulation'
 import type { GameState, LevelResult, Question, TradeOffer, UpgradeError } from './engine/types'
+import { cleanPseudo, loadPseudo, storePseudo } from './lib/pseudo'
 
 const QUESTIONS = questionsData as Question[]
 
@@ -33,6 +34,7 @@ export interface LevelCardData {
 
 interface Store {
   screen: Screen
+  pseudo: string
   phase: Phase
   game: GameState
   selectedTile: number | null
@@ -43,6 +45,7 @@ interface Store {
   toast: Toast | null
   flash: { index: number; kind: 'ok' | 'error'; id: number } | null
 
+  setPseudo: (raw: string) => void
   start: () => void
   selectTile: (index: number) => void
   upgradeSelected: () => void
@@ -95,6 +98,7 @@ export const useStore = create<Store>((set, get) => {
 
   return {
     screen: 'home',
+    pseudo: loadPseudo(),
     phase: 'build',
     game: createInitialState(),
     selectedTile: null,
@@ -105,8 +109,13 @@ export const useStore = create<Store>((set, get) => {
     toast: null,
     flash: null,
 
-    start: () =>
+    setPseudo: (raw) => set({ pseudo: raw.slice(0, 20) }),
+
+    start: () => {
+      const pseudo = cleanPseudo(get().pseudo)
+      storePseudo(pseudo)
       set({
+        pseudo,
         screen: 'game',
         phase: 'level',
         game: createInitialState(),
@@ -117,7 +126,8 @@ export const useStore = create<Store>((set, get) => {
         levelCard: { result: null, nextLevel: 1 },
         toast: null,
         flash: null,
-      }),
+      })
+    },
 
     selectTile: (index) => set({ selectedTile: get().selectedTile === index ? null : index }),
 

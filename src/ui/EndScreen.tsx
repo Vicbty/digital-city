@@ -2,8 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { LEVELS } from '../engine/levels'
 import { computeScore, totalStars } from '../engine/score'
 import type { GameState } from '../engine/types'
-import { getPercentileBeaten, saveGame } from '../lib/supabase'
+import { getLeaderboard, getPercentileBeaten, saveGame, type LeaderboardEntry } from '../lib/supabase'
 import { useStore } from '../store'
+import Leaderboard from './Leaderboard'
 
 function verdict(g: GameState): string {
   const last = g.levelResults[g.levelResults.length - 1]
@@ -16,6 +17,8 @@ function verdict(g: GameState): string {
 
 export default function EndScreen() {
   const game = useStore((s) => s.game)
+  const pseudo = useStore((s) => s.pseudo)
+  const [board, setBoard] = useState<LeaderboardEntry[] | null>(null)
   const start = useStore((s) => s.start)
   const showToast = useStore((s) => s.showToast)
   const score = useMemo(() => computeScore(game), [game])
@@ -28,6 +31,7 @@ export default function EndScreen() {
   useEffect(() => {
     let alive = true
     getPercentileBeaten(score).then((p) => alive && setPercentile(p))
+    getLeaderboard(10).then((b) => alive && setBoard(b))
     return () => {
       alive = false
     }
@@ -36,7 +40,7 @@ export default function EndScreen() {
   const save = (r: number | null) => {
     if (saved.current) return
     saved.current = true
-    void saveGame({ score, quizCorrect: game.quizCorrect, quizTotal: game.quizTotal, rating: r })
+    void saveGame({ score, quizCorrect: game.quizCorrect, quizTotal: game.quizTotal, rating: r, pseudo })
   }
 
   const rate = (r: number) => {
@@ -65,6 +69,11 @@ export default function EndScreen() {
       if ((e as Error).name !== 'AbortError') showToast('Partage impossible, copie le lien à la main', 'error')
     }
   }
+
+  // Le joueur est ajouté au classement affiché même avant l'enregistrement de sa partie.
+  const merged = board ? [...board, { pseudo, score, me: true }].sort((a, b) => b.score - a.score) : []
+  const myIndex = merged.findIndex((e) => 'me' in e)
+  const top = merged.slice(0, 5)
 
   return (
     <main className="screen end">
@@ -96,6 +105,8 @@ export default function EndScreen() {
       <button className="btn btn-primary btn-big" onClick={share}>
         Défier mes potes 📤
       </button>
+
+      {board && <Leaderboard entries={top} extra={myIndex >= 5 ? { pseudo, score } : null} />}
 
       <section className="rating">
         <p>{rating ? `Tu as mis ${rating}/10, merci !` : 'Tu notes le jeu combien ?'}</p>

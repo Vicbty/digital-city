@@ -3,7 +3,7 @@
 ## Contexte
 Challenge d'une journée (prototype à 15h, tests croisés 16h30, pitch 17h15).
 Thème : **numérique responsable** (Social Media Impact Challenge).
-Jeu web type SimCity : le joueur hérite du data center le plus polluant (une « ville » d'installations)
+Jeu web de gestion : le joueur hérite du data center le plus polluant (une salle serveurs de 5x5 installations)
 et doit le rendre le plus sobre possible, sans cesser de répondre aux besoins des habitants.
 Le jury note : le fun, le potentiel viral (nb de visiteurs), la note des joueurs (1-10).
 
@@ -39,7 +39,8 @@ src/
 - 2 fois par niveau, un data center voisin (fictif) propose un échange (accepter / refuser).
 - 3 niveaux de 5 tours (15 tours). Fin de niveau : jusqu'à 3 étoiles (demande couverte, objectif CO₂, habitants ≥ 70).
 - Score /100 = réduction de CO₂ finale (75 % = max) × (0,4 + 0,6 × satisfaction/100).
-- Écran de fin : score, étoiles, % de joueurs battus, bouton partager, note 1-10 → saveGame().
+- Accueil : le joueur saisit un pseudo (pas de compte, pas de mot de passe), mémorisé dans le navigateur.
+- Écran de fin : score, étoiles, % de joueurs battus, classement (pseudo), bouton partager, note 1-10 → saveGame().
 
 ## Conventions
 - Le moteur est en fonctions **pures** : (state, action) => nouveau state. Aucun import React dans engine/.

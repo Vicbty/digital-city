@@ -768,3 +768,79 @@ button {
     display: none;
   }
 }
+
+/* ---------- Pseudo + classement ---------- */
+.pseudo-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-weight: 700;
+}
+.pseudo-field input {
+  min-height: 52px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 1.1rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--surface-2);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 150ms;
+}
+.pseudo-field input:focus {
+  border-color: var(--accent);
+}
+.board {
+  width: 100%;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: left;
+}
+.board h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+.board ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.board li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+.board-rank {
+  width: 28px;
+  text-align: center;
+  font-weight: 800;
+}
+.board-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.board li strong {
+  color: var(--money);
+}
+.board-me {
+  outline: 2px solid var(--accent);
+  background: rgba(167, 139, 250, 0.15) !important;
+}
+.pseudo-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
