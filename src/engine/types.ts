@@ -83,6 +83,7 @@ export interface Question {
   answer: number
   explication: string
   source: string
+  url?: string // lien vers la source
 }
 
 export interface GameState {

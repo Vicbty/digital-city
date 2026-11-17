@@ -1,137 +1,212 @@
 [
   {
     "id": "q01",
-    "theme": "energie",
-    "question": "Pour faire tourner un data center, quelle électricité pollue le moins ?",
-    "choices": ["Un générateur diesel", "Une centrale à charbon", "Le solaire ou l'éolien"],
-    "answer": 2,
-    "explication": "Même serveur, électricité différente = empreinte très différente. Les data centers les plus sobres misent sur l'énergie bas carbone.",
-    "source": "À VÉRIFIER"
+    "theme": "materiel",
+    "question": "En France, quelle part de l'empreinte carbone du pays vient du numérique (2022) ?",
+    "choices": [
+      "Environ 0,5 %",
+      "Environ 4 %",
+      "Environ 25 %"
+    ],
+    "answer": 1,
+    "explication": "4,4 % selon l'ADEME et l'Arcep. Le geste n°1 : garder ses appareils plus longtemps.",
+    "source": "ADEME & Arcep, évaluation de l'impact environnemental du numérique en France (mise à jour 2024, données 2022)",
+    "url": "https://ecoresponsable.numerique.gouv.fr/docs/2024/etude-ademe-impacts-environnementaux-numerique.pdf"
   },
   {
     "id": "q02",
-    "theme": "refroidissement",
-    "question": "Pourquoi un data center a-t-il besoin d'être refroidi ?",
-    "choices": ["Les serveurs chauffent en tournant", "Pour garder les données au frais", "Pour le confort des techniciens"],
-    "answer": 0,
-    "explication": "Tout calcul produit de la chaleur. Moins on fait travailler les serveurs pour rien, moins il faut refroidir.",
-    "source": "À VÉRIFIER"
+    "theme": "energie",
+    "question": "Dans l'empreinte carbone du numérique en France, les data centers pèsent…",
+    "choices": [
+      "Presque rien",
+      "Près de la moitié",
+      "La totalité"
+    ],
+    "answer": 1,
+    "explication": "46 % pour les data centers, 50 % pour nos appareils, 4 % pour les réseaux. Le cloud n'est pas un nuage : ce sont des bâtiments bien réels.",
+    "source": "ADEME & Arcep, évaluation de l'impact environnemental du numérique en France (mise à jour 2024, données 2022)",
+    "url": "https://ecoresponsable.numerique.gouv.fr/docs/2024/etude-ademe-impacts-environnementaux-numerique.pdf"
   },
   {
     "id": "q03",
-    "theme": "materiel",
-    "question": "Dans l'empreinte carbone du numérique en France, qu'est-ce qui pèse le plus ?",
-    "choices": ["L'électricité consommée à l'usage", "La fabrication des équipements", "Les deux pareil"],
+    "theme": "reseau",
+    "question": "À la maison, pour regarder une vidéo, le gouvernement conseille…",
+    "choices": [
+      "La 4G/5G plutôt que le wifi",
+      "Le wifi plutôt que la 4G/5G",
+      "Peu importe"
+    ],
     "answer": 1,
-    "explication": "Fabriquer les appareils pèse plus lourd que les utiliser. Le geste n°1 : garder ton matériel plus longtemps.",
-    "source": "ADEME / Arcep, étude sur l'empreinte environnementale du numérique en France (2022)"
+    "explication": "Le réseau fixe a moins d'impact que le réseau mobile. Chez toi, bascule sur le wifi.",
+    "source": "Gouvernement, « Les gestes à adopter au quotidien pour diminuer sa pollution numérique » (info.gouv.fr)",
+    "url": "https://www.info.gouv.fr/actualite/les-gestes-a-adopter-au-quotidien-pour-diminuer-sa-pollution-numerique"
   },
   {
     "id": "q04",
-    "theme": "donnees",
-    "question": "Tes vieux mails et photos en double stockés dans le cloud…",
-    "choices": ["Ne consomment rien", "Occupent des serveurs allumés en permanence", "Disparaissent tout seuls"],
-    "answer": 1,
-    "explication": "Le cloud, ce sont des serveurs bien réels. Fais un petit ménage : supprime les doublons et vide ta corbeille.",
-    "source": "À VÉRIFIER"
+    "theme": "ia",
+    "question": "Selon l'Agence internationale de l'énergie, d'ici 2030 l'électricité consommée par les data centers devrait…",
+    "choices": [
+      "Baisser",
+      "Rester stable",
+      "Plus que doubler"
+    ],
+    "answer": 2,
+    "explication": "L'AIE prévoit environ 945 TWh en 2030 contre 415 TWh en 2024, surtout à cause de l'IA. Garde l'IA pour les tâches où elle t'aide vraiment.",
+    "source": "Agence internationale de l'énergie (AIE), rapport « Energy and AI » (2025)",
+    "url": "https://www.iea.org/reports/energy-and-ai/executive-summary"
   },
   {
     "id": "q05",
-    "theme": "usages",
-    "question": "Quel usage fait le plus travailler les data centers et les réseaux ?",
-    "choices": ["Envoyer un SMS", "Regarder des vidéos en streaming", "Lire un PDF déjà téléchargé"],
-    "answer": 1,
-    "explication": "La vidéo représente une grosse part du trafic. Baisse la qualité quand l'écran est petit, ça ne se voit presque pas.",
-    "source": "À VÉRIFIER"
+    "theme": "refroidissement",
+    "question": "À Paris, la piscine de la Butte-aux-Cailles est en partie chauffée par…",
+    "choices": [
+      "La chaleur du métro",
+      "Des panneaux solaires",
+      "Des serveurs informatiques"
+    ],
+    "answer": 2,
+    "explication": "Depuis 2017, des serveurs installés dans son ancienne chaufferie réchauffent une partie de l'eau. La chaleur d'un data center peut chauffer une piscine ou des logements.",
+    "source": "Ville de Paris (paris.fr) ; DatacenterDynamics",
+    "url": "https://www.datacenterdynamics.com/content-tracks/power-cooling/stimergys-edge-platform-used-to-heat-french-public-pool/98404.fullarticle"
   },
   {
     "id": "q06",
-    "theme": "ia",
-    "question": "Générer une image avec une IA, par rapport à une recherche web classique, ça demande…",
-    "choices": ["Moins de calcul", "Autant de calcul", "Beaucoup plus de calcul"],
-    "answer": 2,
-    "explication": "Les IA génératives font tourner de gros serveurs. Garde-les pour quand elles servent vraiment.",
-    "source": "À VÉRIFIER"
+    "theme": "materiel",
+    "question": "Quelle phase pèse le plus dans l'impact environnemental du numérique ?",
+    "choices": [
+      "La fabrication des équipements",
+      "La recharge des appareils",
+      "L'envoi des messages"
+    ],
+    "answer": 0,
+    "explication": "Fabriquer un appareil demande des métaux, de l'eau et de l'énergie. Fais réparer, achète reconditionné et garde ton téléphone plus longtemps.",
+    "source": "ADEME, guide « En route vers la sobriété numérique » ; ADEME & Arcep (2024)",
+    "url": "https://librairie.ademe.fr/ged/6555/guide-en-route-vers-sobriete-numerique-202209.pdf"
   },
   {
     "id": "q07",
-    "theme": "reseau",
-    "question": "À la maison, quel réseau est le plus sobre pour regarder une vidéo ?",
-    "choices": ["La 4G/5G", "C'est exactement pareil", "Le wifi"],
+    "theme": "energie",
+    "question": "Les data centers installés en France consomment environ quelle part de l'électricité du pays ?",
+    "choices": [
+      "Environ 20 %",
+      "Environ 50 %",
+      "Environ 2 %"
+    ],
     "answer": 2,
-    "explication": "Le réseau fixe consomme moins que le réseau mobile. Chez toi, bascule sur le wifi.",
-    "source": "ADEME, guide « En route vers la sobriété numérique » — À VÉRIFIER"
+    "explication": "Environ 10 TWh par an, soit près de 2 % de l'électricité française, et ça augmente vite avec l'IA.",
+    "source": "RTE (gestionnaire du réseau électrique) et ADEME",
+    "url": "https://www.connaissancedesenergies.org/data-centers-en-france-quelle-consommation-delectricite-venir"
   },
   {
     "id": "q08",
-    "theme": "refroidissement",
-    "question": "Le « free cooling » dans un data center, c'est…",
-    "choices": ["Refroidir les serveurs avec l'air extérieur", "Une clim offerte gratuitement", "Éteindre les serveurs la nuit"],
-    "answer": 0,
-    "explication": "Quand il fait frais dehors, l'air extérieur remplace en partie la clim. C'est pour ça qu'on aime les data centers dans les pays froids.",
-    "source": "À VÉRIFIER"
+    "theme": "donnees",
+    "question": "Tes vieux mails stockés dans ta boîte de réception…",
+    "choices": [
+      "Ne consomment rien",
+      "Sont gardés sur des serveurs qui consomment de l'énergie",
+      "Disparaissent tout seuls"
+    ],
+    "answer": 1,
+    "explication": "Stocker des données, c'est faire tourner des serveurs. Fais le ménage : vieux mails, doublons de photos, fichiers oubliés dans le cloud.",
+    "source": "Ministère de l'Intérieur, « La pollution numérique : les enjeux » (2023)",
+    "url": "https://interieur.gouv.fr/sites/minint/files/medias/documents/2023-08/Edition%201%20-%20La%20pollution%20nume%CC%81rique%20Les%20enjeux%20-%20DEPAFI_compressed.pdf"
   },
   {
     "id": "q09",
-    "theme": "materiel",
-    "question": "Un serveur en fin de vie, le mieux c'est…",
-    "choices": ["Le stocker dans un hangar", "Le reconditionner ou recycler ses composants", "Le jeter avec les ordures"],
-    "answer": 1,
-    "explication": "Un appareil reconditionné, c'est un appareil neuf en moins à fabriquer. Pense aussi au reconditionné pour ton téléphone.",
-    "source": "À VÉRIFIER"
+    "theme": "refroidissement",
+    "question": "Le PUE mesure l'efficacité énergétique d'un data center. Plus il est proche de 1…",
+    "choices": [
+      "Plus il pollue",
+      "Plus il est grand",
+      "Plus le data center est efficace"
+    ],
+    "answer": 2,
+    "explication": "PUE = énergie totale ÷ énergie des serveurs. Près de 1, presque toute l'électricité sert au calcul et pas à la clim.",
+    "source": "Norme ISO/IEC 30134-2 (indicateur PUE, The Green Grid)",
+    "url": "https://www.data4group.com/en/?p=9334"
   },
   {
     "id": "q10",
-    "theme": "energie",
-    "question": "Pour polluer moins, où vaut-il mieux installer un data center ?",
-    "choices": ["Là où l'électricité est bas carbone", "Là où l'électricité vient du charbon", "Peu importe, ça ne change rien"],
-    "answer": 0,
-    "explication": "L'électricité n'a pas la même empreinte partout. Le lieu d'un data center change beaucoup son bilan.",
-    "source": "À VÉRIFIER"
+    "theme": "usages",
+    "question": "Pour réduire l'impact d'une vidéo en streaming, le bon réflexe :",
+    "choices": [
+      "Toujours mettre la 4K",
+      "Baisser la résolution si la HD ne sert à rien",
+      "La relancer plusieurs fois"
+    ],
+    "answer": 1,
+    "explication": "Sur un écran de téléphone, la HD se voit à peine. Règle la qualité vidéo sur « auto » ou plus basse.",
+    "source": "Gouvernement, « Les gestes à adopter au quotidien pour diminuer sa pollution numérique » (info.gouv.fr)",
+    "url": "https://www.info.gouv.fr/actualite/les-gestes-a-adopter-au-quotidien-pour-diminuer-sa-pollution-numerique"
   },
   {
     "id": "q11",
-    "theme": "donnees",
-    "question": "Envoyer un gros fichier à 20 personnes : quelle option est la plus sobre ?",
-    "choices": ["Une pièce jointe à chacun", "Un seul lien de téléchargement partagé", "L'envoyer deux fois pour être sûr"],
-    "answer": 1,
-    "explication": "Un lien = le fichier stocké une seule fois. Pense aussi à supprimer le lien quand tout le monde l'a récupéré.",
-    "source": "À VÉRIFIER"
+    "theme": "ia",
+    "question": "En 2024, les data centers représentaient environ quelle part de l'électricité mondiale ?",
+    "choices": [
+      "Environ 1,5 %",
+      "Environ 15 %",
+      "Environ 40 %"
+    ],
+    "answer": 0,
+    "explication": "Environ 415 TWh selon l'AIE : c'est peu en part, mais c'est le poste qui grimpe le plus vite.",
+    "source": "Agence internationale de l'énergie (AIE), rapport « Energy and AI » (2025)",
+    "url": "https://www.iea.org/reports/energy-and-ai/executive-summary"
   },
   {
     "id": "q12",
-    "theme": "usages",
-    "question": "Désactiver la lecture auto des vidéos, ça sert à…",
-    "choices": ["Avoir plus d'abonnés", "Moins scroller et moins solliciter les serveurs", "Rien du tout"],
-    "answer": 1,
-    "explication": "Moins de vidéos lancées sans le vouloir = moins de données transférées et de temps perdu. Ça se règle en 10 secondes.",
-    "source": "À VÉRIFIER"
+    "theme": "donnees",
+    "question": "Sur un site web, refuser les cookies doit être…",
+    "choices": [
+      "Impossible",
+      "Payant",
+      "Aussi simple que de les accepter"
+    ],
+    "answer": 2,
+    "explication": "C'est la règle fixée par la CNIL. Clique sur « Tout refuser » : moins de pistage, moins de données envoyées aux serveurs publicitaires.",
+    "source": "CNIL, lignes directrices et recommandation sur les cookies et autres traceurs",
+    "url": "https://www.cnil.fr/fr/cookies-et-autres-traceurs"
   },
   {
     "id": "q13",
-    "theme": "ia",
-    "question": "Pour une question simple comme « capitale de l'Italie ? », le plus sobre c'est…",
-    "choices": ["Demander à une IA générative", "Faire une recherche classique (ou y réfléchir 2 s)", "Demander à 3 IA pour comparer"],
+    "theme": "energie",
+    "question": "Quel pays consommait le plus d'électricité pour ses data centers en 2024 ?",
+    "choices": [
+      "La France",
+      "Les États-Unis",
+      "Le Brésil"
+    ],
     "answer": 1,
-    "explication": "Pas besoin d'un gros modèle pour une réponse simple. Garde l'IA pour les tâches où elle t'aide vraiment.",
-    "source": "À VÉRIFIER"
+    "explication": "Selon l'AIE : environ 45 % pour les États-Unis, 25 % pour la Chine, 15 % pour l'Europe. Là où l'électricité est bas carbone, un data center pollue moins.",
+    "source": "Agence internationale de l'énergie (AIE), rapport « Energy and AI » (2025)",
+    "url": "https://www.iea.org/reports/energy-and-ai/executive-summary"
   },
   {
     "id": "q14",
-    "theme": "reseau",
-    "question": "Regarder une vidéo en basse définition sur un téléphone, ça…",
-    "choices": ["Se voit à peine et transfère moins de données", "Est interdit", "Use l'écran plus vite"],
-    "answer": 0,
-    "explication": "Sur un petit écran, la 4K ne sert pas à grand-chose. Règle la qualité vidéo par défaut sur « auto » ou plus basse.",
-    "source": "À VÉRIFIER"
+    "theme": "usages",
+    "question": "Pour écouter de la musique sur une plateforme de vidéos, le plus sobre c'est…",
+    "choices": [
+      "Lancer le clip en HD",
+      "Écouter en audio seul",
+      "Laisser la vidéo tourner en fond"
+    ],
+    "answer": 1,
+    "explication": "Sans image, beaucoup moins de données circulent. Préfère une appli de musique ou le mode audio.",
+    "source": "Gouvernement, « Les gestes à adopter au quotidien pour diminuer sa pollution numérique » (info.gouv.fr)",
+    "url": "https://www.info.gouv.fr/actualite/les-gestes-a-adopter-au-quotidien-pour-diminuer-sa-pollution-numerique"
   },
   {
     "id": "q15",
-    "theme": "refroidissement",
-    "question": "La chaleur produite par un data center peut servir à…",
-    "choices": ["Rien, elle est perdue de toute façon", "Chauffer des logements ou une piscine", "Faire fondre la neige du toit, c'est tout"],
+    "theme": "energie",
+    "question": "Selon l'ADEME, si rien ne change, la consommation des data centers en France d'ici 2035 pourrait…",
+    "choices": [
+      "Baisser de moitié",
+      "Être multipliée par environ 4",
+      "Rester identique"
+    ],
     "answer": 1,
-    "explication": "Récupérer la chaleur des serveurs pour chauffer un quartier, ça existe déjà. Une chaleur perdue en moins !",
-    "source": "À VÉRIFIER"
+    "explication": "Dans son scénario « tendanciel », l'ADEME estime une multiplication par 3,7. D'autres scénarios, plus sobres, la font baisser : tout dépend de nos usages.",
+    "source": "ADEME, étude prospective sur les data centers en France (janvier 2026)",
+    "url": "https://www.connaissancedesenergies.org/data-centers-en-france-quelle-consommation-delectricite-venir"
   }
 ]

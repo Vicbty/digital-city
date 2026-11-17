@@ -35,6 +35,16 @@ export default function QuizCard({ question }: { question: Question }) {
           <div className="quiz-feedback">
             <p className="quiz-verdict">{correct ? `✅ Bien joué ! +${reward} 🪙` : '❌ Raté… pas grave !'}</p>
             <p>{question.explication}</p>
+            <p className="quiz-source">
+              📚 Source :{' '}
+              {question.url ? (
+                <a href={question.url} target="_blank" rel="noopener noreferrer">
+                  {question.source}
+                </a>
+              ) : (
+                question.source
+              )}
+            </p>
             <button className="btn btn-primary" onClick={() => finishQuiz(correct)}>
               Continuer ➜
             </button>
