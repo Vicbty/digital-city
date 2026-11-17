@@ -32,7 +32,33 @@
     <meta name="twitter:image" content="/og.png" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Affiché tant que le jeu n'a pas démarré : évite une page blanche. -->
+      <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;font-family:-apple-system,system-ui,sans-serif;color:#1b232c;background:#eef1f4;text-align:center">
+        <img src="/apple-touch-icon.png" width="72" height="72" alt="" style="border-radius:16px" />
+        <strong style="font-size:20px">Digital City</strong>
+        <span id="boot-msg" style="color:#5d6b79">Chargement…</span>
+      </div>
+    </div>
+    <script>
+      // Si le jeu plante avant de s'afficher, on montre l'erreur au lieu d'une page blanche.
+      ;(function () {
+        function show(text) {
+          if (window.__dcMounted) return
+          var el = document.getElementById('boot-msg')
+          if (el) el.innerHTML = text
+        }
+        window.addEventListener('error', function (e) {
+          show('Oups, le jeu n\'a pas pu démarrer.<br><small>' + (e.message || 'erreur inconnue') + '</small>')
+        })
+        window.addEventListener('unhandledrejection', function (e) {
+          show('Oups, le jeu n\'a pas pu démarrer.<br><small>' + ((e.reason && e.reason.message) || 'erreur inconnue') + '</small>')
+        })
+        setTimeout(function () {
+          show('Le jeu met du temps à charger… Vérifie ta connexion, ou ouvre le lien dans Safari.')
+        }, 10000)
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
