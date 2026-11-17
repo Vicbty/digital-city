@@ -9,17 +9,17 @@ description: Écrire, ajouter ou corriger des questions du quiz de Digital City 
 ```json
 {
   "id": "q01",
-  "theme": "empreinte" ,
+  "theme": "energie",
   "question": "...",
   "choices": ["...", "...", "..."],
   "answer": 0,
   "explication": "1-2 phrases, ton léger, avec un conseil concret.",
-  "source": "Nom de la source ou À VÉRIFIER",
-  "bonus": "money" 
+  "source": "Nom de la source ou À VÉRIFIER"
 }
 ```
-- theme ∈ empreinte | reseaux-sociaux | donnees-perso | cybersecurite | sante-mentale | fake-news | materiel
-- bonus ∈ money | wellbeing | privacy
+- theme ∈ energie | refroidissement | materiel | donnees | usages | ia | reseau
+- Sujet : l'impact des data centers et du numérique (« data impacts »). Une bonne réponse rapporte des pièces 🪙.
+- Il faut au moins 15 questions (une par tour).
 
 ## Règles
 - **Ne jamais inventer de chiffre.** Si un chiffre précis n'est pas fourni avec une source, reformuler la question sans chiffre (comparaison qualitative) ou mettre "source": "À VÉRIFIER".

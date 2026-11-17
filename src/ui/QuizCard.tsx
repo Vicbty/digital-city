@@ -1,26 +1,22 @@
 import { useState } from 'react'
-import { QUIZ_BONUS } from '../engine/simulation'
+import { STREAK_MIN, quizReward } from '../engine/simulation'
 import type { Question } from '../engine/types'
 import { useStore } from '../store'
 
-const BONUS_LABEL = {
-  money: `+${QUIZ_BONUS.money} 💰`,
-  wellbeing: `+${QUIZ_BONUS.wellbeing} 😊`,
-  privacy: `+${QUIZ_BONUS.privacy} 🔒`,
-}
-
 export default function QuizCard({ question }: { question: Question }) {
   const finishQuiz = useStore((s) => s.finishQuiz)
-  const turn = useStore((s) => s.game.turn)
+  const streak = useStore((s) => s.game.streak)
   const [picked, setPicked] = useState<number | null>(null)
   const answered = picked !== null
   const correct = picked === question.answer
+  const reward = quizReward(streak)
+  const streakBonus = streak + 1 >= STREAK_MIN
 
   return (
     <div className="modal" role="dialog" aria-modal="true">
       <div className={`quiz ${answered ? (correct ? 'quiz-ok' : 'quiz-ko') : ''}`}>
         <p className="quiz-meta">
-          Question du tour {turn} · bonus {BONUS_LABEL[question.bonus]}
+          🧠 Quiz · bonne réponse = +{reward} 🪙{streakBonus ? ' 🔥 bonus série !' : ''}
         </p>
         <h2 className="quiz-question">{question.question}</h2>
         <div className="quiz-choices">
@@ -37,7 +33,7 @@ export default function QuizCard({ question }: { question: Question }) {
         </div>
         {answered && (
           <div className="quiz-feedback">
-            <p className="quiz-verdict">{correct ? `✅ Bien joué ! ${BONUS_LABEL[question.bonus]}` : '❌ Raté… pas grave !'}</p>
+            <p className="quiz-verdict">{correct ? `✅ Bien joué ! +${reward} 🪙` : '❌ Raté… pas grave !'}</p>
             <p>{question.explication}</p>
             <button className="btn btn-primary" onClick={() => finishQuiz(correct)}>
               Continuer ➜

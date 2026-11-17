@@ -1,152 +1,137 @@
 [
   {
     "id": "q01",
-    "theme": "empreinte",
-    "question": "Qu'est-ce qui pèse le plus dans l'empreinte carbone de ton smartphone ?",
-    "choices": ["Sa recharge", "Sa fabrication", "Les SMS envoyés"],
-    "answer": 1,
-    "explication": "La fabrication pèse bien plus que l'usage. Garder ton téléphone plus longtemps, c'est le geste n°1.",
-    "source": "ADEME / Arcep, étude sur l'empreinte environnementale du numérique en France (2022)",
-    "bonus": "money"
+    "theme": "energie",
+    "question": "Pour faire tourner un data center, quelle électricité pollue le moins ?",
+    "choices": ["Un générateur diesel", "Une centrale à charbon", "Le solaire ou l'éolien"],
+    "answer": 2,
+    "explication": "Même serveur, électricité différente = empreinte très différente. Les data centers les plus sobres misent sur l'énergie bas carbone.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q02",
-    "theme": "reseaux-sociaux",
-    "question": "Pourquoi ton fil d'actu te donne envie de scroller sans fin ?",
-    "choices": ["Ton téléphone est lent", "C'est un pur hasard", "Il est conçu pour capter ton attention"],
-    "answer": 2,
-    "explication": "Les algorithmes misent sur ton temps d'écran. Active un minuteur d'usage dans les réglages de ton téléphone.",
-    "source": "À VÉRIFIER",
-    "bonus": "wellbeing"
+    "theme": "refroidissement",
+    "question": "Pourquoi un data center a-t-il besoin d'être refroidi ?",
+    "choices": ["Les serveurs chauffent en tournant", "Pour garder les données au frais", "Pour le confort des techniciens"],
+    "answer": 0,
+    "explication": "Tout calcul produit de la chaleur. Moins on fait travailler les serveurs pour rien, moins il faut refroidir.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q03",
-    "theme": "donnees-perso",
-    "question": "Une appli lampe torche veut accéder à tes contacts. Tu fais quoi ?",
-    "choices": ["Je refuse : elle n'en a pas besoin", "J'accepte, c'est normal", "Je lui donne aussi ma position"],
-    "answer": 0,
-    "explication": "Une appli ne devrait demander que ce dont elle a besoin. Fais le tri dans les permissions de tes applis.",
-    "source": "RGPD, principe de minimisation des données (CNIL)",
-    "bonus": "privacy"
+    "theme": "materiel",
+    "question": "Dans l'empreinte carbone du numérique en France, qu'est-ce qui pèse le plus ?",
+    "choices": ["L'électricité consommée à l'usage", "La fabrication des équipements", "Les deux pareil"],
+    "answer": 1,
+    "explication": "Fabriquer les appareils pèse plus lourd que les utiliser. Le geste n°1 : garder ton matériel plus longtemps.",
+    "source": "ADEME / Arcep, étude sur l'empreinte environnementale du numérique en France (2022)"
   },
   {
     "id": "q04",
-    "theme": "cybersecurite",
-    "question": "Quel est le mot de passe le plus solide ?",
-    "choices": ["Ton prénom + ton année de naissance", "Une longue phrase de passe, unique", "Le même partout, mais compliqué"],
+    "theme": "donnees",
+    "question": "Tes vieux mails et photos en double stockés dans le cloud…",
+    "choices": ["Ne consomment rien", "Occupent des serveurs allumés en permanence", "Disparaissent tout seuls"],
     "answer": 1,
-    "explication": "Longueur + unicité = solidité. Un gestionnaire de mots de passe retient tout à ta place.",
-    "source": "CNIL, recommandations sur les mots de passe",
-    "bonus": "privacy"
+    "explication": "Le cloud, ce sont des serveurs bien réels. Fais un petit ménage : supprime les doublons et vide ta corbeille.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q05",
-    "theme": "sante-mentale",
-    "question": "Quel réflexe aide le plus à bien dormir ?",
-    "choices": ["Regarder une série au lit", "Scroller avec la luminosité au minimum", "Poser le téléphone avant de se coucher"],
-    "answer": 2,
-    "explication": "Laisse ton téléphone charger hors de la chambre et ressors un vrai réveil.",
-    "source": "À VÉRIFIER",
-    "bonus": "wellbeing"
+    "theme": "usages",
+    "question": "Quel usage fait le plus travailler les data centers et les réseaux ?",
+    "choices": ["Envoyer un SMS", "Regarder des vidéos en streaming", "Lire un PDF déjà téléchargé"],
+    "answer": 1,
+    "explication": "La vidéo représente une grosse part du trafic. Baisse la qualité quand l'écran est petit, ça ne se voit presque pas.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q06",
-    "theme": "materiel",
-    "question": "Ton téléphone rame. Le geste le plus responsable ?",
-    "choices": ["Le nettoyer, le mettre à jour ou le faire réparer", "En racheter un neuf direct", "Le jeter à la poubelle classique"],
-    "answer": 0,
-    "explication": "Supprime les applis inutiles, change la batterie, file au repair café. Un téléphone réparé, c'est un téléphone en moins à fabriquer.",
-    "source": "À VÉRIFIER",
-    "bonus": "money"
+    "theme": "ia",
+    "question": "Générer une image avec une IA, par rapport à une recherche web classique, ça demande…",
+    "choices": ["Moins de calcul", "Autant de calcul", "Beaucoup plus de calcul"],
+    "answer": 2,
+    "explication": "Les IA génératives font tourner de gros serveurs. Garde-les pour quand elles servent vraiment.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q07",
-    "theme": "fake-news",
-    "question": "Une info choc circule sans source. Ton premier réflexe ?",
-    "choices": ["La partager vite avant tout le monde", "Vérifier sur des médias fiables", "La croire si elle a plein de likes"],
-    "answer": 1,
-    "explication": "Les likes ne prouvent rien. Cherche la source d'origine avant de partager.",
-    "source": "À VÉRIFIER",
-    "bonus": "wellbeing"
-  },
-  {
-    "id": "q08",
-    "theme": "empreinte",
+    "theme": "reseau",
     "question": "À la maison, quel réseau est le plus sobre pour regarder une vidéo ?",
     "choices": ["La 4G/5G", "C'est exactement pareil", "Le wifi"],
     "answer": 2,
     "explication": "Le réseau fixe consomme moins que le réseau mobile. Chez toi, bascule sur le wifi.",
-    "source": "ADEME, guide « En route vers la sobriété numérique » — À VÉRIFIER",
-    "bonus": "money"
+    "source": "ADEME, guide « En route vers la sobriété numérique » — À VÉRIFIER"
+  },
+  {
+    "id": "q08",
+    "theme": "refroidissement",
+    "question": "Le « free cooling » dans un data center, c'est…",
+    "choices": ["Refroidir les serveurs avec l'air extérieur", "Une clim offerte gratuitement", "Éteindre les serveurs la nuit"],
+    "answer": 0,
+    "explication": "Quand il fait frais dehors, l'air extérieur remplace en partie la clim. C'est pour ça qu'on aime les data centers dans les pays froids.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q09",
-    "theme": "donnees-perso",
-    "question": "Cliquer « Tout accepter » sur les cookies, ça sert surtout à…",
-    "choices": ["Suivre ta navigation pour la pub", "Accélérer le site", "Protéger ton ordinateur"],
-    "answer": 0,
-    "explication": "Clique sur « Tout refuser » : c'est ton droit, et le site doit le rendre aussi simple qu'accepter.",
-    "source": "CNIL, lignes directrices et recommandation sur les cookies",
-    "bonus": "privacy"
+    "theme": "materiel",
+    "question": "Un serveur en fin de vie, le mieux c'est…",
+    "choices": ["Le stocker dans un hangar", "Le reconditionner ou recycler ses composants", "Le jeter avec les ordures"],
+    "answer": 1,
+    "explication": "Un appareil reconditionné, c'est un appareil neuf en moins à fabriquer. Pense aussi au reconditionné pour ton téléphone.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q10",
-    "theme": "reseaux-sociaux",
-    "question": "Désactiver la lecture auto des vidéos, ça sert à…",
-    "choices": ["Avoir plus d'abonnés", "Moins scroller et économiser des données", "Rien du tout"],
-    "answer": 1,
-    "explication": "Moins de vidéos lancées sans le vouloir = moins de temps perdu et moins de données. Ça se règle en 10 secondes.",
-    "source": "À VÉRIFIER",
-    "bonus": "wellbeing"
+    "theme": "energie",
+    "question": "Pour polluer moins, où vaut-il mieux installer un data center ?",
+    "choices": ["Là où l'électricité est bas carbone", "Là où l'électricité vient du charbon", "Peu importe, ça ne change rien"],
+    "answer": 0,
+    "explication": "L'électricité n'a pas la même empreinte partout. Le lieu d'un data center change beaucoup son bilan.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q11",
-    "theme": "cybersecurite",
-    "question": "Un SMS te demande de payer un colis via un lien. C'est sûrement…",
-    "choices": ["Un vrai livreur", "Un cadeau surprise", "Du phishing (hameçonnage)"],
-    "answer": 2,
-    "explication": "Ne clique pas : va directement sur le site officiel du transporteur et signale le SMS au 33700.",
-    "source": "cybermalveillance.gouv.fr",
-    "bonus": "money"
+    "theme": "donnees",
+    "question": "Envoyer un gros fichier à 20 personnes : quelle option est la plus sobre ?",
+    "choices": ["Une pièce jointe à chacun", "Un seul lien de téléchargement partagé", "L'envoyer deux fois pour être sûr"],
+    "answer": 1,
+    "explication": "Un lien = le fichier stocké une seule fois. Pense aussi à supprimer le lien quand tout le monde l'a récupéré.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q12",
-    "theme": "sante-mentale",
-    "question": "Les notifications en continu, ça fait quoi à ton cerveau ?",
-    "choices": ["Ça disperse ton attention", "Ça aide à se concentrer", "Aucun effet"],
-    "answer": 0,
-    "explication": "Coupe les notifs non essentielles et garde seulement les messages de tes proches.",
-    "source": "À VÉRIFIER",
-    "bonus": "wellbeing"
+    "theme": "usages",
+    "question": "Désactiver la lecture auto des vidéos, ça sert à…",
+    "choices": ["Avoir plus d'abonnés", "Moins scroller et moins solliciter les serveurs", "Rien du tout"],
+    "answer": 1,
+    "explication": "Moins de vidéos lancées sans le vouloir = moins de données transférées et de temps perdu. Ça se règle en 10 secondes.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q13",
-    "theme": "materiel",
-    "question": "Que faire du vieux téléphone qui dort dans ton tiroir ?",
-    "choices": ["Le garder « au cas où » pour toujours", "Le donner, le revendre ou le recycler", "Le jeter à la poubelle"],
+    "theme": "ia",
+    "question": "Pour une question simple comme « capitale de l'Italie ? », le plus sobre c'est…",
+    "choices": ["Demander à une IA générative", "Faire une recherche classique (ou y réfléchir 2 s)", "Demander à 3 IA pour comparer"],
     "answer": 1,
-    "explication": "Un téléphone qui dort ne sert à personne. Donne-le, revends-le ou dépose-le en point de collecte.",
-    "source": "À VÉRIFIER",
-    "bonus": "money"
+    "explication": "Pas besoin d'un gros modèle pour une réponse simple. Garde l'IA pour les tâches où elle t'aide vraiment.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q14",
-    "theme": "fake-news",
-    "question": "Une photo semble trop incroyable pour être vraie. Comment vérifier ?",
-    "choices": ["Compter ses partages", "Demander à l'auteur s'il ment", "Faire une recherche d'image inversée"],
-    "answer": 2,
-    "explication": "La recherche d'image inversée retrouve souvent l'origine de la photo. Méfie-toi aussi des images générées par IA.",
-    "source": "À VÉRIFIER",
-    "bonus": "privacy"
+    "theme": "reseau",
+    "question": "Regarder une vidéo en basse définition sur un téléphone, ça…",
+    "choices": ["Se voit à peine et transfère moins de données", "Est interdit", "Use l'écran plus vite"],
+    "answer": 0,
+    "explication": "Sur un petit écran, la 4K ne sert pas à grand-chose. Règle la qualité vidéo par défaut sur « auto » ou plus basse.",
+    "source": "À VÉRIFIER"
   },
   {
     "id": "q15",
-    "theme": "reseaux-sociaux",
-    "question": "Un réseau social gratuit gagne surtout de l'argent grâce à…",
-    "choices": ["La pub ciblée grâce à tes données", "Les dons des utilisateurs", "L'argent de l'État"],
-    "answer": 0,
-    "explication": "Si c'est gratuit, c'est souvent toi le produit. Passe tes paramètres de confidentialité en mode privé.",
-    "source": "À VÉRIFIER",
-    "bonus": "privacy"
+    "theme": "refroidissement",
+    "question": "La chaleur produite par un data center peut servir à…",
+    "choices": ["Rien, elle est perdue de toute façon", "Chauffer des logements ou une piscine", "Faire fondre la neige du toit, c'est tout"],
+    "answer": 1,
+    "explication": "Récupérer la chaleur des serveurs pour chauffer un quartier, ça existe déjà. Une chaleur perdue en moins !",
+    "source": "À VÉRIFIER"
   }
 ]

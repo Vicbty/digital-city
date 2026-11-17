@@ -20,6 +20,9 @@ create policy "anon insert visits" on visits for insert to anon with check (true
 create policy "anon read visits" on visits for select to anon using (true);
 create policy "anon insert games" on games for insert to anon with check (true);
 create policy "anon read games" on games for select to anon using (true);
+-- nécessaire si « Automatically expose new tables » est décoché à la création du projet
+grant select, insert on visits to anon;
+grant select, insert on games to anon;
 ```
 
 ## src/lib/supabase.ts doit exposer

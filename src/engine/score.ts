@@ -1,12 +1,20 @@
-import { CO2_MAX } from './simulation'
 import type { GameState } from './types'
 
-/** Argent de référence : une partie avec MONEY_REF, 0 CO₂ et 100/100 partout = 100 points. */
-export const MONEY_REF = 3000
+/** Réduction de CO₂ qui donne le maximum de points (au-delà, plafonné). */
+export const REDUCTION_FOR_MAX = 75
 
-export function computeScore(state: Pick<GameState, 'money' | 'co2' | 'wellbeing' | 'privacy'>): number {
-  const money = Math.max(0, state.money)
-  const co2Factor = Math.max(0, 1 - state.co2 / CO2_MAX)
-  const raw = money * co2Factor * (state.wellbeing / 100) * (state.privacy / 100)
-  return Math.min(100, Math.round((raw / MONEY_REF) * 100))
+/**
+ * Score sur 100 : réduction de CO₂ atteinte en fin de partie, pondérée par la satisfaction des habitants
+ * (un data center sobre mais qui ne rend plus le service ne gagne pas).
+ */
+export function computeScore(state: Pick<GameState, 'levelResults' | 'satisfaction'>): number {
+  const last = state.levelResults[state.levelResults.length - 1]
+  const reduction = last ? last.reductionPct : 0
+  const reductionFactor = Math.min(1, Math.max(0, reduction) / REDUCTION_FOR_MAX)
+  const satisfactionFactor = 0.4 + 0.6 * (state.satisfaction / 100)
+  return Math.round(100 * reductionFactor * satisfactionFactor)
+}
+
+export function totalStars(state: Pick<GameState, 'levelResults'>): number {
+  return state.levelResults.reduce((s, r) => s + r.stars, 0)
 }

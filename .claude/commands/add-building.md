@@ -1,6 +1,6 @@
-Ajoute ce bâtiment au jeu : $ARGUMENTS
+Ajoute cette installation au jeu : $ARGUMENTS
 
-1. Ajoute son type dans BuildingType (src/engine/types.ts) et préviens-moi que l'ordi UI devra pull.
-2. Ajoute ses stats dans src/engine/buildings.ts (coût, revenu, co2, wellbeing, privacy, emoji, nom FR).
-3. Vérifie que les chiffres restent équilibrés par rapport aux autres bâtiments et explique ton choix en une phrase.
+1. Si c'est une nouvelle famille : ajoute-la dans le type Family (src/engine/types.ts) et place-la dans START_LAYOUT.
+2. Ajoute ses 3 niveaux dans src/engine/buildings.ts (nom FR, emoji, description, co2, capacity, demand, income, satisfaction) et ses 2 coûts d'amélioration.
+3. Vérifie avec le skill game-balance que les chiffres restent équilibrés et explique ton choix en une phrase.
 4. Lance npm run build.

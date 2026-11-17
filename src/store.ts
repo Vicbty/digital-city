@@ -1,12 +1,22 @@
 import { create } from 'zustand'
 import questionsData from './content/questions.json'
-import { BUILDINGS } from './engine/buildings'
-import { answerQuiz, createInitialState, nextTurn, placeBuilding } from './engine/simulation'
-import type { BuildingType, GameState, PlaceError, Question } from './engine/types'
+import { FAMILIES } from './engine/buildings'
+import {
+  acceptTrade,
+  answerQuiz,
+  availableTrades,
+  createInitialState,
+  declineTrade,
+  isTradeTurn,
+  nextTurn,
+  upgradeTile,
+} from './engine/simulation'
+import type { GameState, LevelResult, Question, TradeOffer, UpgradeError } from './engine/types'
 
 const QUESTIONS = questionsData as Question[]
 
 export type Screen = 'home' | 'game' | 'end'
+export type Phase = 'build' | 'quiz' | 'trade' | 'level'
 export type ToastKind = 'ok' | 'error' | 'info'
 
 interface Toast {
@@ -15,22 +25,32 @@ interface Toast {
   kind: ToastKind
 }
 
+/** Carte de niveau : résultat du niveau terminé (si besoin) + présentation du suivant. */
+export interface LevelCardData {
+  result: LevelResult | null
+  nextLevel: number | null
+}
+
 interface Store {
   screen: Screen
+  phase: Phase
   game: GameState
-  selected: BuildingType | null
-  questions: Question[] // file mélangée, sans répétition
+  selectedTile: number | null
+  questions: Question[]
   currentQuiz: Question | null
+  currentTrade: TradeOffer | null
+  levelCard: LevelCardData | null
   toast: Toast | null
   flash: { index: number; kind: 'ok' | 'error'; id: number } | null
 
   start: () => void
-  select: (type: BuildingType) => void
-  tapCell: (index: number) => void
+  selectTile: (index: number) => void
+  upgradeSelected: () => void
   openQuiz: () => void
   finishQuiz: (correct: boolean) => void
+  resolveTrade: (accept: boolean) => void
+  closeLevelCard: () => void
   showToast: (text: string, kind?: ToastKind) => void
-  goHome: () => void
 }
 
 /** Mélange en évitant deux thèmes identiques à la suite quand c'est possible. */
@@ -46,72 +66,107 @@ function shuffleQuestions(list: Question[]): Question[] {
   return out
 }
 
-const ERROR_TEXT: Record<PlaceError, string> = {
-  occupied: 'Case déjà occupée !',
-  notEnoughMoney: "Pas assez d'argent 💸",
-  outOfBounds: 'Hors de la ville',
+const ERROR_TEXT: Record<UpgradeError, string> = {
+  maxTier: 'Déjà au top niveau 🌱',
+  notEnoughCoins: 'Pas assez de pièces 🪙 Réponds juste au quiz !',
+  outOfBounds: 'Hors du data center',
   gameOver: 'La partie est finie',
 }
 
 let counter = 0
 
-export const useStore = create<Store>((set, get) => ({
-  screen: 'home',
-  game: createInitialState(),
-  selected: null,
-  questions: [],
-  currentQuiz: null,
-  toast: null,
-  flash: null,
-
-  start: () =>
-    set({
-      screen: 'game',
-      game: createInitialState(),
-      selected: null,
-      questions: shuffleQuestions(QUESTIONS),
-      currentQuiz: null,
-      toast: null,
-      flash: null,
-    }),
-
-  select: (type) => set({ selected: get().selected === type ? null : type }),
-
-  tapCell: (index) => {
-    const { selected, game, showToast } = get()
-    if (!selected) {
-      if (game.grid[index]) {
-        const b = BUILDINGS[game.grid[index]!]
-        showToast(`${b.emoji} ${b.name}`, 'info')
-      } else {
-        showToast('Choisis un bâtiment en bas 👇', 'info')
-      }
+export const useStore = create<Store>((set, get) => {
+  /** Fait tourner le tour et affiche la carte de niveau si un niveau vient de se terminer. */
+  const endTurn = (game: GameState) => {
+    const next = nextTurn(game)
+    const levelDone = next.levelResults.length > game.levelResults.length
+    if (!levelDone) {
+      set({ game: next, phase: 'build', currentQuiz: null, currentTrade: null })
       return
     }
-    const res = placeBuilding(game, index, selected)
-    if (res.ok) {
-      set({ game: res.state, flash: { index, kind: 'ok', id: ++counter } })
-      showToast(`${BUILDINGS[selected].emoji} construit ! −${BUILDINGS[selected].cost} 💰`, 'ok')
-    } else {
-      set({ flash: { index, kind: 'error', id: ++counter } })
-      showToast(ERROR_TEXT[res.error], 'error')
-    }
-  },
+    set({
+      game: next,
+      phase: 'level',
+      currentQuiz: null,
+      currentTrade: null,
+      levelCard: { result: next.levelResults[next.levelResults.length - 1], nextLevel: next.gameOver ? null : next.level },
+    })
+  }
 
-  openQuiz: () => {
-    const { questions, game } = get()
-    const q = questions[(game.turn - 1) % questions.length] ?? null
-    set({ currentQuiz: q, selected: null, toast: null })
-  },
+  return {
+    screen: 'home',
+    phase: 'build',
+    game: createInitialState(),
+    selectedTile: null,
+    questions: [],
+    currentQuiz: null,
+    currentTrade: null,
+    levelCard: null,
+    toast: null,
+    flash: null,
 
-  finishQuiz: (correct) => {
-    const { game, currentQuiz } = get()
-    if (!currentQuiz) return
-    const next = nextTurn(answerQuiz(game, correct, currentQuiz.bonus))
-    set({ game: next, currentQuiz: null, screen: next.gameOver ? 'end' : 'game' })
-  },
+    start: () =>
+      set({
+        screen: 'game',
+        phase: 'level',
+        game: createInitialState(),
+        selectedTile: null,
+        questions: shuffleQuestions(QUESTIONS),
+        currentQuiz: null,
+        currentTrade: null,
+        levelCard: { result: null, nextLevel: 1 },
+        toast: null,
+        flash: null,
+      }),
 
-  showToast: (text, kind = 'info') => set({ toast: { id: ++counter, text, kind } }),
+    selectTile: (index) => set({ selectedTile: get().selectedTile === index ? null : index }),
 
-  goHome: () => set({ screen: 'home', currentQuiz: null }),
-}))
+    upgradeSelected: () => {
+      const { selectedTile, game, showToast } = get()
+      if (selectedTile === null) return
+      const before = game.grid[selectedTile]
+      const res = upgradeTile(game, selectedTile)
+      if (res.ok) {
+        const after = FAMILIES[before.family].tiers[before.tier + 1]
+        set({ game: res.state, flash: { index: selectedTile, kind: 'ok', id: ++counter } })
+        showToast(`${after.emoji} ${after.name} !`, 'ok')
+      } else {
+        set({ flash: { index: selectedTile, kind: 'error', id: ++counter } })
+        showToast(ERROR_TEXT[res.error], 'error')
+      }
+    },
+
+    openQuiz: () => {
+      const { questions, game } = get()
+      const q = questions[(game.turn - 1) % questions.length] ?? null
+      set({ currentQuiz: q, phase: 'quiz', selectedTile: null, toast: null })
+    },
+
+    finishQuiz: (correct) => {
+      const { game } = get()
+      const answered = answerQuiz(game, correct)
+      if (isTradeTurn(answered.turn)) {
+        const offers = availableTrades(answered)
+        if (offers.length) {
+          const offer = offers[Math.floor(Math.random() * offers.length)]
+          set({ game: answered, currentQuiz: null, currentTrade: offer, phase: 'trade' })
+          return
+        }
+      }
+      endTurn(answered)
+    },
+
+    resolveTrade: (accept) => {
+      const { game, currentTrade } = get()
+      if (!currentTrade) return
+      endTurn(accept ? acceptTrade(game, currentTrade) : declineTrade(game, currentTrade))
+    },
+
+    closeLevelCard: () => {
+      const { game } = get()
+      set({ levelCard: null, phase: 'build', screen: game.gameOver ? 'end' : 'game' })
+    },
+
+    showToast: (text, kind = 'info') => set({ toast: { id: ++counter, text, kind } }),
+  }
+})

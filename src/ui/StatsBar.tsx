@@ -1,56 +1,63 @@
-import { CO2_MAX, MAX_TURNS, computeTurnDelta } from '../engine/simulation'
-import { computeScore } from '../engine/score'
+import { LEVELS } from '../engine/levels'
+import { TURNS_PER_LEVEL, computeStats, turnInLevel } from '../engine/simulation'
 import { useStore } from '../store'
-
-function fmt(n: number) {
-  return (n > 0 ? '+' : '') + n
-}
-
-interface MeterProps {
-  emoji: string
-  label: string
-  value: string
-  delta: number
-  percent: number
-  color: string
-  invert?: boolean // true si une hausse est mauvaise (CO₂)
-}
-
-function Meter({ emoji, label, value, delta, percent, color, invert }: MeterProps) {
-  const good = invert ? delta < 0 : delta > 0
-  const bad = invert ? delta > 0 : delta < 0
-  return (
-    <div className="meter" aria-label={label}>
-      <div className="meter-top">
-        <span>{emoji}</span>
-        <strong>{value}</strong>
-        {delta !== 0 && <small className={good ? 'up' : bad ? 'down' : ''}>{fmt(delta)}</small>}
-      </div>
-      <div className="meter-bar">
-        <div style={{ width: `${Math.max(0, Math.min(100, percent))}%`, background: color }} />
-      </div>
-    </div>
-  )
-}
 
 export default function StatsBar() {
   const game = useStore((s) => s.game)
-  const d = computeTurnDelta(game)
+  const st = computeStats(game)
+  const level = LEVELS[game.level - 1]
+  const co2Pct = (st.co2 / game.startCo2) * 100
+  const targetLeft = 100 - level.co2Target
+  const capPct = st.demand > 0 ? Math.min(100, (st.capacity / st.demand) * 100) : 100
+
   return (
     <header className="stats">
       <div className="stats-row">
-        <span className="turn">
-          Tour <strong>{game.turn}</strong>/{MAX_TURNS}
+        <span>
+          Niv. <strong>{game.level}</strong> · Tour <strong>{turnInLevel(game.turn)}</strong>/{TURNS_PER_LEVEL}
         </span>
-        <span className="live-score">
-          Score <strong>{computeScore(game)}</strong>/100
+        <span className="coins">
+          🪙 <strong>{game.coins}</strong>
+          {game.streak >= 2 && <small className="streak"> 🔥{game.streak}</small>}
         </span>
       </div>
-      <div className="meters">
-        <Meter emoji="💰" label="Argent" value={String(game.money)} delta={d.money} percent={(game.money / 3000) * 100} color="var(--money)" />
-        <Meter emoji="🏭" label="CO₂" value={`${game.co2}/${CO2_MAX}`} delta={d.co2} percent={(game.co2 / CO2_MAX) * 100} color={game.co2 > CO2_MAX * 0.7 ? 'var(--danger)' : 'var(--co2)'} invert />
-        <Meter emoji="😊" label="Bien-être" value={String(game.wellbeing)} delta={d.wellbeing} percent={game.wellbeing} color="var(--wellbeing)" />
-        <Meter emoji="🔒" label="Données" value={String(game.privacy)} delta={d.privacy} percent={game.privacy} color="var(--privacy)" />
+
+      <div className="meter">
+        <div className="meter-top">
+          <span>🏭 CO₂</span>
+          <strong>{st.co2}/tour</strong>
+          <small className={st.reductionPct > 0 ? 'up' : 'muted'}>−{Math.max(0, st.reductionPct)} %</small>
+          <small className="muted meter-goal">objectif −{level.co2Target} %</small>
+        </div>
+        <div className="meter-bar meter-bar-big">
+          <div style={{ width: `${Math.min(100, co2Pct)}%`, background: co2Pct <= targetLeft ? 'var(--wellbeing)' : 'var(--danger)' }} />
+          <i className="meter-target" style={{ left: `${targetLeft}%` }} />
+        </div>
+      </div>
+
+      <div className="meters-2">
+        <div className="meter">
+          <div className="meter-top">
+            <span>⚡</span>
+            <strong className={st.demandMet ? '' : 'down'}>
+              {st.capacity}/{st.demand}
+            </strong>
+            <small className="muted">capacité/demande</small>
+          </div>
+          <div className="meter-bar">
+            <div style={{ width: `${capPct}%`, background: st.demandMet ? 'var(--privacy)' : 'var(--danger)' }} />
+          </div>
+        </div>
+        <div className="meter">
+          <div className="meter-top">
+            <span>😊</span>
+            <strong>{game.satisfaction}</strong>
+            <small className="muted">habitants</small>
+          </div>
+          <div className="meter-bar">
+            <div style={{ width: `${game.satisfaction}%`, background: 'var(--wellbeing)' }} />
+          </div>
+        </div>
       </div>
     </header>
   )

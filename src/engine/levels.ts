@@ -1,0 +1,102 @@
+import type { LevelDef, TradeOffer } from './types'
+
+export const LEVELS: LevelDef[] = [
+  {
+    level: 1,
+    name: 'Le pire data center de France',
+    intro: 'Diesel, clim à fond, données zombies : ton data center est une catastrophe. Commence le grand nettoyage !',
+    baseDemand: 45,
+    co2Target: 15,
+  },
+  {
+    level: 2,
+    name: 'Le rush du streaming',
+    intro: 'Une plateforme vidéo cartonne : les habitants en veulent plus. Tiens la charge sans exploser ton CO₂.',
+    baseDemand: 58,
+    co2Target: 40,
+  },
+  {
+    level: 3,
+    name: 'Le sommet climat',
+    intro: 'Le monde entier te regarde. Deviens le data center le plus sobre… sans couper le service.',
+    baseDemand: 70,
+    co2Target: 55,
+  },
+]
+
+// Data centers voisins (fictifs) : un échange est proposé 2 fois par niveau.
+export const TRADES: TradeOffer[] = [
+  {
+    id: 'voltnord',
+    partner: 'VoltNord',
+    emoji: '⚡',
+    text: 'Le barrage de VoltNord te vend son électricité hydraulique pour ce niveau.',
+    coins: -50,
+    effect: { co2: -20, capacity: 0, demand: 0 },
+    duration: 'level',
+  },
+  {
+    id: 'cloudsud',
+    partner: 'CloudSud',
+    emoji: '☁️',
+    text: 'CloudSud te loue une partie de ses serveurs pour ce niveau.',
+    coins: -40,
+    effect: { co2: 6, capacity: 15, demand: 0 },
+    duration: 'level',
+  },
+  {
+    id: 'quartier',
+    partner: 'Quartier Ouest',
+    emoji: '🏘️',
+    text: 'Le quartier Ouest veut acheter la chaleur de tes serveurs pour chauffer ses logements.',
+    coins: 60,
+    effect: { co2: 0, capacity: 0, demand: 0 },
+    duration: 'permanent',
+    requires: { family: 'cooling', tier: 2 },
+  },
+  {
+    id: 'recyclest',
+    partner: 'ReCycl’Est',
+    emoji: '♻️',
+    text: 'ReCycl’Est rachète tes pièces détachées pour réparer d’autres machines.',
+    coins: 30,
+    effect: { co2: -4, capacity: 0, demand: 0 },
+    duration: 'permanent',
+  },
+  {
+    id: 'techdump',
+    partner: 'TechDump',
+    emoji: '📦',
+    text: 'TechDump te vend des serveurs neufs à prix cassé. Fabriquer du matériel neuf, ça pollue…',
+    coins: -20,
+    effect: { co2: 18, capacity: 20, demand: 0 },
+    duration: 'permanent',
+  },
+  {
+    id: 'datafjord',
+    partner: 'DataFjord',
+    emoji: '🧊',
+    text: 'DataFjord héberge tes archives au frais en Norvège pour ce niveau.',
+    coins: -45,
+    effect: { co2: -8, capacity: 0, demand: -5 },
+    duration: 'level',
+  },
+  {
+    id: 'streammax',
+    partner: 'StreamMax',
+    emoji: '🎬',
+    text: 'StreamMax te paie pour héberger sa plateforme de vidéos 4K. Ça va charger tes serveurs…',
+    coins: 80,
+    effect: { co2: 0, capacity: 0, demand: 12 },
+    duration: 'permanent',
+  },
+  {
+    id: 'mutualise',
+    partner: 'GreenGrid',
+    emoji: '🤝',
+    text: 'GreenGrid propose de mutualiser vos serveurs : moins de machines allumées pour rien.',
+    coins: -30,
+    effect: { co2: -3, capacity: 8, demand: 0 },
+    duration: 'permanent',
+  },
+]
